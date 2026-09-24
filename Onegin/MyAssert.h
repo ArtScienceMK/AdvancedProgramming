@@ -19,6 +19,8 @@
 
 #ifdef DEBUG
 
+#define LOG(...) __VA_ARGS__
+
 // #define FMT(x) (#x ":" x)
 
 #define ASSERT(condition, sentence, exitStatus)\
@@ -72,6 +74,8 @@
     } while (0)
     
 #else
+
+#define LOG(...)
 
 #define DEBUG_ARRAY(arr, leftBound, leftIndex, midIndex, rightIndex, rightBound, midValue, arrSize)
 

@@ -47,11 +47,27 @@ Congratulations!
 
 ## What's New
 
-Stay tuned for new updates!
+Added prcosessing of comand line arguments! Folowing flags are avaliable:
+* -i=[Path to file] Reading from file
+* -o=[Path to file] Writing to file
+* -h Showing a manual
 
 ## Documentation
 
-Stay tuned for new updates!
+List of sortings, avaliable in program:
+* Standart library QickSort (qsort)
+* Bubble sort, implemented by myself
+
+List of comparators, avaliable in program:
+* CmpLettersAZ - compare strings from left to right only by letters (register independent), ignoring other symbols. Order of sorted strings is lexicogrpahical. 
+* CmpLettersZA - compare strings from left to right only by letters (register independent), ignoring other symbols. Order of sorted strings is reversed lexicogrpahical. 
+* CmpLettersInvAZ - compare strings from right to left only by letters (register independent), ignoring other symbols. Order of sorted strings is lexicogrpahical.
+* CmpLettersInvZA - compare strings from right to left only by letters (register independent), ignoring other symbols. Order of sorted strings is reversed lexicogrpahical.
+* StrCmpAZ - compare strings from left to right, letters will be processed register independent. Order of sorted strings is lexicogrpahical.
+* StrCmpZA - compare strings from left to right, letters will be processed register independent. Order of sorted strings is reversed lexicogrpahical.
+* StrCmpInvAZ - compare strings from right to left, letters will be processed register independent. Order of sorted strings is lexicogrpahical.
+* StrCmpInvZA - compare strings from right to left, letters will be processed register independent. Order of sorted strings is reversed lexicogrpahical.
+
 
 ## Contacts
 
