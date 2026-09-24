@@ -15,7 +15,7 @@
 
 ## About
 
-**Onegin** V1.0 can help you to understand the Russian soul through the awesome poem "Eugene Onegin". Program can print a whole text of poem and sort it in any provided way:  
+**Onegin** V2.0 can help you to understand the Russian soul through the awesome poem "Eugene Onegin". Program can print a whole text of poem and sort it in any provided way:  
 
 * Basic string comparison (like strcmp) 
 * Letters-only comparison
@@ -47,26 +47,26 @@ Congratulations!
 
 ## What's New
 
-Added prcosessing of comand line arguments! Folowing flags are avaliable:
+Added processing of command line arguments! Following flags are available:
 * -i=[Path to file] Reading from file
 * -o=[Path to file] Writing to file
 * -h Showing a manual
 
 ## Documentation
 
-List of sortings, avaliable in program:
-* Standart library QickSort (qsort)
+List of sortings, available in program:
+* Standard library QuickSort (qsort)
 * Bubble sort, implemented by myself
 
-List of comparators, avaliable in program:
-* CmpLettersAZ - compare strings from left to right only by letters (register independent), ignoring other symbols. Order of sorted strings is lexicogrpahical. 
-* CmpLettersZA - compare strings from left to right only by letters (register independent), ignoring other symbols. Order of sorted strings is reversed lexicogrpahical. 
-* CmpLettersInvAZ - compare strings from right to left only by letters (register independent), ignoring other symbols. Order of sorted strings is lexicogrpahical.
-* CmpLettersInvZA - compare strings from right to left only by letters (register independent), ignoring other symbols. Order of sorted strings is reversed lexicogrpahical.
-* StrCmpAZ - compare strings from left to right, letters will be processed register independent. Order of sorted strings is lexicogrpahical.
-* StrCmpZA - compare strings from left to right, letters will be processed register independent. Order of sorted strings is reversed lexicogrpahical.
-* StrCmpInvAZ - compare strings from right to left, letters will be processed register independent. Order of sorted strings is lexicogrpahical.
-* StrCmpInvZA - compare strings from right to left, letters will be processed register independent. Order of sorted strings is reversed lexicogrpahical.
+List of comparators, available in program:
+* CmpLettersAZ - compare strings from left to right only by letters (register independent), ignoring other symbols. Order of sorted strings is lexicographical. 
+* CmpLettersZA - compare strings from left to right only by letters (register independent), ignoring other symbols. Order of sorted strings is reversed lexicographical. 
+* CmpLettersInvAZ - compare strings from right to left only by letters (register independent), ignoring other symbols. Order of sorted strings is lexicographical.
+* CmpLettersInvZA - compare strings from right to left only by letters (register independent), ignoring other symbols. Order of sorted strings is reversed lexicographical.
+* StrCmpAZ - compare strings from left to right, letters will be processed register independent. Order of sorted strings is lexicographical.
+* StrCmpZA - compare strings from left to right, letters will be processed register independent. Order of sorted strings is reversed lexicographical.
+* StrCmpInvAZ - compare strings from right to left, letters will be processed register independent. Order of sorted strings is lexicographical.
+* StrCmpInvZA - compare strings from right to left, letters will be processed register independent. Order of sorted strings is reversed lexicographical.
 
 
 ## Contacts

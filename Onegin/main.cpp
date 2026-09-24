@@ -69,7 +69,7 @@ bool EndOfString(char c);
 
 int CountChar(char* buf, char toFind);
 
-void BubbleSort(void** arr, size_t arrSize, int (*MyCmp)(void*, void*), void (*StringSwap)(void*, void*));
+void BubbleSort(void** arr, size_t arrSize, int (*MyCmp)(const void*, const void*), void (*StringSwap)(void*, void*));
 
 // Comparators returns -1 = less, 0 = equal, 1 = more, other result = error
 
@@ -145,10 +145,10 @@ int main(int argc, char** argv) {
 
     UnlinkFile(myArgv.outputFilename);
 
-    // BubbleSort((void**)textOnegin.index, textOnegin.maxLines, CmpFuncAZ, SwapFunc);
+    BubbleSort((void**)textOnegin.index, textOnegin.maxLines, CmpLettersAZ, SwapFunc);
 
-    // WriteIndexToFile(DefaultOutputFilename, textOnegin.index, textOnegin.maxLines, textOnegin.buferSize);    
-    // WriteSepToFile(DefaultOutputFilename);
+    WriteIndexToFile(DefaultOutputFilename, textOnegin.index, textOnegin.maxLines, textOnegin.buferSize);    
+    WriteSepToFile(DefaultOutputFilename);
 
     qsort((void**)textOnegin.index, textOnegin.maxLines, sizeof(textOnegin.index[0]), CmpFuncInvAZ);
 
@@ -156,6 +156,7 @@ int main(int argc, char** argv) {
     WriteSepToFile(myArgv.outputFilename);
 
     WriteBuferToFile(myArgv.outputFilename, textOnegin.bufer, textOnegin.buferSize);
+    WriteSepToFile(myArgv.outputFilename);
 
     free(textOnegin.bufer);
     free(textOnegin.index);
@@ -286,6 +287,8 @@ void UnlinkFile(const char* filename) {
 
     ASSERT(fileDesc >= 0, GetErrorString(FILE_ACCESS_DENIED), FILE_ACCESS_DENIED);
     
+    ftruncate(fileDesc, 0);
+    
     close(fileDesc);
 }
 
@@ -302,7 +305,7 @@ int GetFileSize(int fileDesc) {
 }
 
 void WriteBuferToFile(const char* filename, char* bufer, int buferSize) {
-    int fileDesc = open(filename, O_APPEND);  // Дед, почему нельзя ставить просто w
+    int fileDesc = open(filename, O_WRONLY | O_APPEND);  // Дед, почему нельзя ставить просто w
 
     ASSERT(fileDesc >= 0, GetErrorString(FILE_ACCESS_DENIED), FILE_ACCESS_DENIED);
 
@@ -335,7 +338,7 @@ void WriteIndexToFile(const char* filename, String* index, int maxLines, int buf
 }
 
 void WriteSepToFile(const char* filename) {
-    int fileDesc = open(filename, O_APPEND);
+    int fileDesc = open(filename, O_WRONLY | O_APPEND);
 
     ASSERT(fileDesc >= 0, GetErrorString(FILE_ACCESS_DENIED), FILE_ACCESS_DENIED);
 
@@ -376,7 +379,7 @@ int CountChar(char* bufer, char toFind) {
     return lines;
 }
 
-void BubbleSort(void** arr, size_t arrSize, int (*MyCmp)(void*, void*), void (*StringSwap)(void*, void*)) {
+void BubbleSort(void** arr, size_t arrSize, int (*MyCmp)(const void*, const void*), void (*StringSwap)(void*, void*)) {
     ASSERT(arr != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
     ASSERT(MyCmp != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
     ASSERT(StringSwap != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
@@ -388,7 +391,7 @@ void BubbleSort(void** arr, size_t arrSize, int (*MyCmp)(void*, void*), void (*S
     for (size_t i = 0; i < arrSize - 1; i++) {
         for (size_t j = i + 1; j < arrSize; j++) {
 
-            int cmpResult = MyCmp((void*)&(arrString[i]), (void*)&(arrString[j]));
+            int cmpResult = MyCmp((const void*)&(arrString[i]), (const void*)&(arrString[j]));
             
             ASSERT(cmpResult != 2, GetErrorString(CMP_ERROR), CMP_ERROR);
 
