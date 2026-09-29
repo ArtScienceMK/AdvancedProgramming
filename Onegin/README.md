@@ -37,7 +37,7 @@ If you want to build this project on your machine follow this steps:
 0) Check dependencies
 1) ``` mkdir Onegin ```
 2) ``` cd Onegin ```
-3) ``` git clone https://github.com/ArtScienceMK/SquareSolver ```
+3) ``` git clone https://github.com/ArtScienceMK/AdvancedProgramming/tree/main/Onegin ```
 4) ``` g++ main.cpp MyString.cpp -o main ``` to disable any debug output
 
    ```  g++ main.cpp MyString.cpp -DDEBUG -o main ``` to enable all debug output into console and activate asserts
