@@ -22,15 +22,19 @@ typedef double StackElement_t;
 #include "MyStack.h"
 
 #include <stdio.h>
+#include <unistd.h>
 
 ERROR_STATUSES OkSample(void);
 ERROR_STATUSES BadClearInitSample(void);
 ERROR_STATUSES NotEnoughMemorySample(void);
 ERROR_STATUSES PushEmptySample(void);
+ERROR_STATUSES BadCanarySample(void);
+
+void SpoilCanary(Stack_t* ptrStack);
 
 int main() {
     
-    ERROR_STATUSES sampleErrorStatus = OkSample();
+    BadCanarySample();
 
     return 0;
 }
@@ -121,6 +125,31 @@ ERROR_STATUSES PushEmptySample() {
     ASSERT(StackDestroyErrorStatus == OK, GetErrorString(StackDestroyErrorStatus), StackDestroyErrorStatus);
 
     return OK;
+}
+
+ERROR_STATUSES BadCanarySample() {
+    Stack_t stk1 = {};
+    
+    ERROR_STATUSES StackInitErrorStatus = StackInit(&stk1, 3 ON_DEBUG(, __FILE_NAME__, __FUNCTION__, __FILE__, __LINE__));
+    
+    ASSERT(StackInitErrorStatus == OK, GetErrorString(StackInitErrorStatus), StackInitErrorStatus);
+
+    // StackDump(stk1);
+
+    SpoilCanary(&stk1);
+
+    StackVerify(&stk1);
+    StackDump(stk1);
+
+    ERROR_STATUSES StackDestroyErrorStatus = StackDestroy(&stk1);
+
+    ASSERT(StackDestroyErrorStatus == OK, GetErrorString(StackDestroyErrorStatus), StackDestroyErrorStatus);
+
+    return OK;
+}
+
+void SpoilCanary(Stack_t* ptrStack) {
+    ptrStack->data[0] = (double)0xBAD;
 }
 
 ERROR_STATUSES StackInit(Stack_t* ptrStack, size_t _capacity ON_DEBUG(, const char* name,
@@ -242,24 +271,39 @@ ERROR_STATUSES StackDump(Stack_t stack) {
     LOG(fprintf(stderr, "capacity = %i\n", stack.capacity);)
     LOG(fprintf(stderr, "    size = %i\n", stack.size);)
 
-    LOG(fprintf(stderr, "%s *[0] = %lf (CANARY)\n", ORANGE, stack.data[0]);)
+    if (isatty(fileno(stderr))) {
+        LOG(fprintf(stderr, "%s", ORANGE);)
+    }
 
-    LOG(fprintf(stderr, "%s", GREEN);)
+    LOG(fprintf(stderr, "*[0] = %lf (CANARY)\n", stack.data[0]);)
+
+    if (isatty(fileno(stderr))) {
+        LOG(fprintf(stderr, "%s", GREEN);)
+    }
 
     for (int i = 1; i <= stack.size; i++) {
         LOG(fprintf(stderr, "*[%i] = %lf\n", i, stack.data[i]);)
     }
 
-    LOG(fprintf(stderr, "%s", RED);)
+    if (isatty(fileno(stderr))) {
+        LOG(fprintf(stderr, "%s", RED);)
+    }
 
     for (int i = stack.size + 1; i < stack.capacity - 1; i++) {
         LOG(fprintf(stderr, "[%i] = %lf (POISON)\n", i, stack.data[i]);)
     }
 
-    LOG(fprintf(stderr, "%s *[%i] = %lf (CANARY)\n",
-                ORANGE, stack.capacity - 1, stack.data[stack.capacity - 1]);)
+    if (isatty(fileno(stderr))) {
+        LOG(fprintf(stderr, "%s", ORANGE);)
+    }
 
-    LOG(fprintf(stderr, "%s", RESET);)
+    LOG(fprintf(stderr, "*[%i] = %lf (CANARY)\n",
+                stack.capacity - 1, stack.data[stack.capacity - 1]);)
+
+
+    if (isatty(fileno(stderr))) {
+        LOG(fprintf(stderr, "%s", RESET);)
+    }
 
     LOG(fprintf(stderr, "}\n");)
 
