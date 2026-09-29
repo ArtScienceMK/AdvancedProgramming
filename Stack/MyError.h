@@ -12,7 +12,8 @@ enum ERROR_STATUSES {
     BAD_CLEAR_INIT      = 7, 
     STACK_DESTROY_ERROR = 8,
     EMPTY_STACK         = 9,
-    STACK_CAP_SIZE      = 10
+    STACK_CAP_SIZE      = 10, 
+    BAD_CANARY          = 11
 };
 
 const char* GetErrorString(ERROR_STATUSES errorStatus);
@@ -48,6 +49,9 @@ const char* GetErrorString(ERROR_STATUSES errorStatus) {
 
         case STACK_CAP_SIZE:
             return "Stack capacity is less than size!\n";
+
+        case BAD_CANARY:
+            return "Canary value was changed!\n";
 
         default:
             return "Unknown error status!\n";
