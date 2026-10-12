@@ -2,28 +2,35 @@
 #define _MY_ERROR_H
 
 enum ERROR_STATUSES {
-    OK                         = 0, 
-    FILE_ACCESS_DENIED         = 1,
-    FILE_FSTAT_ERROR           = 2,
-    OUT_OF_RANGE               = 3,
-    CMP_ERROR                  = 4, 
-    NOT_ENOUGH_MEMORY          = 5, 
-    PUSH_NOT_EQUAL_POP         = 6, 
-    BAD_CLEAR_INIT             = 7, 
-    STACK_DESTROY_ERROR        = 8,
-    EMPTY_STACK                = 9,
-    STACK_CAP_SIZE             = 10, 
-    BAD_CANARY                 = 11,
-    HASHES_DIFFER              = 12,
-    EXECUTION_ERROR            = 13,
-    READ_FILE_ERROR            = 14,
-    WRITE_BUFFER_TO_FILE_ERROR = 15,
-    UNLINK_FILE_ERROR          = 16,
-    WRITE_SEP_TO_FILE_ERROR    = 17,
-    UNKNOWN_OPCODE             = 18,
-    ZERO_DIVISION_ERROR        = 19,
-    OPCODE_INPUT_ERROR         = 20,
-    ARGS_INPUT_ERROR           = 21                  
+    OK                                   = 0, 
+    FILE_ACCESS_DENIED                   = 1,
+    FILE_FSTAT_ERROR                     = 2,
+    OUT_OF_RANGE                         = 3,
+    CMP_ERROR                            = 4, 
+    NOT_ENOUGH_MEMORY                    = 5, 
+    PUSH_NOT_EQUAL_POP                   = 6, 
+    BAD_CLEAR_INIT                       = 7, 
+    STACK_DESTROY_ERROR                  = 8,
+    EMPTY_STACK                          = 9,
+    STACK_CAP_SIZE                       = 10, 
+    BAD_CANARY                           = 11,
+    HASHES_DIFFER                        = 12,
+    EXECUTION_ERROR                      = 13,
+    READ_FILE_ERROR                      = 14,
+    WRITE_BUFFER_TO_FILE_ERROR           = 15,
+    UNLINK_FILE_ERROR                    = 16,
+    WRITE_SEP_TO_FILE_ERROR              = 17,
+    UNKNOWN_OPCODE                       = 18,
+    ZERO_DIVISION_ERROR                  = 19,
+    OPCODE_INPUT_ERROR                   = 20,
+    ARGS_INPUT_ERROR                     = 21,
+    ASSEMBLE_ERROR                       = 22,
+    STRCMP_ERROR                         = 23,
+    ASSEMBLE_VERIFICATION_ERROR          = 24,
+    INT_TO_STRING_ERROR                  = 25,
+    DISASSEMBLE_ERROR                    = 26,
+    READING_OPCODE_DISASSEMBLE_ERROR     = 27,
+    WRITE_INDEX_TO_FILE_ERROR            = 28
 };
 
 const char* GetErrorString(ERROR_STATUSES errorStatus);
@@ -88,7 +95,28 @@ const char* GetErrorString(ERROR_STATUSES errorStatus) {
             return "Error happened while executing in opcode input!\n";
         
         case ARGS_INPUT_ERROR:
-            return "Error happened while executing in args input!\n";
+            return "Error happened while executing in args input!\n";   
+        
+        case ASSEMBLE_ERROR:
+            return "Error happened while assembling!\n";
+
+        case STRCMP_ERROR:
+            return "Error happened while comparing strings!\n";
+        
+        case ASSEMBLE_VERIFICATION_ERROR:
+            return "Incorrect line found while assembling!\n";
+        
+        case INT_TO_STRING_ERROR:
+            return "Error happened while converting int to string!\n";
+        
+        case DISASSEMBLE_ERROR:
+            return "Error happened while disassembling!\n";
+
+        case READING_OPCODE_DISASSEMBLE_ERROR:
+            return "Error happened when reading opcode while disassembling!\n";
+        
+        case WRITE_INDEX_TO_FILE_ERROR:
+            return "Error happened when writing index to file!\n";
 
         default:
             return "Unknown error status!\n";
