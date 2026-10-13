@@ -172,9 +172,20 @@ ERROR_STATUSES Disassemble(Text* ptrTextExec, Text* ptrTextSource) {
 
         char* opcodeString = NULL;
 
+        ARG_TYPES argType = NO_ARG;
+        
+        int argTypeLen = 0;
+
         switch ((OPCODES)opcode_int) {
             case PUSH:
                 opcodeString = strdup("PUSH");
+
+                if (sscanf(curLine + NumLen(opcode_int) + 1, "%i", &argType) == 0) {
+                    ASSERT(false, GetErrorString(NO_ARGUMENT_TYPE_ERROR), NO_ARGUMENT_TYPE_ERROR);
+                }
+                
+                argTypeLen = NumLen(argType);
+
                 break;
 
             case POP:
@@ -229,16 +240,16 @@ ERROR_STATUSES Disassemble(Text* ptrTextExec, Text* ptrTextSource) {
         ON_DEBUG(fprintf(stderr, "(Disassemble): wanna copy <%s>\n", curLine + opcodeStringLen);)
         ON_DEBUG(DebugPrintLine(curLine + opcodeStringLen);)
 
-        strcpy(ptrTextSource->buffer + ptrTextSourceBufferInd,                curLine + opcodeStringLen);
-        strcpy(ptrTextSource->index[curLineInd].line + ptrTextSourceIndexInd, curLine + opcodeStringLen);
+        strcpy(ptrTextSource->buffer + ptrTextSourceBufferInd,                curLine + opcodeStringLen + argTypeLen);
+        strcpy(ptrTextSource->index[curLineInd].line + ptrTextSourceIndexInd, curLine + opcodeStringLen + argTypeLen);
 
-        int addedLen = strlen(curLine + opcodeStringLen);
+        int addedLen = strlen(curLine + opcodeStringLen + argTypeLen);
         
         ptrTextSourceBufferInd += addedLen;
         ptrTextSourceIndexInd  += addedLen;
 
         ptrTextSource->buffer[ptrTextSourceBufferInd]                   = '\n';
-        ptrTextSource->index[curLineInd].line[ptrTextSourceIndexInd] = '\n';
+        ptrTextSource->index[curLineInd].line[ptrTextSourceIndexInd]    = '\n';
 
         ptrTextSourceBufferInd++;
 

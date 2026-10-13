@@ -62,6 +62,7 @@ ERROR_STATUSES MyStrlen(const char* string, int* res);
 ERROR_STATUSES MyIntToString(int num, char** ptrLine);
 ERROR_STATUSES ReplaceAll(char* line, char from, char to);
 
+ERROR_STATUSES GetArgumentType(const char* line, int lineExpr, ARG_TYPES* ptrArgType);
 
 int NumLen(int num);
 
@@ -141,18 +142,29 @@ ERROR_STATUSES Assemble(Text* ptrTextSource, Text* ptrTextExec) {
         DebugPrintLine(curLine);
 
         int lenExpr = 0;
+        ARG_TYPES argType = NO_ARG;
 
         ASSERT(curLine != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
 
-        OPCODES opcode = EMPTY;
+        OPCODES opcode = NO_OPCODE;
         
         if (strncmp(curLine, "PUSH", strlen("PUSH")) == 0) {
             opcode = PUSH;
             lenExpr = strlen("PUSH");
+
+            ERROR_STATUSES GetArgumentTypeErrorStatus = GetArgumentType(curLine, lenExpr, &argType);
+
+            ASSERT(GetArgumentTypeErrorStatus == OK, GetErrorString(GetArgumentTypeErrorStatus),
+                   GetArgumentTypeErrorStatus);
         }
         else if (strncmp(curLine, "POP", strlen("POP")) == 0) {
             opcode = POP;
             lenExpr = strlen("POP");
+
+            ERROR_STATUSES GetArgumentTypeErrorStatus = GetArgumentType(curLine, lenExpr, &argType);
+
+            ASSERT(GetArgumentTypeErrorStatus == OK, GetErrorString(GetArgumentTypeErrorStatus),
+                   GetArgumentTypeErrorStatus);
         }
         else if (strncmp(curLine, "OUT", strlen("OUT")) == 0) {
             opcode = OUT;
@@ -177,6 +189,22 @@ ERROR_STATUSES Assemble(Text* ptrTextSource, Text* ptrTextExec) {
         else if (strncmp(curLine, "DUMP", strlen("DUMP")) == 0) {
             opcode = DUMP;
             lenExpr = strlen("DUMP");
+        } 
+        else if (strncmp(curLine, "SIN", strlen("SIN")) == 0) {
+            opcode = SIN;
+            lenExpr = strlen("SIN");
+        } 
+        else if (strncmp(curLine, "COS", strlen("COS")) == 0) {
+            opcode = COS;
+            lenExpr = strlen("COS");
+        } 
+        else if (strncmp(curLine, "SQUARE", strlen("SQUARE")) == 0) {
+            opcode = SQUARE;
+            lenExpr = strlen("SQUARE");
+        } 
+        else if (strncmp(curLine, "SQRT", strlen("SQRT")) == 0) {
+            opcode = SQRT;
+            lenExpr = strlen("SQRT");
         } 
         else if (strcmp(curLine, "") == 0) {
 
@@ -204,13 +232,38 @@ ERROR_STATUSES Assemble(Text* ptrTextSource, Text* ptrTextExec) {
         
         ERROR_STATUSES MyIntToStringErrorStatus = MyIntToString(opcode, &opcodeString);
         ASSERT(MyIntToStringErrorStatus == OK, GetErrorString(INT_TO_STRING_ERROR), INT_TO_STRING_ERROR);
+       
         
         strcpy(ptrTextExec->buffer + ptrTextExecBufferInd, opcodeString);
         strcpy(ptrTextExec->index[curLineInd].line + ptrTextExecIndexInd, opcodeString);
-
+        
         ptrTextExecBufferInd += strlen(opcodeString);
         ptrTextExecIndexInd += strlen(opcodeString);
         
+        if (argType != NO_ARG) {
+
+            const char* spaceString = " ";
+
+            strcpy(ptrTextExec->buffer + ptrTextExecBufferInd, spaceString);
+            strcpy(ptrTextExec->index[curLineInd].line + ptrTextExecIndexInd, spaceString);
+            
+            ptrTextExecBufferInd += strlen(spaceString);
+            ptrTextExecIndexInd += strlen(spaceString);
+
+            
+            char* argTypeString = NULL;
+            
+            ERROR_STATUSES MyIntToStringErrorStatus = MyIntToString((int)argType, &argTypeString);
+            ASSERT(MyIntToStringErrorStatus == OK, GetErrorString(INT_TO_STRING_ERROR), INT_TO_STRING_ERROR);
+            
+            ON_DEBUG(fprintf(stderr, "(Assemble): found type of arguments <%s>\n", argTypeString);)
+
+            strcpy(ptrTextExec->buffer + ptrTextExecBufferInd, argTypeString);
+            strcpy(ptrTextExec->index[curLineInd].line + ptrTextExecIndexInd, argTypeString);
+            
+            ptrTextExecBufferInd += strlen(argTypeString);
+            ptrTextExecIndexInd += strlen(argTypeString);
+        }
         // exit(0);
         // if (NOT LineVerify(curLine + lenExpr + 1)) {
         //     fprintf(stderr, GetErrorString(ASSEMBLE_VERIFICATION_ERROR), ASSEMBLE_VERIFICATION_ERROR);
@@ -561,5 +614,49 @@ ERROR_STATUSES ReplaceAll(char* line, char from, char to) {
         }
     }
 
+    return OK;
+}
+
+ERROR_STATUSES GetArgumentType(const char* line, int lenExpr, ARG_TYPES* ptrArgType) {
+    double arg = 0;
+
+    if (!sscanf(line + lenExpr, "%lf", &arg)) {
+
+        char* registerName = (char*)calloc(MaxRegisterNameLen, sizeof(char));
+
+        ASSERT(registerName != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
+
+        if (!sscanf(line + lenExpr, "%s", registerName)) {
+            ASSERT(false, GetErrorString(READING_COMMAND_ASSEMBLE_ERROR), READING_COMMAND_ASSEMBLE_ERROR);
+        }
+
+        bool isValidName = false;
+        
+        ERROR_STATUSES IsValidRegisterNameErrorStatus = IsValidRegisterName(registerName, &isValidName);
+        ASSERT(IsValidRegisterNameErrorStatus == OK, GetErrorString(IsValidRegisterNameErrorStatus),
+               IsValidRegisterNameErrorStatus);
+
+        if (!isValidName) {
+            ASSERT(false, GetErrorString(UNKNOWN_REGISTER_NAME), UNKNOWN_REGISTER_NAME);
+        }
+
+        *ptrArgType = VARIABLE;
+    } else {
+        *ptrArgType = CONSTANT;
+    }
+
+    return OK;
+}
+
+ERROR_STATUSES IsValidRegisterName(const char* line, bool* res) {
+    if (strcmp(line, "RAX") == 0 || strcmp(line, "RBX") == 0 || 
+        strcmp(line, "RCX") == 0 || strcmp(line, "RDX") == 0 || 
+        strcmp(line, "REX") == 0 || strcmp(line, "RFX") == 0 || 
+        strcmp(line, "RGX") == 0 || strcmp(line, "RJX") == 0   ) {
+        *res = true;
+        return OK;    
+    }
+
+    *res = false;
     return OK;
 }

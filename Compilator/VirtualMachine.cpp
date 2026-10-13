@@ -85,9 +85,11 @@ size_t CountChar(char* buf, char toFind);
 
 ERROR_STATUSES MyStrlen(const char* string, int* res);
 
-ERROR_STATUSES Execute(Text* ptrExec);
+ERROR_STATUSES Execute(Text* ptrExec, StackElement_t* Registers);
 
 int NumLen(int num);
+
+ERROR_STATUSES StringToRegisterName(const char* line, REGISTERS_NAMES* ptrRegisterName);
 
 int main() {   
     Text textExec = {};
@@ -104,7 +106,9 @@ int main() {
     
     // return 0;
 
-    ERROR_STATUSES ExecuteErrorStatus = Execute(&textExec);
+    StackElement_t Registers[RegistersSize] = {};
+
+    ERROR_STATUSES ExecuteErrorStatus = Execute(&textExec, Registers);
     ON_DEBUG(ASSERT(ExecuteErrorStatus == OK, GetErrorString(EXECUTION_ERROR), EXECUTION_ERROR))
         
     ERROR_STATUSES UnlinkFileErrorStatuses = UnlinkFile(DefaultOutputFilename);
@@ -598,7 +602,7 @@ unsigned long long GetHash(Stack_t* ptrStack) {
 
 }
 
-ERROR_STATUSES Execute(Text* ptrExec) {
+ERROR_STATUSES Execute(Text* ptrExec, StackElement_t* Registers) {
     ON_DEBUG(ASSERT(ptrExec         != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);)
     ON_DEBUG(ASSERT(ptrExec->buffer != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);)
     ON_DEBUG(ASSERT(ptrExec->index  != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);)
@@ -615,21 +619,79 @@ ERROR_STATUSES Execute(Text* ptrExec) {
     ON_DEBUG(fprintf(stderr, "(Execute): going in cycle\n");)
 
     for (int curLineId = 0; curLineId < ptrExec->maxLines; curLineId++) {
-        int opcode = 0;
+        OPCODES opcode = NO_OPCODE;
+        
+        ARG_TYPES argType = NO_ARG;
+
         StackElement_t args = 0;
+
+        REGISTERS_NAMES registerIndex = NO_NAME;
 
         char* curLine = ptrExec->index[curLineId].line;
 
         DebugPrintLine(curLine);
 
+        if (strcmp(curLine, "") == 0) {
+            fprintf(stderr, "Exitting...\n");
+            
+            return OK; 
+        }
+
         if (sscanf(curLine, "%i ", &opcode) == 0) {
             ASSERT(0, GetErrorString(OPCODE_INPUT_ERROR), OPCODE_INPUT_ERROR);
         }
+
         //  BUG: считывай строку во второй раз, учитывая длину opcode
         
-        if ((OPCODES)opcode != POP && (OPCODES)opcode != OUT && (OPCODES)opcode != DUMP) {
-            if (sscanf(curLine + NumLen(opcode), "%lf", &args) == 0) {
-                ASSERT(0, GetErrorString(ARGS_INPUT_ERROR), ARGS_INPUT_ERROR);
+        if (opcode != OUT && opcode != DUMP && opcode != SIN &&
+            opcode != COS && opcode != SQUARE && opcode != SQRT) {
+            if (opcode == PUSH || opcode == POP) {
+                if (sscanf(curLine + NumLen(opcode), "%i", &argType) == 0) {
+                    ASSERT(false, GetErrorString(NO_ARGUMENT_TYPE_ERROR), NO_ARGUMENT_TYPE_ERROR);
+                }
+                //   Дед, можно попытаться вернуть switch, но есть пара вопросов
+                
+                char* registerName = NULL;
+                bool isValid = false;
+
+                ERROR_STATUSES IsValidRegisterNameErrorStatus  = OK;
+                ERROR_STATUSES StringToRegisterNameErrorStatus = OK;
+
+                switch (argType) {
+                    case CONSTANT:
+                        if (sscanf(curLine + NumLen(opcode) + 1 + NumLen(argType), "%lf", &args) == 0) {
+                            ASSERT(false, GetErrorString(ARGS_INPUT_ERROR), ARGS_INPUT_ERROR);
+                        }
+                        break;
+                    
+                    case VARIABLE:
+                        registerName = (char*)calloc(MaxRegisterNameLen, sizeof(*registerName));    //  Дед, может лучше sizeof(char)?
+
+                        ASSERT(registerName != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
+
+                        if (sscanf(curLine + NumLen(opcode) + 1 + NumLen(argType), "%s", registerName) == 0) {
+                            ASSERT(false, GetErrorString(ARGS_INPUT_ERROR), ARGS_INPUT_ERROR);
+                        }
+
+                        
+                        
+                        IsValidRegisterNameErrorStatus = IsValidRegisterName(registerName, &isValid);
+                        
+                        ASSERT(IsValidRegisterNameErrorStatus == OK, GetErrorString(IS_VALID_REGISTER_NAME_ERROR), 
+                               IS_VALID_REGISTER_NAME_ERROR);
+                        
+                        StringToRegisterNameErrorStatus = StringToRegisterName(registerName, &registerIndex); 
+
+                        args = Registers[registerIndex];
+                        break;
+                    
+                    default:
+                        ASSERT(false, GetErrorString(UNKNOWN_ARGUMENT_TYPE), UNKNOWN_ARGUMENT_TYPE);
+                        break;
+                }
+            }
+            else if (sscanf(curLine + NumLen(opcode), "%lf", &args) == 0) {
+                ASSERT(false, GetErrorString(ARGS_INPUT_ERROR), ARGS_INPUT_ERROR);
             }
 
             ON_DEBUG(fprintf(stderr, "Args input enabled and correct!!!\n");)
@@ -647,6 +709,9 @@ ERROR_STATUSES Execute(Text* ptrExec) {
             case POP: {
                 StackElement_t popValue = 0;
                 StackPop(&stk1, &popValue);
+
+                Registers[registerIndex] = popValue;
+
                 break;
             }
             
@@ -707,7 +772,39 @@ ERROR_STATUSES Execute(Text* ptrExec) {
                 StackPush(&stk1, op1 / op2);
                 break;
             }
+
+            case SIN: {
+                StackElement_t op1 = 0;
+                StackPop(&stk1, &op1);
+
+                StackPush(&stk1, sin(op1));
+                break;
+            }
+
+            case COS: {
+                StackElement_t op1 = 0;
+                StackPop(&stk1, &op1);
+
+                StackPush(&stk1, cos(op1));
+                break;
+            }
             
+            case SQUARE: {
+                StackElement_t op1 = 0;
+                StackPop(&stk1, &op1);
+
+                StackPush(&stk1, op1 * op1);
+                break;
+            }
+
+            case SQRT: {
+                StackElement_t op1 = 0;
+                StackPop(&stk1, &op1);
+
+                StackPush(&stk1, sqrt(op1));
+                break;
+            }
+
             default: {
                 ASSERT(0, GetErrorString(UNKNOWN_OPCODE), UNKNOWN_OPCODE);
                 break;
@@ -731,4 +828,43 @@ int NumLen(int num) {
     num += log10(num) + 1;
     
     return num;
+}
+
+ERROR_STATUSES IsValidRegisterName(const char* line, bool* res) {
+    if (strcmp(line, "RAX") == 0 || strcmp(line, "RBX") == 0 || 
+        strcmp(line, "RCX") == 0 || strcmp(line, "RDX") == 0 || 
+        strcmp(line, "REX") == 0 || strcmp(line, "RFX") == 0 || 
+        strcmp(line, "RGX") == 0 || strcmp(line, "RJX") == 0   ) {
+        *res = true;
+        return OK;    
+    }
+
+    *res = false;
+    return OK;
+}
+
+ERROR_STATUSES StringToRegisterName(const char* line, REGISTERS_NAMES* ptrRegisterName) {
+    ASSERT(line != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+
+    if (strcmp(line, "RAX") == 0) {
+        *ptrRegisterName = RAX;
+    } else if (strcmp(line, "RBX") == 0) {
+        *ptrRegisterName = RBX;
+    }  else if (strcmp(line, "RCX") == 0) {
+        *ptrRegisterName = RCX;
+    }  else if (strcmp(line, "RDX") == 0) {
+        *ptrRegisterName = RDX;
+    }  else if (strcmp(line, "REX") == 0) {
+        *ptrRegisterName = REX;
+    }  else if (strcmp(line, "RFX") == 0) {
+        *ptrRegisterName = RFX;
+    }  else if (strcmp(line, "RGX") == 0) {
+        *ptrRegisterName = RGX;
+    } else if (strcmp(line, "RJX") == 0) {
+        *ptrRegisterName = RJX;
+    } else {
+        return UNKNOWN_REGISTER_NAME;
+    }
+
+    return OK;
 }

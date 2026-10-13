@@ -30,7 +30,14 @@ enum ERROR_STATUSES {
     INT_TO_STRING_ERROR                  = 25,
     DISASSEMBLE_ERROR                    = 26,
     READING_OPCODE_DISASSEMBLE_ERROR     = 27,
-    WRITE_INDEX_TO_FILE_ERROR            = 28
+    WRITE_INDEX_TO_FILE_ERROR            = 28,
+    READING_COMMAND_ASSEMBLE_ERROR       = 29,
+    UNKNOWN_REGISTER_NAME                = 30,
+    GET_ARGUMENT_TYPE_ERROR              = 31,
+    IS_VALID_REGISTER_NAME_ERROR         = 32,
+    NO_ARGUMENT_TYPE_ERROR               = 33,
+    UNKNOWN_ARGUMENT_TYPE                = 34,
+    
 };
 
 const char* GetErrorString(ERROR_STATUSES errorStatus);
@@ -117,6 +124,24 @@ const char* GetErrorString(ERROR_STATUSES errorStatus) {
         
         case WRITE_INDEX_TO_FILE_ERROR:
             return "Error happened when writing index to file!\n";
+
+        case READING_COMMAND_ASSEMBLE_ERROR:
+            return "Error happened when reading command while assembling!\n";
+
+        case UNKNOWN_REGISTER_NAME:
+            return "Got an unknown register name!\n";
+
+        case GET_ARGUMENT_TYPE_ERROR:
+            return "Error happened when getting argument type!\n";
+
+        case IS_VALID_REGISTER_NAME_ERROR:
+            return "Error happened when validating register name!\n";
+
+        case NO_ARGUMENT_TYPE_ERROR:
+            return "Argument type missing!\n";
+
+        case UNKNOWN_ARGUMENT_TYPE:
+            return "Unknown argument type!\n";
 
         default:
             return "Unknown error status!\n";
