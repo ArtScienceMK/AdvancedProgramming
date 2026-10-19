@@ -35,7 +35,7 @@ struct Text {
     String* index;
 };
 
-typedef double StackElement_t;
+typedef int StackElement_t;
 
 const char* DefaultInputFilename = "SourceFile.txt";
 const char* DefaultOutputFilename = "ExecutableFile.txt";
@@ -63,6 +63,8 @@ ERROR_STATUSES MyIntToString(int num, char** ptrLine);
 ERROR_STATUSES ReplaceAll(char* line, char from, char to);
 
 ERROR_STATUSES GetArgumentType(const char* line, int lineExpr, ARG_TYPES* ptrArgType);
+
+ERROR_STATUSES registerNameStringToIndex(const char* line, REGISTERS_NAMES* ptrRegisterName);
 
 int NumLen(int num);
 
@@ -206,6 +208,38 @@ ERROR_STATUSES Assemble(Text* ptrTextSource, Text* ptrTextExec) {
             opcode = SQRT;
             lenExpr = strlen("SQRT");
         } 
+        else if (strncmp(curLine, "HALT", strlen("HALT")) == 0) {
+            opcode = HALT;
+            lenExpr = strlen("HALT");
+        } 
+        else if (strncmp(curLine, "JMP", strlen("JMP")) == 0) {
+            opcode = JMP;
+            lenExpr = strlen("JMP");
+        } 
+        else if (strncmp(curLine, "JA", strlen("JA")) == 0) {
+            opcode = JA;
+            lenExpr = strlen("JA");
+        } 
+        else if (strncmp(curLine, "JB", strlen("JB")) == 0) {
+            opcode = JB;
+            lenExpr = strlen("JB");
+        } 
+        else if (strncmp(curLine, "JAE", strlen("JAE")) == 0) {
+            opcode = JAE;
+            lenExpr = strlen("JAE");
+        } 
+        else if (strncmp(curLine, "JBE", strlen("JBE")) == 0) {
+            opcode = JBE;
+            lenExpr = strlen("JBE");
+        } 
+        else if (strncmp(curLine, "JE", strlen("JE")) == 0) {
+            opcode = JE;
+            lenExpr = strlen("JE");
+        } 
+        else if (strncmp(curLine, "JNE", strlen("JNE")) == 0) {
+            opcode = JNE;
+            lenExpr = strlen("JNE");
+        } 
         else if (strcmp(curLine, "") == 0) {
 
             ON_DEBUG(fprintf(stderr, "END OF FILE!\n");)
@@ -239,8 +273,12 @@ ERROR_STATUSES Assemble(Text* ptrTextSource, Text* ptrTextExec) {
         
         ptrTextExecBufferInd += strlen(opcodeString);
         ptrTextExecIndexInd += strlen(opcodeString);
+
+        curLine += lenExpr;
         
         if (argType != NO_ARG) {
+
+            curLine += 1;
 
             const char* spaceString = " ";
 
@@ -264,19 +302,70 @@ ERROR_STATUSES Assemble(Text* ptrTextSource, Text* ptrTextExec) {
             ptrTextExecBufferInd += strlen(argTypeString);
             ptrTextExecIndexInd += strlen(argTypeString);
         }
+        
+
+        int registerLen = 0;
+
+        if (argType == VARIABLE) {
+            const char* spaceString = " ";
+
+            strcpy(ptrTextExec->buffer + ptrTextExecBufferInd, spaceString);
+            strcpy(ptrTextExec->index[curLineInd].line + ptrTextExecIndexInd, spaceString);
+            
+            ptrTextExecBufferInd += strlen(spaceString);
+            ptrTextExecIndexInd += strlen(spaceString);
+
+            char* registerNameString = curLine;
+
+            ON_DEBUG(fprintf(stderr, "(Assemble): found register name <%s>\n", registerNameString);)
+
+            REGISTERS_NAMES registerNameIndex = NO_NAME;
+            
+            ERROR_STATUSES registerNameStringToIndexErrorStatus = registerNameStringToIndex(registerNameString, 
+                &registerNameIndex);
+            
+            ASSERT(registerNameStringToIndexErrorStatus == OK, GetErrorString(registerNameStringToIndexErrorStatus),
+                registerNameStringToIndexErrorStatus);
+            
+            char* registerNameLine = NULL;
+
+            ERROR_STATUSES MyIntToStringErrorStatus = MyIntToString((int)argType, &registerNameLine);
+            ASSERT(MyIntToStringErrorStatus == OK, GetErrorString(INT_TO_STRING_ERROR), INT_TO_STRING_ERROR);
+
+
+            strcpy(ptrTextExec->buffer + ptrTextExecBufferInd, registerNameLine);
+            strcpy(ptrTextExec->index[curLineInd].line + ptrTextExecIndexInd, registerNameLine);
+            
+            int registerNameLineLen = strlen(registerNameLine);
+
+            ptrTextExecBufferInd += registerNameLineLen;
+            ptrTextExecIndexInd  += registerNameLineLen;
+
+            registerLen += strlen(registerNameString);
+        }
         // exit(0);
-        // if (NOT LineVerify(curLine + lenExpr + 1)) {
+        // if (NOT LineVerify(curLine)) {
         //     fprintf(stderr, GetErrorString(ASSEMBLE_VERIFICATION_ERROR), ASSEMBLE_VERIFICATION_ERROR);
         //     return ASSEMBLE_VERIFICATION_ERROR;
         // } TODO
         
-        ON_DEBUG(fprintf(stderr, "(Assemble): wanna copy <%s>\n", curLine + lenExpr);)
-        ON_DEBUG(DebugPrintLine(curLine + lenExpr);)
+        curLine += registerLen;
 
-        strcpy(ptrTextExec->buffer + ptrTextExecBufferInd,                curLine + lenExpr);
-        // strcpy(ptrTextExec->index[curLineInd].line + ptrTextExecIndexInd, curLine + lenExpr);
+        const char* spaceString = " ";
 
-        int addedLen = strlen(curLine + lenExpr);
+        strcpy(ptrTextExec->buffer + ptrTextExecBufferInd, spaceString);
+        strcpy(ptrTextExec->index[curLineInd].line + ptrTextExecIndexInd, spaceString);
+        
+        ptrTextExecBufferInd += strlen(spaceString);
+        ptrTextExecIndexInd += strlen(spaceString);
+
+        ON_DEBUG(fprintf(stderr, "(Assemble): wanna copy <%s>\n", curLine);)
+        ON_DEBUG(DebugPrintLine(curLine);)
+
+        strcpy(ptrTextExec->buffer + ptrTextExecBufferInd,                curLine);
+        // strcpy(ptrTextExec->index[curLineInd].line + ptrTextExecIndexInd, curLine);
+
+        int addedLen = strlen(curLine);
         
         ptrTextExecBufferInd += addedLen;
         // ptrTextExecIndexInd  += addedLen;
@@ -632,7 +721,7 @@ ERROR_STATUSES GetArgumentType(const char* line, int lenExpr, ARG_TYPES* ptrArgT
 
         bool isValidName = false;
         
-        ERROR_STATUSES IsValidRegisterNameErrorStatus = IsValidRegisterName(registerName, &isValidName);
+        ERROR_STATUSES IsValidRegisterNameErrorStatus = IsValidRegisterNameString(registerName, &isValidName);
         ASSERT(IsValidRegisterNameErrorStatus == OK, GetErrorString(IsValidRegisterNameErrorStatus),
                IsValidRegisterNameErrorStatus);
 
@@ -648,11 +737,47 @@ ERROR_STATUSES GetArgumentType(const char* line, int lenExpr, ARG_TYPES* ptrArgT
     return OK;
 }
 
-ERROR_STATUSES IsValidRegisterName(const char* line, bool* res) {
-    if (strcmp(line, "RAX") == 0 || strcmp(line, "RBX") == 0 || 
-        strcmp(line, "RCX") == 0 || strcmp(line, "RDX") == 0 || 
-        strcmp(line, "REX") == 0 || strcmp(line, "RFX") == 0 || 
-        strcmp(line, "RGX") == 0 || strcmp(line, "RJX") == 0   ) {
+ERROR_STATUSES registerNameStringToIndex(const char* line, REGISTERS_NAMES* registerName) {
+    int registerNameSize = 3;
+
+    if (strncmp(line, "RAX", registerNameSize) == 0) {
+        *registerName = RAX;
+    }
+     else if (strncmp(line, "RBX", registerNameSize) == 0) {
+        *registerName = RBX;
+    }
+     else if (strncmp(line, "RCX", registerNameSize) == 0) {
+        *registerName = RCX;
+    }
+     else if (strncmp(line, "RDX", registerNameSize) == 0) {
+        *registerName = RDX;
+    }
+     else if (strncmp(line, "REX", registerNameSize) == 0) {
+        *registerName = REX;
+    }
+     else if (strncmp(line, "RFX", registerNameSize) == 0) {
+        *registerName = RFX;
+    }
+     else if (strncmp(line, "RGX", registerNameSize) == 0) {
+        *registerName = RGX;
+    }
+     else if (strncmp(line, "RJX", registerNameSize) == 0) {
+        *registerName = RJX;
+    }
+     else {
+        return UNKNOWN_REGISTER_NAME;
+    }
+
+    return OK;
+}
+
+ERROR_STATUSES IsValidRegisterNameString(const char* line, bool* res) {
+    int registerNameSize = 3;
+
+    if (strncmp(line, "RAX", registerNameSize) == 0 || strncmp(line, "RBX", registerNameSize) == 0 || 
+        strncmp(line, "RCX", registerNameSize) == 0 || strncmp(line, "RDX", registerNameSize) == 0 || 
+        strncmp(line, "REX", registerNameSize) == 0 || strncmp(line, "RFX", registerNameSize) == 0 || 
+        strncmp(line, "RGX", registerNameSize) == 0 || strncmp(line, "RJX", registerNameSize) == 0   ) {
         *res = true;
         return OK;    
     }

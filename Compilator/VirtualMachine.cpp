@@ -64,6 +64,14 @@ struct Text {
     String* index;
 };
 
+struct Comand {
+    OPCODES opcode;
+    ARG_TYPES argType;
+    StackElement_t argValue;
+    REGISTERS_NAMES registerName;
+    int jumpLineIndex;
+};
+
 const char* DefaultInputFilename = "ExecutableFile.txt";
 const char* DefaultOutputFilename = "VirtualMachineOut.txt";
 
@@ -85,15 +93,23 @@ size_t CountChar(char* buf, char toFind);
 
 ERROR_STATUSES MyStrlen(const char* string, int* res);
 
-ERROR_STATUSES Execute(Text* ptrExec, StackElement_t* Registers);
+ERROR_STATUSES LoadProgram(Text* ptrExec, Comand* ptrCode);
+ERROR_STATUSES Execute(Comand* ptrCode, StackElement_t* Registers);
 
 int NumLen(int num);
 
-ERROR_STATUSES StringToRegisterName(const char* line, REGISTERS_NAMES* ptrRegisterName);
+bool IsValidJumpLineIndex(int index);
+
+ERROR_STATUSES JumpVerify(int jumpLineIndex);
+
+void DebugPrintCode(Comand* code);
 
 int main() {   
     Text textExec = {};
     ERROR_STATUSES ReadTextErrorStatus = ReadText(DefaultInputFilename, true, &textExec);
+    
+    Comand code[MaxCodeSize] = {};
+    LoadProgram(&textExec, code);
     
     // LOG(fprintf(stderr, "Info about first 3 lines!\n"));
     // LOG(fprintf(stderr, "index[0].size: %zu\n", textExec.index[0].size);)
@@ -108,8 +124,15 @@ int main() {
 
     StackElement_t Registers[RegistersSize] = {};
 
-    ERROR_STATUSES ExecuteErrorStatus = Execute(&textExec, Registers);
-    ON_DEBUG(ASSERT(ExecuteErrorStatus == OK, GetErrorString(EXECUTION_ERROR), EXECUTION_ERROR))
+    // DebugPrintCode(code);
+    // exit(0);
+
+    ERROR_STATUSES ExecuteErrorStatus = Execute(code, Registers);
+    
+    ON_DEBUG((ExecuteErrorStatus == HALT_EXIT) ? GetErrorString(ExecuteErrorStatus) : GetErrorString(OK);)
+
+    ON_DEBUG(ASSERT(ExecuteErrorStatus == OK || 
+                    ExecuteErrorStatus == HALT_EXIT, GetErrorString(ExecuteErrorStatus), ExecuteErrorStatus))
         
     ERROR_STATUSES UnlinkFileErrorStatuses = UnlinkFile(DefaultOutputFilename);
     ON_DEBUG(ASSERT(UnlinkFileErrorStatuses == OK, GetErrorString(UNLINK_FILE_ERROR), UNLINK_FILE_ERROR))
@@ -602,10 +625,134 @@ unsigned long long GetHash(Stack_t* ptrStack) {
 
 }
 
-ERROR_STATUSES Execute(Text* ptrExec, StackElement_t* Registers) {
+ERROR_STATUSES LoadProgram(Text* ptrExec, Comand* ptrCode) {
     ON_DEBUG(ASSERT(ptrExec         != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);)
     ON_DEBUG(ASSERT(ptrExec->buffer != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);)
     ON_DEBUG(ASSERT(ptrExec->index  != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);)
+
+    ON_DEBUG(ASSERT(ptrCode         != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);)
+
+    int codeInd = 0;
+
+    for (int curLineId = 0; curLineId < ptrExec->maxLines; curLineId++) {
+        OPCODES opcode = NO_OPCODE;
+        
+        ARG_TYPES argType = NO_ARG;
+
+        StackElement_t args = 0;
+
+        REGISTERS_NAMES registerIndex = NO_NAME;
+        
+        int jumpLineIndex = -1;
+
+        char* curLine = ptrExec->index[curLineId].line;
+
+        DebugPrintLine(curLine);
+
+        if (strcmp(curLine, "") == 0) {
+            ptrCode[codeInd].opcode = HALT;
+            codeInd++;
+
+            fprintf(stderr, "(LoadProgram): Exitting...\n");
+            
+            return OK; 
+        }
+
+        if (sscanf(curLine, "%i ", &opcode) == 0) {
+            ASSERT(0, GetErrorString(OPCODE_INPUT_ERROR), OPCODE_INPUT_ERROR);
+        }
+
+        ptrCode[codeInd].opcode = opcode;
+
+        ON_DEBUG(fprintf(stderr, "(LoadProgram): have an opcode: %i\n", ptrCode[codeInd].opcode);)
+
+        //  BUG: считывай строку во второй раз, учитывая длину opcode
+        
+        if (opcode != OUT && opcode != DUMP && opcode != SIN &&
+            opcode != COS && opcode != SQUARE && opcode != SQRT) {
+            if (opcode == PUSH || opcode == POP) {
+                if (sscanf(curLine + NumLen(opcode), "%i", &argType) == 0) {
+                    ASSERT(false, GetErrorString(NO_ARGUMENT_TYPE_ERROR), NO_ARGUMENT_TYPE_ERROR);
+                }
+                //   Дед, можно попытаться вернуть switch, но есть пара вопросов
+                
+                ptrCode[codeInd].argType = argType;
+
+                ON_DEBUG(fprintf(stderr, "(LoadProgram): have an argType: %i\n", ptrCode[codeInd].argType);)
+
+                REGISTERS_NAMES registerName = NO_NAME;
+                bool isValid = false;
+
+                ERROR_STATUSES IsValidRegisterNameErrorStatus  = OK;
+                ERROR_STATUSES StringToRegisterNameErrorStatus = OK;
+
+                ON_DEBUG(fprintf(stderr, "Wanna read arg value from line:\n");)
+                ON_DEBUG(DebugPrintLine(curLine + NumLen(opcode) + 1 + NumLen(argType) + 1);)
+
+                switch (argType) {
+                    case CONSTANT:
+                        if (sscanf(curLine + NumLen(opcode) + 1 + NumLen(argType) + 1, "%lf", &args) == 0) {
+                            ASSERT(false, GetErrorString(ARGS_INPUT_ERROR), ARGS_INPUT_ERROR);
+                        }
+
+                        ptrCode[codeInd].argValue = args;
+
+                        ON_DEBUG(fprintf(stderr, "(LoadProgram): have a constant arg: %lf\n", ptrCode[codeInd].argValue);)
+
+                        break;
+                    
+                    case VARIABLE:
+                        if (sscanf(curLine + NumLen(opcode) + 1 + NumLen(argType) + 1, "%i", &registerName) == 0) {
+                            ASSERT(false, GetErrorString(ARGS_INPUT_ERROR), ARGS_INPUT_ERROR);
+                        }
+                        
+                        IsValidRegisterNameErrorStatus = IsValidRegisterName(registerName, &isValid);
+                        
+                        ASSERT(IsValidRegisterNameErrorStatus == OK, GetErrorString(IS_VALID_REGISTER_NAME_ERROR), 
+                               IS_VALID_REGISTER_NAME_ERROR);
+                        
+                        ptrCode[codeInd].registerName = registerName;
+                        
+                        ON_DEBUG(fprintf(stderr, "(LoadProgram): have a variable arg: %i\n", ptrCode[codeInd].registerName);)
+                               
+                        break;
+                    
+                    default:
+                        ASSERT(false, GetErrorString(UNKNOWN_ARGUMENT_TYPE), UNKNOWN_ARGUMENT_TYPE);
+                        break;
+                }
+            }
+            else if (opcode == JMP || opcode == JA || opcode == JB  ||
+                     opcode == JAE || opcode == JBE || opcode == JE ||
+                     opcode == JNE                                    ) {
+                ON_DEBUG(fprintf(stderr, "(LoadProgram): wanna find a jump arg in string: <%s>\n", curLine + NumLen(opcode));)
+
+                if (sscanf(curLine + NumLen(opcode), "%i", &jumpLineIndex) == 0) {
+                    ASSERT(false, GetErrorString(ARGS_INPUT_ERROR), ARGS_INPUT_ERROR);
+                }
+
+                ptrCode[codeInd].jumpLineIndex = jumpLineIndex;
+
+                ON_DEBUG(fprintf(stderr, "(LoadProgram): have a jump arg: %i\n", ptrCode[codeInd].jumpLineIndex);)
+            }
+            else if (sscanf(curLine + NumLen(opcode), "%lf", &args) == 0) {
+                ASSERT(false, GetErrorString(ARGS_INPUT_ERROR), ARGS_INPUT_ERROR);
+            }
+
+            ON_DEBUG(fprintf(stderr, "Args input enabled and correct!!!\n");)
+        }
+
+        codeInd++;
+    }
+
+    ptrCode[codeInd].opcode = HALT;
+    codeInd++;
+
+    return OK;
+}
+
+ERROR_STATUSES Execute(Comand* ptrCode, StackElement_t* Registers) {
+    ON_DEBUG(ASSERT(ptrCode         != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);)
 
     Stack_t stk1 = {};
     
@@ -618,91 +765,52 @@ ERROR_STATUSES Execute(Text* ptrExec, StackElement_t* Registers) {
     
     ON_DEBUG(fprintf(stderr, "(Execute): going in cycle\n");)
 
-    for (int curLineId = 0; curLineId < ptrExec->maxLines; curLineId++) {
-        OPCODES opcode = NO_OPCODE;
+    for (int codeLine = 0; codeLine < MaxCodeSize; codeLine++) {
+        OPCODES opcode                = ptrCode[codeLine].opcode;
+
+        ARG_TYPES argType             = ptrCode[codeLine].argType;
+
+        StackElement_t args           = ptrCode[codeLine].argValue;
+
+        REGISTERS_NAMES registerIndex = ptrCode[codeLine].registerName;
         
-        ARG_TYPES argType = NO_ARG;
+        int             jumpLineIndex = ptrCode[codeLine].jumpLineIndex;
 
-        StackElement_t args = 0;
-
-        REGISTERS_NAMES registerIndex = NO_NAME;
-
-        char* curLine = ptrExec->index[curLineId].line;
-
-        DebugPrintLine(curLine);
-
-        if (strcmp(curLine, "") == 0) {
-            fprintf(stderr, "Exitting...\n");
+        // if (strcmp(curLine, "") == 0) {
+        //     fprintf(stderr, "Exitting...\n");
             
-            return OK; 
-        }
-
-        if (sscanf(curLine, "%i ", &opcode) == 0) {
-            ASSERT(0, GetErrorString(OPCODE_INPUT_ERROR), OPCODE_INPUT_ERROR);
-        }
-
+        //     return OK; 
+        // }
+        //  Добавить stop opcode. Норм идея, Дед?
         //  BUG: считывай строку во второй раз, учитывая длину opcode
         
-        if (opcode != OUT && opcode != DUMP && opcode != SIN &&
-            opcode != COS && opcode != SQUARE && opcode != SQRT) {
-            if (opcode == PUSH || opcode == POP) {
-                if (sscanf(curLine + NumLen(opcode), "%i", &argType) == 0) {
-                    ASSERT(false, GetErrorString(NO_ARGUMENT_TYPE_ERROR), NO_ARGUMENT_TYPE_ERROR);
-                }
-                //   Дед, можно попытаться вернуть switch, но есть пара вопросов
-                
-                char* registerName = NULL;
-                bool isValid = false;
+        ON_DEBUG(fprintf(stderr, "(Execute): opcode: %i, argType: %i, args: %lf, registerIndex: %i, jumpLineIndex: %i\n",  
+                                 opcode, argType, args, registerIndex, jumpLineIndex);)
 
-                ERROR_STATUSES IsValidRegisterNameErrorStatus  = OK;
-                ERROR_STATUSES StringToRegisterNameErrorStatus = OK;
+        switch((OPCODES)opcode) {
+            case PUSH: {
 
                 switch (argType) {
                     case CONSTANT:
-                        if (sscanf(curLine + NumLen(opcode) + 1 + NumLen(argType), "%lf", &args) == 0) {
-                            ASSERT(false, GetErrorString(ARGS_INPUT_ERROR), ARGS_INPUT_ERROR);
-                        }
+                        StackPush(&stk1, args);
+
+                        ON_DEBUG(fprintf(stderr, "(Execute): want to push constant: %lf\n", args);)
+
                         break;
-                    
+
                     case VARIABLE:
-                        registerName = (char*)calloc(MaxRegisterNameLen, sizeof(*registerName));    //  Дед, может лучше sizeof(char)?
+                        StackPush(&stk1, Registers[registerIndex]);
 
-                        ASSERT(registerName != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
+                        ON_DEBUG(fprintf(stderr, "(Execute): want to push %lf from Registers[%i]\n",
+                                 Registers[registerIndex], registerIndex);)
 
-                        if (sscanf(curLine + NumLen(opcode) + 1 + NumLen(argType), "%s", registerName) == 0) {
-                            ASSERT(false, GetErrorString(ARGS_INPUT_ERROR), ARGS_INPUT_ERROR);
-                        }
-
-                        
-                        
-                        IsValidRegisterNameErrorStatus = IsValidRegisterName(registerName, &isValid);
-                        
-                        ASSERT(IsValidRegisterNameErrorStatus == OK, GetErrorString(IS_VALID_REGISTER_NAME_ERROR), 
-                               IS_VALID_REGISTER_NAME_ERROR);
-                        
-                        StringToRegisterNameErrorStatus = StringToRegisterName(registerName, &registerIndex); 
-
-                        args = Registers[registerIndex];
                         break;
                     
                     default:
                         ASSERT(false, GetErrorString(UNKNOWN_ARGUMENT_TYPE), UNKNOWN_ARGUMENT_TYPE);
                         break;
                 }
-            }
-            else if (sscanf(curLine + NumLen(opcode), "%lf", &args) == 0) {
-                ASSERT(false, GetErrorString(ARGS_INPUT_ERROR), ARGS_INPUT_ERROR);
-            }
 
-            ON_DEBUG(fprintf(stderr, "Args input enabled and correct!!!\n");)
-        }
-        
-        ON_DEBUG(fprintf(stderr, "(Execute): opcode: %i, args: %lf\n", 
-                                 opcode, args);)
-
-        switch((OPCODES)opcode) {
-            case PUSH: {
-                StackPush(&stk1, args);
                 break;
             }
             
@@ -710,7 +818,14 @@ ERROR_STATUSES Execute(Text* ptrExec, StackElement_t* Registers) {
                 StackElement_t popValue = 0;
                 StackPop(&stk1, &popValue);
 
-                Registers[registerIndex] = popValue;
+                if (registerIndex != NO_NAME) {
+                    Registers[registerIndex] = popValue;
+
+                    ON_DEBUG(fprintf(stderr, "(Execute): want to pop %lf in Registers[%i]\n",
+                             Registers[registerIndex], registerIndex);)
+                }
+
+                ON_DEBUG(fprintf(stderr, "(Execute): want to pop: %lf\n", popValue);)
 
                 break;
             }
@@ -801,7 +916,132 @@ ERROR_STATUSES Execute(Text* ptrExec, StackElement_t* Registers) {
                 StackElement_t op1 = 0;
                 StackPop(&stk1, &op1);
 
+                ON_DEBUG(fprintf(stderr, "(Execute): want to sqrt: %lf\n", op1);)
+
                 StackPush(&stk1, sqrt(op1));
+                break;
+            }
+
+            case JMP: {
+                ON_DEBUG(fprintf(stderr, "Wanna jump to: codeLine[%i]\n", jumpLineIndex);)
+
+                ERROR_STATUSES JumpVerifyErrorStatus = JumpVerify(jumpLineIndex);
+                ASSERT(JumpVerifyErrorStatus == OK, GetErrorString(JumpVerifyErrorStatus),
+                       JumpVerifyErrorStatus);
+
+                codeLine = jumpLineIndex - 1; 
+                break;
+            }
+
+            case HALT: {
+                return HALT_EXIT;
+            }
+
+            case JA: {
+                ON_DEBUG(fprintf(stderr, "Wanna jump to: codeLine[%i]\n", jumpLineIndex);)
+
+                StackElement_t op1 = POISON, op2 = POISON;
+                StackPop(&stk1, &op1);
+                StackPop(&stk1, &op2);
+                
+                if (op1 != POISON && op2 != POISON && op1 > op2) {
+                    ERROR_STATUSES JumpVerifyErrorStatus = JumpVerify(jumpLineIndex);
+                    ASSERT(JumpVerifyErrorStatus == OK, GetErrorString(JumpVerifyErrorStatus),
+                            JumpVerifyErrorStatus);
+
+                    codeLine = jumpLineIndex - 1; 
+                }
+
+                break;
+            }
+
+            case JB: {
+                ON_DEBUG(fprintf(stderr, "Wanna jump to: codeLine[%i]\n", jumpLineIndex);)
+
+                StackElement_t op1 = POISON, op2 = POISON;
+                StackPop(&stk1, &op1);
+                StackPop(&stk1, &op2);
+                
+                if (op1 != POISON && op2 != POISON && op1 < op2) {
+                    ERROR_STATUSES JumpVerifyErrorStatus = JumpVerify(jumpLineIndex);
+                    ASSERT(JumpVerifyErrorStatus == OK, GetErrorString(JumpVerifyErrorStatus),
+                            JumpVerifyErrorStatus);
+
+                    codeLine = jumpLineIndex - 1; 
+                }
+
+                break;
+            }
+
+            case JAE: {
+                ON_DEBUG(fprintf(stderr, "Wanna jump to: codeLine[%i]\n", jumpLineIndex);)
+
+                StackElement_t op1 = POISON, op2 = POISON;
+                StackPop(&stk1, &op1);
+                StackPop(&stk1, &op2);
+                
+                if (op1 != POISON && op2 != POISON && op1 >= op2) {
+                    ERROR_STATUSES JumpVerifyErrorStatus = JumpVerify(jumpLineIndex);
+                    ASSERT(JumpVerifyErrorStatus == OK, GetErrorString(JumpVerifyErrorStatus),
+                            JumpVerifyErrorStatus);
+
+                    codeLine = jumpLineIndex - 1; 
+                }
+
+                break;
+            }
+
+            case JBE: {
+                ON_DEBUG(fprintf(stderr, "Wanna jump to: codeLine[%i]\n", jumpLineIndex);)
+
+                StackElement_t op1 = POISON, op2 = POISON;
+                StackPop(&stk1, &op1);
+                StackPop(&stk1, &op2);
+                
+                if (op1 != POISON && op2 != POISON && op1 <= op2) {
+                    ERROR_STATUSES JumpVerifyErrorStatus = JumpVerify(jumpLineIndex);
+                    ASSERT(JumpVerifyErrorStatus == OK, GetErrorString(JumpVerifyErrorStatus),
+                            JumpVerifyErrorStatus);
+
+                    codeLine = jumpLineIndex - 1; 
+                }
+
+                break;
+            }
+
+            case JE: {
+                ON_DEBUG(fprintf(stderr, "Wanna jump to: codeLine[%i]\n", jumpLineIndex);)
+
+                StackElement_t op1 = POISON, op2 = POISON;
+                StackPop(&stk1, &op1);
+                StackPop(&stk1, &op2);
+                
+                if (op1 != POISON && op2 != POISON && op1 == op2) {
+                    ERROR_STATUSES JumpVerifyErrorStatus = JumpVerify(jumpLineIndex);
+                    ASSERT(JumpVerifyErrorStatus == OK, GetErrorString(JumpVerifyErrorStatus),
+                            JumpVerifyErrorStatus);
+
+                    codeLine = jumpLineIndex - 1; 
+                }
+
+                break;
+            }
+
+            case JNE: {
+                ON_DEBUG(fprintf(stderr, "Wanna jump to: codeLine[%i]\n", jumpLineIndex);)
+
+                StackElement_t op1 = POISON, op2 = POISON;
+                StackPop(&stk1, &op1);
+                StackPop(&stk1, &op2);
+                
+                if (op1 != POISON && op2 != POISON && op1 != op2) {
+                    ERROR_STATUSES JumpVerifyErrorStatus = JumpVerify(jumpLineIndex);
+                    ASSERT(JumpVerifyErrorStatus == OK, GetErrorString(JumpVerifyErrorStatus),
+                            JumpVerifyErrorStatus);
+
+                    codeLine = jumpLineIndex - 1; 
+                }
+
                 break;
             }
 
@@ -821,50 +1061,53 @@ int NumLen(int num) {
     }
 
     int res = 0;
+
     if (num < 0) {
         res++;
+        num *= -1;
     }
 
-    num += log10(num) + 1;
+    res += log10(num) + 1;
     
-    return num;
+    ON_DEBUG(fprintf(stderr, "(NumLen) %i has len %i\n", num, res );)
+    return res;
 }
 
-ERROR_STATUSES IsValidRegisterName(const char* line, bool* res) {
-    if (strcmp(line, "RAX") == 0 || strcmp(line, "RBX") == 0 || 
-        strcmp(line, "RCX") == 0 || strcmp(line, "RDX") == 0 || 
-        strcmp(line, "REX") == 0 || strcmp(line, "RFX") == 0 || 
-        strcmp(line, "RGX") == 0 || strcmp(line, "RJX") == 0   ) {
-        *res = true;
-        return OK;    
+ERROR_STATUSES IsValidRegisterName(REGISTERS_NAMES registerName, bool* res) {
+    switch (registerName) {
+        default:
+            *res = false;
+            return OK;
+            break;
     }
 
-    *res = false;
+    *res = true;
     return OK;
 }
 
-ERROR_STATUSES StringToRegisterName(const char* line, REGISTERS_NAMES* ptrRegisterName) {
-    ASSERT(line != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+bool IsValidJumpLineIndex(int index) {
+    return index >= 0;  // TODO: узнавать верхнюю границу допустимой памяти
+}
 
-    if (strcmp(line, "RAX") == 0) {
-        *ptrRegisterName = RAX;
-    } else if (strcmp(line, "RBX") == 0) {
-        *ptrRegisterName = RBX;
-    }  else if (strcmp(line, "RCX") == 0) {
-        *ptrRegisterName = RCX;
-    }  else if (strcmp(line, "RDX") == 0) {
-        *ptrRegisterName = RDX;
-    }  else if (strcmp(line, "REX") == 0) {
-        *ptrRegisterName = REX;
-    }  else if (strcmp(line, "RFX") == 0) {
-        *ptrRegisterName = RFX;
-    }  else if (strcmp(line, "RGX") == 0) {
-        *ptrRegisterName = RGX;
-    } else if (strcmp(line, "RJX") == 0) {
-        *ptrRegisterName = RJX;
-    } else {
-        return UNKNOWN_REGISTER_NAME;
+ERROR_STATUSES JumpVerify(int jumpLineIndex) {
+    if (jumpLineIndex == -1) {
+        ASSERT(false, GetErrorString(NOT_INITIALIZED_JUMP_ADDRESS), NOT_INITIALIZED_JUMP_ADDRESS);
     }
 
+    ASSERT(IsValidJumpLineIndex(jumpLineIndex), GetErrorString(JUMP_ADDRESS_IS_OUT_OF_RANGE),
+           JUMP_ADDRESS_IS_OUT_OF_RANGE);
+
     return OK;
+}
+
+void DebugPrintCode(Comand* code) {
+    int lenNeeded = 10;
+
+    for (int codeLine = 0; codeLine < lenNeeded; codeLine++) {
+        Comand curComand = code[codeLine];
+
+        ON_DEBUG(fprintf(stderr, "code[%i]: opcode: %i, argType: %i, argValue: %lf, registerName: %s, jumpLineIndex: %i\n",
+                                  codeLine, curComand.opcode, curComand.argType, curComand.argValue, curComand.registerName, 
+                                  curComand.jumpLineIndex);)
+    }
 }

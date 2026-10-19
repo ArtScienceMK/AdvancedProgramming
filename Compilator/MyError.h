@@ -37,7 +37,10 @@ enum ERROR_STATUSES {
     IS_VALID_REGISTER_NAME_ERROR         = 32,
     NO_ARGUMENT_TYPE_ERROR               = 33,
     UNKNOWN_ARGUMENT_TYPE                = 34,
-    
+    JUMP_ADDRESS_IS_OUT_OF_RANGE         = 35,
+    NOT_INITIALIZED_JUMP_ADDRESS         = 36,
+    HALT_EXIT                            = 37,
+    IS_VALID_REGISTER_NAME_STRING_ERROR  = 38
 };
 
 const char* GetErrorString(ERROR_STATUSES errorStatus);
@@ -143,6 +146,18 @@ const char* GetErrorString(ERROR_STATUSES errorStatus) {
         case UNKNOWN_ARGUMENT_TYPE:
             return "Unknown argument type!\n";
 
+        case JUMP_ADDRESS_IS_OUT_OF_RANGE:
+            return "Jump address is out of allocated memory range!\n";
+        
+        case NOT_INITIALIZED_JUMP_ADDRESS:
+            return "Jump address was not initialized!\n";
+
+        case HALT_EXIT:
+            return "HALT command was called!\n";
+
+        case IS_VALID_REGISTER_NAME_STRING_ERROR:
+            return "Error happened when validating register name string!\n";
+            
         default:
             return "Unknown error status!\n";
     }
