@@ -72,6 +72,16 @@ struct Comand {
     int jumpLineIndex;
 };
 
+struct VirtualMachine {
+    Comand code[MaxCodeSize];
+    int codeSize;
+
+    StackElement_t registers[RegistersSize];
+    
+    Stack_t stack;
+    Stack_t callStack;
+};
+
 const char* DefaultInputFilename = "ExecutableFile.txt";
 const char* DefaultOutputFilename = "VirtualMachineOut.txt";
 
@@ -93,8 +103,8 @@ size_t CountChar(char* buf, char toFind);
 
 ERROR_STATUSES MyStrlen(const char* string, int* res);
 
-ERROR_STATUSES LoadProgram(Text* ptrExec, Comand* ptrCode);
-ERROR_STATUSES Execute(Comand* ptrCode, StackElement_t* Registers);
+ERROR_STATUSES LoadProgram(Text* ptrExec, Comand* ptrCode, int* ptrCodeSize);
+ERROR_STATUSES Execute(VirtualMachine vm);
 
 int NumLen(int num);
 
@@ -104,12 +114,15 @@ ERROR_STATUSES JumpVerify(int jumpLineIndex);
 
 void DebugPrintCode(Comand* code);
 
+ERROR_STATUSES VirtualMachineDump(VirtualMachine vm, SourceLocation sourceLocation);
+
 int main() {   
     Text textExec = {};
     ERROR_STATUSES ReadTextErrorStatus = ReadText(DefaultInputFilename, true, &textExec);
     
-    Comand code[MaxCodeSize] = {};
-    LoadProgram(&textExec, code);
+    VirtualMachine vm = {};
+
+    LoadProgram(&textExec, vm.code, &vm.codeSize);
     
     // LOG(fprintf(stderr, "Info about first 3 lines!\n"));
     // LOG(fprintf(stderr, "index[0].size: %zu\n", textExec.index[0].size);)
@@ -122,12 +135,10 @@ int main() {
     
     // return 0;
 
-    StackElement_t Registers[RegistersSize] = {};
-
     // DebugPrintCode(code);
     // exit(0);
 
-    ERROR_STATUSES ExecuteErrorStatus = Execute(code, Registers);
+    ERROR_STATUSES ExecuteErrorStatus = Execute(vm);
     
     ON_DEBUG((ExecuteErrorStatus == HALT_EXIT) ? GetErrorString(ExecuteErrorStatus) : GetErrorString(OK);)
 
@@ -625,7 +636,7 @@ unsigned long long GetHash(Stack_t* ptrStack) {
 
 }
 
-ERROR_STATUSES LoadProgram(Text* ptrExec, Comand* ptrCode) {
+ERROR_STATUSES LoadProgram(Text* ptrExec, Comand* ptrCode, int* ptrCodeSize) {
     ON_DEBUG(ASSERT(ptrExec         != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);)
     ON_DEBUG(ASSERT(ptrExec->buffer != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);)
     ON_DEBUG(ASSERT(ptrExec->index  != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);)
@@ -633,8 +644,11 @@ ERROR_STATUSES LoadProgram(Text* ptrExec, Comand* ptrCode) {
     ON_DEBUG(ASSERT(ptrCode         != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);)
 
     int codeInd = 0;
+    *ptrCodeSize = ptrExec->maxLines;
 
     for (int curLineId = 0; curLineId < ptrExec->maxLines; curLineId++) {
+        ON_DEBUG(fprintf(stderr, "(LoadProgram): curLineId = %i\n", curLineId);)
+
         OPCODES opcode = NO_OPCODE;
         
         ARG_TYPES argType = NO_ARG;
@@ -658,6 +672,15 @@ ERROR_STATUSES LoadProgram(Text* ptrExec, Comand* ptrCode) {
             return OK; 
         }
 
+        if (strncmp(curLine, ":", strlen(":")) == 0 ||
+            strncmp(curLine, ";", strlen(";")) == 0   ) {
+
+            ptrCode[codeInd].opcode = SKIP;
+            codeInd++;
+
+            continue;
+        }
+
         if (sscanf(curLine, "%i ", &opcode) == 0) {
             ASSERT(0, GetErrorString(OPCODE_INPUT_ERROR), OPCODE_INPUT_ERROR);
         }
@@ -668,8 +691,9 @@ ERROR_STATUSES LoadProgram(Text* ptrExec, Comand* ptrCode) {
 
         //  BUG: считывай строку во второй раз, учитывая длину opcode
         
-        if (opcode != OUT && opcode != DUMP && opcode != SIN &&
-            opcode != COS && opcode != SQUARE && opcode != SQRT) {
+        if (opcode == PUSH || opcode == POP || opcode == JMP || opcode == JA ||
+            opcode == JB   || opcode == JAE || opcode == JBE || opcode == JE ||
+            opcode == JNE || opcode == CALL                                    ) {
             if (opcode == PUSH || opcode == POP) {
                 if (sscanf(curLine + NumLen(opcode), "%i", &argType) == 0) {
                     ASSERT(false, GetErrorString(NO_ARGUMENT_TYPE_ERROR), NO_ARGUMENT_TYPE_ERROR);
@@ -724,8 +748,8 @@ ERROR_STATUSES LoadProgram(Text* ptrExec, Comand* ptrCode) {
             }
             else if (opcode == JMP || opcode == JA || opcode == JB  ||
                      opcode == JAE || opcode == JBE || opcode == JE ||
-                     opcode == JNE                                    ) {
-                ON_DEBUG(fprintf(stderr, "(LoadProgram): wanna find a jump arg in string: <%s>\n", curLine + NumLen(opcode));)
+                     opcode == JNE || opcode == CALL                  ) {
+                // ON_DEBUG(fprintf(stderr, "(LoadProgram): wanna find a jump arg in string: <%s>\n", curLine + NumLen(opcode));)
 
                 if (sscanf(curLine + NumLen(opcode), "%i", &jumpLineIndex) == 0) {
                     ASSERT(false, GetErrorString(ARGS_INPUT_ERROR), ARGS_INPUT_ERROR);
@@ -751,21 +775,33 @@ ERROR_STATUSES LoadProgram(Text* ptrExec, Comand* ptrCode) {
     return OK;
 }
 
-ERROR_STATUSES Execute(Comand* ptrCode, StackElement_t* Registers) {
+ERROR_STATUSES Execute(VirtualMachine vm) {
+    Comand* ptrCode = vm.code;
+    StackElement_t* Registers = vm.registers;
+
     ON_DEBUG(ASSERT(ptrCode         != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);)
 
-    Stack_t stk1 = {};
+    vm.stack = {};
+    vm.callStack = {};
     
     SourceLocation sourceLocation1 = {};
-    GET_SOURCE_LOCATION(sourceLocation1, stk1)
+    GET_SOURCE_LOCATION(sourceLocation1, vm.stack)
 
-    ERROR_STATUSES StackInitErrorStatus = StackInit(&stk1, 5 ON_DEBUG(, sourceLocation1));
+    ERROR_STATUSES StackInitErrorStatus = StackInit(&vm.stack, 5 ON_DEBUG(, sourceLocation1));
     
     ON_DEBUG(ASSERT(StackInitErrorStatus == OK, GetErrorString(StackInitErrorStatus), StackInitErrorStatus);)
+
+    SourceLocation sourceLocation2 = {};
+    GET_SOURCE_LOCATION(sourceLocation2, vm.callStack)
+
+    StackInitErrorStatus = StackInit(&vm.callStack, 5 ON_DEBUG(, sourceLocation2));
+    
+    ON_DEBUG(ASSERT(StackInitErrorStatus == OK, GetErrorString(StackInitErrorStatus), StackInitErrorStatus);)
+
     
     ON_DEBUG(fprintf(stderr, "(Execute): going in cycle\n");)
 
-    for (int codeLine = 0; codeLine < MaxCodeSize; codeLine++) {
+    for (int codeLine = 0; codeLine < vm.codeSize; codeLine++) {
         OPCODES opcode                = ptrCode[codeLine].opcode;
 
         ARG_TYPES argType             = ptrCode[codeLine].argType;
@@ -784,22 +820,22 @@ ERROR_STATUSES Execute(Comand* ptrCode, StackElement_t* Registers) {
         //  Добавить stop opcode. Норм идея, Дед?
         //  BUG: считывай строку во второй раз, учитывая длину opcode
         
-        ON_DEBUG(fprintf(stderr, "(Execute): opcode: %i, argType: %i, args: %lf, registerIndex: %i, jumpLineIndex: %i\n",  
-                                 opcode, argType, args, registerIndex, jumpLineIndex);)
+        ON_DEBUG(fprintf(stderr, "(Execute): code[%i], opcode: %i, argType: %i, args: %lf, registerIndex: %i, jumpLineIndex: %i\n",  
+                                  codeLine, opcode, argType, args, registerIndex, jumpLineIndex);)
 
         switch((OPCODES)opcode) {
             case PUSH: {
 
                 switch (argType) {
                     case CONSTANT:
-                        StackPush(&stk1, args);
+                        StackPush(&vm.stack, args);
 
                         ON_DEBUG(fprintf(stderr, "(Execute): want to push constant: %lf\n", args);)
 
                         break;
 
                     case VARIABLE:
-                        StackPush(&stk1, Registers[registerIndex]);
+                        StackPush(&vm.stack, Registers[registerIndex]);
 
                         ON_DEBUG(fprintf(stderr, "(Execute): want to push %lf from Registers[%i]\n",
                                  Registers[registerIndex], registerIndex);)
@@ -816,7 +852,7 @@ ERROR_STATUSES Execute(Comand* ptrCode, StackElement_t* Registers) {
             
             case POP: {
                 StackElement_t popValue = 0;
-                StackPop(&stk1, &popValue);
+                StackPop(&vm.stack, &popValue);
 
                 if (registerIndex != NO_NAME) {
                     Registers[registerIndex] = popValue;
@@ -831,8 +867,14 @@ ERROR_STATUSES Execute(Comand* ptrCode, StackElement_t* Registers) {
             }
             
             case OUT: {
+                // SourceLocation sourceLocation2 = {};
+
+                // GET_SOURCE_LOCATION(sourceLocation2, vm);
+
+                // VirtualMachineDump(vm, sourceLocation2);
+
                 StackElement_t popValue = 0;
-                StackPop(&stk1, &popValue);
+                StackPop(&vm.stack, &popValue);
 
                 fprintf(stderr, "(out): %lf\n", popValue);
             
@@ -842,9 +884,9 @@ ERROR_STATUSES Execute(Comand* ptrCode, StackElement_t* Registers) {
             case DUMP: {
                 SourceLocation sourceLocation1 = {};
                 
-                GET_SOURCE_LOCATION(sourceLocation1, stk1)
+                GET_SOURCE_LOCATION(sourceLocation1, vm.stack)
 
-                StackDump(stk1, sourceLocation1);
+                StackDump(vm.stack, sourceLocation1);
             
                 break;
             }
@@ -852,73 +894,73 @@ ERROR_STATUSES Execute(Comand* ptrCode, StackElement_t* Registers) {
 
             case ADD: {
                 StackElement_t op1 = 0, op2 = 0;
-                StackPop(&stk1, &op1);
-                StackPop(&stk1, &op2);
+                StackPop(&vm.stack, &op1);
+                StackPop(&vm.stack, &op2);
                 
-                StackPush(&stk1, op1 + op2);
+                StackPush(&vm.stack, op1 + op2);
                 break;
             }
             
             case SUB: {
                 StackElement_t op1 = 0, op2 = 0;
-                StackPop(&stk1, &op1);
-                StackPop(&stk1, &op2);
+                StackPop(&vm.stack, &op1);
+                StackPop(&vm.stack, &op2);
 
-                StackPush(&stk1, op1 - op2);
+                StackPush(&vm.stack, op2 - op1);
                 break;
             }
             
             case MUL: {
                 StackElement_t op1 = 0, op2 = 0;
-                StackPop(&stk1, &op1);
-                StackPop(&stk1, &op2);
+                StackPop(&vm.stack, &op1);
+                StackPop(&vm.stack, &op2);
 
-                StackPush(&stk1, op1 * op2);
+                StackPush(&vm.stack, op1 * op2);
                 break;
             }
             
             case DIV: {
                 StackElement_t op1 = 0, op2 = 0;
-                StackPop(&stk1, &op1);
-                StackPop(&stk1, &op2);
+                StackPop(&vm.stack, &op1);
+                StackPop(&vm.stack, &op2);
 
                 ASSERT(op2 != 0, GetErrorString(ZERO_DIVISION_ERROR), ZERO_DIVISION_ERROR);
 
-                StackPush(&stk1, op1 / op2);
+                StackPush(&vm.stack, op2 / op1);
                 break;
             }
 
             case SIN: {
                 StackElement_t op1 = 0;
-                StackPop(&stk1, &op1);
+                StackPop(&vm.stack, &op1);
 
-                StackPush(&stk1, sin(op1));
+                StackPush(&vm.stack, sin(op1));
                 break;
             }
 
             case COS: {
                 StackElement_t op1 = 0;
-                StackPop(&stk1, &op1);
+                StackPop(&vm.stack, &op1);
 
-                StackPush(&stk1, cos(op1));
+                StackPush(&vm.stack, cos(op1));
                 break;
             }
             
             case SQUARE: {
                 StackElement_t op1 = 0;
-                StackPop(&stk1, &op1);
+                StackPop(&vm.stack, &op1);
 
-                StackPush(&stk1, op1 * op1);
+                StackPush(&vm.stack, op1 * op1);
                 break;
             }
 
             case SQRT: {
                 StackElement_t op1 = 0;
-                StackPop(&stk1, &op1);
+                StackPop(&vm.stack, &op1);
 
                 ON_DEBUG(fprintf(stderr, "(Execute): want to sqrt: %lf\n", op1);)
 
-                StackPush(&stk1, sqrt(op1));
+                StackPush(&vm.stack, sqrt(op1));
                 break;
             }
 
@@ -941,8 +983,8 @@ ERROR_STATUSES Execute(Comand* ptrCode, StackElement_t* Registers) {
                 ON_DEBUG(fprintf(stderr, "Wanna jump to: codeLine[%i]\n", jumpLineIndex);)
 
                 StackElement_t op1 = POISON, op2 = POISON;
-                StackPop(&stk1, &op1);
-                StackPop(&stk1, &op2);
+                StackPop(&vm.stack, &op1);
+                StackPop(&vm.stack, &op2);
                 
                 if (op1 != POISON && op2 != POISON && op1 > op2) {
                     ERROR_STATUSES JumpVerifyErrorStatus = JumpVerify(jumpLineIndex);
@@ -959,8 +1001,8 @@ ERROR_STATUSES Execute(Comand* ptrCode, StackElement_t* Registers) {
                 ON_DEBUG(fprintf(stderr, "Wanna jump to: codeLine[%i]\n", jumpLineIndex);)
 
                 StackElement_t op1 = POISON, op2 = POISON;
-                StackPop(&stk1, &op1);
-                StackPop(&stk1, &op2);
+                StackPop(&vm.stack, &op1);
+                StackPop(&vm.stack, &op2);
                 
                 if (op1 != POISON && op2 != POISON && op1 < op2) {
                     ERROR_STATUSES JumpVerifyErrorStatus = JumpVerify(jumpLineIndex);
@@ -977,8 +1019,8 @@ ERROR_STATUSES Execute(Comand* ptrCode, StackElement_t* Registers) {
                 ON_DEBUG(fprintf(stderr, "Wanna jump to: codeLine[%i]\n", jumpLineIndex);)
 
                 StackElement_t op1 = POISON, op2 = POISON;
-                StackPop(&stk1, &op1);
-                StackPop(&stk1, &op2);
+                StackPop(&vm.stack, &op1);
+                StackPop(&vm.stack, &op2);
                 
                 if (op1 != POISON && op2 != POISON && op1 >= op2) {
                     ERROR_STATUSES JumpVerifyErrorStatus = JumpVerify(jumpLineIndex);
@@ -995,8 +1037,8 @@ ERROR_STATUSES Execute(Comand* ptrCode, StackElement_t* Registers) {
                 ON_DEBUG(fprintf(stderr, "Wanna jump to: codeLine[%i]\n", jumpLineIndex);)
 
                 StackElement_t op1 = POISON, op2 = POISON;
-                StackPop(&stk1, &op1);
-                StackPop(&stk1, &op2);
+                StackPop(&vm.stack, &op1);
+                StackPop(&vm.stack, &op2);
                 
                 if (op1 != POISON && op2 != POISON && op1 <= op2) {
                     ERROR_STATUSES JumpVerifyErrorStatus = JumpVerify(jumpLineIndex);
@@ -1013,8 +1055,8 @@ ERROR_STATUSES Execute(Comand* ptrCode, StackElement_t* Registers) {
                 ON_DEBUG(fprintf(stderr, "Wanna jump to: codeLine[%i]\n", jumpLineIndex);)
 
                 StackElement_t op1 = POISON, op2 = POISON;
-                StackPop(&stk1, &op1);
-                StackPop(&stk1, &op2);
+                StackPop(&vm.stack, &op1);
+                StackPop(&vm.stack, &op2);
                 
                 if (op1 != POISON && op2 != POISON && op1 == op2) {
                     ERROR_STATUSES JumpVerifyErrorStatus = JumpVerify(jumpLineIndex);
@@ -1031,8 +1073,8 @@ ERROR_STATUSES Execute(Comand* ptrCode, StackElement_t* Registers) {
                 ON_DEBUG(fprintf(stderr, "Wanna jump to: codeLine[%i]\n", jumpLineIndex);)
 
                 StackElement_t op1 = POISON, op2 = POISON;
-                StackPop(&stk1, &op1);
-                StackPop(&stk1, &op2);
+                StackPop(&vm.stack, &op1);
+                StackPop(&vm.stack, &op2);
                 
                 if (op1 != POISON && op2 != POISON && op1 != op2) {
                     ERROR_STATUSES JumpVerifyErrorStatus = JumpVerify(jumpLineIndex);
@@ -1040,6 +1082,54 @@ ERROR_STATUSES Execute(Comand* ptrCode, StackElement_t* Registers) {
                             JumpVerifyErrorStatus);
 
                     codeLine = jumpLineIndex - 1; 
+                }
+
+                break;
+            }
+
+            case CALL: {
+                ERROR_STATUSES JumpVerifyErrorStatus = JumpVerify(jumpLineIndex);
+                ASSERT(JumpVerifyErrorStatus == OK, GetErrorString(JumpVerifyErrorStatus),
+                        JumpVerifyErrorStatus);
+
+                StackPush(&vm.callStack, codeLine + 1);
+
+                codeLine = jumpLineIndex - 1;
+                
+                break;
+            }
+
+            case RET: {
+                StackElement_t jumpIndex = -1;
+
+                StackPop(&vm.callStack, &jumpIndex);
+
+                ON_DEBUG(fprintf(stderr, "Wanna return to code[%lf]\n", jumpIndex);)
+
+                ERROR_STATUSES JumpVerifyErrorStatus = JumpVerify(jumpIndex);
+                ASSERT(JumpVerifyErrorStatus == OK, GetErrorString(JumpVerifyErrorStatus),
+                JumpVerifyErrorStatus);
+
+                codeLine = jumpIndex - 1;
+
+                break;
+            }
+
+            case SKIP: {
+                continue;
+
+                break;
+            }
+
+            case IN: {
+                fprintf(stderr, "Input a value:");
+
+                StackElement_t value = 0;
+
+                if (scanf("%lf", &value)) {
+                    fprintf(stderr, "Input successful! Input value: %lf\n", value);
+
+                    StackPush(&vm.stack, value);
                 }
 
                 break;
@@ -1110,4 +1200,29 @@ void DebugPrintCode(Comand* code) {
                                   codeLine, curComand.opcode, curComand.argType, curComand.argValue, curComand.registerName, 
                                   curComand.jumpLineIndex);)
     }
+}
+
+ERROR_STATUSES VirtualMachineDump(VirtualMachine vm, SourceLocation sourceLocation) {
+
+    LOG(fprintf(stderr, "\n-----------\n");)
+    LOG(fprintf(stderr, "(VirtualMachineDump): Starting...\n");)
+
+    LOG(fprintf(stderr, "Vm_t <%s> [%p] %s at %s {\n",
+                sourceLocation.name, &vm, sourceLocation.function, sourceLocation.file);)  //  TODO make STRINGIFY
+
+    ON_DEBUG(StackVerify(&vm.stack););
+
+    StackDump(vm.stack, sourceLocation);
+
+    LOG(fprintf(stderr, "(VirtualMachineDump): -------------\n");)
+
+    LOG(fprintf(stderr, "(VirtualMachineDump): Code printing...\n");)
+
+    DebugPrintCode(vm.code);
+
+    LOG(fprintf(stderr, "(VirtualMachineDump): -------------\n");)
+
+    LOG(fprintf(stderr, "(VirtualMachineDump): Ending...\n");)
+
+    return OK;
 }

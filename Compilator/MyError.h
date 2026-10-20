@@ -40,7 +40,11 @@ enum ERROR_STATUSES {
     JUMP_ADDRESS_IS_OUT_OF_RANGE         = 35,
     NOT_INITIALIZED_JUMP_ADDRESS         = 36,
     HALT_EXIT                            = 37,
-    IS_VALID_REGISTER_NAME_STRING_ERROR  = 38
+    IS_VALID_REGISTER_NAME_STRING_ERROR  = 38,
+    READ_LABEL_ERROR                     = 39,
+    LABEL_REDEFINITION                   = 40,
+    UNKNOWN_LABEL                        = 41,
+    NOT_INITIALIZED_LABEL                = 42
 };
 
 const char* GetErrorString(ERROR_STATUSES errorStatus);
@@ -157,7 +161,19 @@ const char* GetErrorString(ERROR_STATUSES errorStatus) {
 
         case IS_VALID_REGISTER_NAME_STRING_ERROR:
             return "Error happened when validating register name string!\n";
-            
+        
+        case READ_LABEL_ERROR:
+            return "Error happened when reading label!\n";
+
+        case LABEL_REDEFINITION:
+            return "Got a label redefinition!\n";
+
+        case UNKNOWN_LABEL:
+            return "Got an unknown label!\n";
+        
+        case NOT_INITIALIZED_LABEL:
+            return "Label was not initialized!\n";
+
         default:
             return "Unknown error status!\n";
     }

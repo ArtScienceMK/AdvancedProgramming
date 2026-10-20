@@ -35,12 +35,20 @@ struct Text {
     String* index;
 };
 
+struct AssembleContext{
+    Text textSource;
+    Text textExec;
+    int* labels;
+};
+
 typedef int StackElement_t;
 
 const char* DefaultInputFilename = "SourceFile.txt";
 const char* DefaultOutputFilename = "ExecutableFile.txt";
 
-ERROR_STATUSES Assemble(Text* ptrTextSource, Text* ptrTextExec);
+const int MaxLabelsSize = 50;
+
+ERROR_STATUSES Assemble(AssembleContext* asmContext);
 
 ERROR_STATUSES ReadText(const char* filename, bool fillIndex, Text* ptrText);
 ERROR_STATUSES ReadLinesText(Text* ptrText);
@@ -61,6 +69,8 @@ size_t CountChar(char* buf, char toFind);
 ERROR_STATUSES MyStrlen(const char* string, int* res);
 ERROR_STATUSES MyIntToString(int num, char** ptrLine);
 ERROR_STATUSES ReplaceAll(char* line, char from, char to);
+ERROR_STATUSES TrimSpaces(char** ptrLine);
+
 
 ERROR_STATUSES GetArgumentType(const char* line, int lineExpr, ARG_TYPES* ptrArgType);
 
@@ -68,9 +78,18 @@ ERROR_STATUSES registerNameStringToIndex(const char* line, REGISTERS_NAMES* ptrR
 
 int NumLen(int num);
 
-int main() {   
-    Text textSource = {};
-    ERROR_STATUSES ReadTextErrorStatus = ReadText(DefaultInputFilename, true, &textSource);
+ERROR_STATUSES InitLabels(int* labels);
+
+ERROR_STATUSES ResolveLabels(Text* ptrTextSource, int* labels);
+
+void AddSpace(char* buffer, char* line, int* ptrBufferInd, int* ptrIndexInd);
+
+void MyStrcpyWithSep(char* bufferDest, char* lineDest, char* src, int* ptrBufferInd, size_t* ptrLineSize);
+
+int main() {  
+    AssembleContext asmContext = {};
+
+    ERROR_STATUSES ReadTextErrorStatus = ReadText(DefaultInputFilename, true, &asmContext.textSource);
     
     // LOG(fprintf(stderr, "Info about first 3 lines!\n"));
     // LOG(fprintf(stderr, "index[0].size: %zu\n", textSource.index[0].size);)
@@ -85,28 +104,78 @@ int main() {
         
     ERROR_STATUSES UnlinkFileErrorStatuses = UnlinkFile(DefaultOutputFilename);
     ON_DEBUG(ASSERT(UnlinkFileErrorStatuses == OK, GetErrorString(UNLINK_FILE_ERROR), UNLINK_FILE_ERROR);)
-
-    Text textExec = {};
     
-    ERROR_STATUSES AssembleErrorStatus = Assemble(&textSource, &textExec);
+    int labels[MaxLabelsSize] = {};
+    InitLabels(labels);
+
+    asmContext.labels = labels;
+
+    ERROR_STATUSES ResolveLabelsErrorStatus = ResolveLabels(&asmContext.textSource, asmContext.labels);
+    ASSERT(ResolveLabelsErrorStatus == OK, GetErrorString(ResolveLabelsErrorStatus), ResolveLabelsErrorStatus);
+
+    ERROR_STATUSES AssembleErrorStatus = Assemble(&asmContext);
     ON_DEBUG(ASSERT(AssembleErrorStatus == OK, GetErrorString(ASSEMBLE_ERROR), ASSEMBLE_ERROR);)
     
-    ERROR_STATUSES WriteBufferToFileErrorStatus = WriteBufferToFile(DefaultOutputFilename, textExec.buffer, textExec.bufferSize);
+    ERROR_STATUSES WriteBufferToFileErrorStatus = WriteBufferToFile(DefaultOutputFilename,
+         asmContext.textExec.buffer, asmContext.textExec.bufferSize);
     ON_DEBUG(ASSERT(WriteBufferToFileErrorStatus == OK, GetErrorString(WRITE_BUFFER_TO_FILE_ERROR), WRITE_BUFFER_TO_FILE_ERROR);)
 
     // ERROR_STATUSES WriteSepToFileErrorStatus = WriteSepToFile(DefaultOutputFilename);
     // ON_DEBUG(ASSERT(WriteSepToFileErrorStatus == OK, GetErrorString(WriteSepToFileErrorStatus), WriteSepToFileErrorStatus);)
 
-    free(textSource.buffer);
-    free(textSource.index);
+    free(asmContext.textSource.buffer);
+    free(asmContext.textSource.index);
 
-    free(textExec.buffer);
-    free(textExec.index);
+    free(asmContext.textExec.buffer);
+    free(asmContext.textExec.index);
 
     return 0;
 }
 
-ERROR_STATUSES Assemble(Text* ptrTextSource, Text* ptrTextExec) {
+ERROR_STATUSES ResolveLabels(Text* ptrTextSource, int* labels) {
+    ASSERT(ptrTextSource           != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+    ASSERT(ptrTextSource->buffer   != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+    ASSERT(ptrTextSource->index    != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+
+    ASSERT(labels                  != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+
+    for (int curLineInd = 0; curLineInd < ptrTextSource->maxLines; curLineInd++) {
+        
+        ON_DEBUG(fprintf(stderr, "(ResolveLabels): curLineInd: %i\n", curLineInd);)
+
+        char* curLine = ptrTextSource->index[curLineInd].line;
+                
+        ASSERT(curLine != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+
+        ERROR_STATUSES TrimSpacesErrorStatus = TrimSpaces(&curLine);
+
+        ASSERT(curLine != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+        
+        // DebugPrintLine(curLine);
+
+        if (strncmp(curLine, ":", strlen(":")) == 0) {
+            int labelInd = -1;
+            
+            if (sscanf(curLine + 1, "%i", &labelInd) == 0) {
+                return READ_LABEL_ERROR;
+            }
+            
+            ASSERT(labelInd < MaxLabelsSize, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+            ASSERT(labels[labelInd] == -1, GetErrorString(LABEL_REDEFINITION), LABEL_REDEFINITION);
+
+            labels[labelInd] = curLineInd;
+        }
+
+    }
+
+    return OK;
+}
+
+ERROR_STATUSES Assemble(AssembleContext* asmContext) {
+    Text* ptrTextSource = &(asmContext->textSource);
+    Text* ptrTextExec   = &(asmContext->textExec);
+    int* labels         = asmContext->labels;
+
     ASSERT(ptrTextSource           != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
     ASSERT(ptrTextSource->buffer   != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
     ASSERT(ptrTextSource->index    != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
@@ -139,18 +208,44 @@ ERROR_STATUSES Assemble(Text* ptrTextSource, Text* ptrTextExec) {
             sizeof(ptrTextExec->index[curLineInd].line[0]));
 
         char* curLine = ptrTextSource->index[curLineInd].line;
+        char* curLineBegin = curLine;
+        
+        ASSERT(curLine != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+        
         ERROR_STATUSES ReplaceAllErrorStatus = ReplaceAll(curLine, '\n', '\0');
+
+        ASSERT(curLine != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+
+        ERROR_STATUSES TrimSpacesErrorStatus = TrimSpaces(&curLine);
+
+        ASSERT(curLine != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
 
         DebugPrintLine(curLine);
 
         int lenExpr = 0;
         ARG_TYPES argType = NO_ARG;
 
-        ASSERT(curLine != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
 
         OPCODES opcode = NO_OPCODE;
+
+
+        bool needJumpingIndex = false;
         
-        if (strncmp(curLine, "PUSH", strlen("PUSH")) == 0) {
+        if (strncmp(curLine, ";", strlen(";")) == 0) {
+            ON_DEBUG(fprintf(stderr, "FOUND COMMENT STRING!\n");)
+
+            MyStrcpyWithSep(ptrTextExec->buffer, ptrTextExec->index[curLineInd].line, curLine, &ptrTextExecBufferInd,
+                            &(ptrTextExec->index[curLineInd].size));
+            continue;
+        }
+        else if (strncmp(curLine, ":", strlen(":")) == 0) {
+            ON_DEBUG(fprintf(stderr, "FOUND LABEL DECLARATION!\n");)
+
+            MyStrcpyWithSep(ptrTextExec->buffer, ptrTextExec->index[curLineInd].line, curLine, &ptrTextExecBufferInd,
+                &(ptrTextExec->index[curLineInd].size));
+            continue;
+        }
+        else if (strncmp(curLine, "PUSH", strlen("PUSH")) == 0) {
             opcode = PUSH;
             lenExpr = strlen("PUSH");
 
@@ -215,32 +310,52 @@ ERROR_STATUSES Assemble(Text* ptrTextSource, Text* ptrTextExec) {
         else if (strncmp(curLine, "JMP", strlen("JMP")) == 0) {
             opcode = JMP;
             lenExpr = strlen("JMP");
-        } 
-        else if (strncmp(curLine, "JA", strlen("JA")) == 0) {
-            opcode = JA;
-            lenExpr = strlen("JA");
-        } 
-        else if (strncmp(curLine, "JB", strlen("JB")) == 0) {
-            opcode = JB;
-            lenExpr = strlen("JB");
+            needJumpingIndex = true;
         } 
         else if (strncmp(curLine, "JAE", strlen("JAE")) == 0) {
             opcode = JAE;
             lenExpr = strlen("JAE");
+            needJumpingIndex = true;
+        }
+        else if (strncmp(curLine, "JA", strlen("JA")) == 0) {
+            opcode = JA;
+            lenExpr = strlen("JA");
+            needJumpingIndex = true;
         } 
         else if (strncmp(curLine, "JBE", strlen("JBE")) == 0) {
             opcode = JBE;
             lenExpr = strlen("JBE");
+            needJumpingIndex = true;   
         } 
-        else if (strncmp(curLine, "JE", strlen("JE")) == 0) {
-            opcode = JE;
-            lenExpr = strlen("JE");
+        else if (strncmp(curLine, "JB", strlen("JB")) == 0) {
+            opcode = JB;
+            lenExpr = strlen("JB");
+            needJumpingIndex = true;
         } 
         else if (strncmp(curLine, "JNE", strlen("JNE")) == 0) {
             opcode = JNE;
             lenExpr = strlen("JNE");
+            needJumpingIndex = true;
+        }
+        else if (strncmp(curLine, "JE", strlen("JE")) == 0) {
+            opcode = JE;
+            lenExpr = strlen("JE");
+            needJumpingIndex = true;
         } 
-        else if (strcmp(curLine, "") == 0) {
+        else if (strncmp(curLine, "CALL", strlen("CALL")) == 0) {
+            opcode = CALL;
+            lenExpr = strlen("CALL");
+            needJumpingIndex = true;
+        }
+        else if (strncmp(curLine, "RET", strlen("RET")) == 0) {
+            opcode = RET;
+            lenExpr = strlen("RET");
+        }
+        else if (strncmp(curLine, "IN", strlen("IN")) == 0) {
+            opcode = IN;
+            lenExpr = strlen("IN");
+        }
+        else if (strcmp(curLine, "") == 0 && curLineInd == ptrTextSource->maxLines - 1) {
 
             ON_DEBUG(fprintf(stderr, "END OF FILE!\n");)
 
@@ -274,19 +389,56 @@ ERROR_STATUSES Assemble(Text* ptrTextSource, Text* ptrTextExec) {
         ptrTextExecBufferInd += strlen(opcodeString);
         ptrTextExecIndexInd += strlen(opcodeString);
 
+        if (needJumpingIndex) {
+            ON_DEBUG(fprintf(stderr, "(Assemble): jump comand detected: curline + %i\n", lenExpr + 2););
+
+            ON_DEBUG(fprintf(stderr, "(Assemble): jump comand detected: <%s>\n", curLine + lenExpr + 2););
+
+                int labelInd = -1;
+                
+                if (sscanf(curLine + lenExpr + 2, "%i", &labelInd)) {
+                    AddSpace(ptrTextExec->buffer, ptrTextExec->index[curLineInd].line,
+                                   &ptrTextExecBufferInd, &ptrTextExecIndexInd);
+
+                ASSERT(labelInd < MaxLabelsSize, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+                ASSERT(labels[labelInd] != -1, GetErrorString(NOT_INITIALIZED_LABEL), NOT_INITIALIZED_LABEL);
+                
+                char* labelAddressString = NULL;
+
+                ERROR_STATUSES MyIntToStringErrorStatus = MyIntToString(labels[labelInd], &labelAddressString);
+                ASSERT(MyIntToStringErrorStatus == OK, GetErrorString(MyIntToStringErrorStatus), MyIntToStringErrorStatus);
+
+                ON_DEBUG(fprintf(stderr, "wanna insert label value: <%s>\n", labelAddressString););
+
+                strcpy(ptrTextExec->buffer + ptrTextExecBufferInd, labelAddressString);
+                strcpy(ptrTextExec->index[curLineInd].line + ptrTextExecIndexInd, labelAddressString);
+
+                int labelIndLen = strlen(labelAddressString);
+
+                ptrTextExecBufferInd += labelIndLen;
+                ptrTextExecIndexInd  += labelIndLen;
+                
+                *(ptrTextExec->buffer + ptrTextExecBufferInd)                = '\n';
+                *(ptrTextExec->index[curLineInd].line + ptrTextExecIndexInd) = '\n';
+                
+                ptrTextExecBufferInd++;
+                ptrTextExecIndexInd++;
+                ptrTextExec->index[curLineInd].size = ptrTextExecIndexInd;
+                
+                continue;
+            }
+        }
+
         curLine += lenExpr;
+
+        
         
         if (argType != NO_ARG) {
 
             curLine += 1;
 
-            const char* spaceString = " ";
-
-            strcpy(ptrTextExec->buffer + ptrTextExecBufferInd, spaceString);
-            strcpy(ptrTextExec->index[curLineInd].line + ptrTextExecIndexInd, spaceString);
-            
-            ptrTextExecBufferInd += strlen(spaceString);
-            ptrTextExecIndexInd += strlen(spaceString);
+            AddSpace(ptrTextExec->buffer, ptrTextExec->index[curLineInd].line,
+                                   &ptrTextExecBufferInd, &ptrTextExecIndexInd);
 
             
             char* argTypeString = NULL;
@@ -307,13 +459,8 @@ ERROR_STATUSES Assemble(Text* ptrTextSource, Text* ptrTextExec) {
         int registerLen = 0;
 
         if (argType == VARIABLE) {
-            const char* spaceString = " ";
-
-            strcpy(ptrTextExec->buffer + ptrTextExecBufferInd, spaceString);
-            strcpy(ptrTextExec->index[curLineInd].line + ptrTextExecIndexInd, spaceString);
-            
-            ptrTextExecBufferInd += strlen(spaceString);
-            ptrTextExecIndexInd += strlen(spaceString);
+            AddSpace(ptrTextExec->buffer, ptrTextExec->index[curLineInd].line,
+                     &ptrTextExecBufferInd, &ptrTextExecIndexInd);
 
             char* registerNameString = curLine;
 
@@ -329,7 +476,7 @@ ERROR_STATUSES Assemble(Text* ptrTextSource, Text* ptrTextExec) {
             
             char* registerNameLine = NULL;
 
-            ERROR_STATUSES MyIntToStringErrorStatus = MyIntToString((int)argType, &registerNameLine);
+            ERROR_STATUSES MyIntToStringErrorStatus = MyIntToString((int)registerNameIndex, &registerNameLine);
             ASSERT(MyIntToStringErrorStatus == OK, GetErrorString(INT_TO_STRING_ERROR), INT_TO_STRING_ERROR);
 
 
@@ -351,13 +498,8 @@ ERROR_STATUSES Assemble(Text* ptrTextSource, Text* ptrTextExec) {
         
         curLine += registerLen;
 
-        const char* spaceString = " ";
-
-        strcpy(ptrTextExec->buffer + ptrTextExecBufferInd, spaceString);
-        strcpy(ptrTextExec->index[curLineInd].line + ptrTextExecIndexInd, spaceString);
-        
-        ptrTextExecBufferInd += strlen(spaceString);
-        ptrTextExecIndexInd += strlen(spaceString);
+        AddSpace(ptrTextExec->buffer, ptrTextExec->index[curLineInd].line,
+                &ptrTextExecBufferInd, &ptrTextExecIndexInd);
 
         ON_DEBUG(fprintf(stderr, "(Assemble): wanna copy <%s>\n", curLine);)
         ON_DEBUG(DebugPrintLine(curLine);)
@@ -706,6 +848,21 @@ ERROR_STATUSES ReplaceAll(char* line, char from, char to) {
     return OK;
 }
 
+ERROR_STATUSES TrimSpaces(char** ptrLine) {
+    ASSERT(*ptrLine != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+
+    char* line = *ptrLine;
+
+    for (; *line; line++) {
+        if (*line != ' ') {
+            *ptrLine = line;
+            return OK;
+        }
+    }
+
+    return OK;
+}
+
 ERROR_STATUSES GetArgumentType(const char* line, int lenExpr, ARG_TYPES* ptrArgType) {
     double arg = 0;
 
@@ -784,4 +941,46 @@ ERROR_STATUSES IsValidRegisterNameString(const char* line, bool* res) {
 
     *res = false;
     return OK;
+}
+
+ERROR_STATUSES InitLabels(int* labels) {
+    ASSERT(labels != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+    
+    for (int curInd = 0; curInd < MaxLabelsSize; curInd++) {
+        labels[curInd] = -1;
+    }
+
+    return OK;
+}
+
+void AddSpace(char* buffer, char* line, int* ptrBufferInd, int* ptrLineInd) {
+    const char* spaceString = " ";
+
+    strcpy(buffer + *ptrBufferInd, spaceString);
+    strcpy(line   + *ptrLineInd, spaceString);
+    
+    int spaceStringLen = 1;
+    *ptrBufferInd += spaceStringLen;
+    *ptrLineInd   += spaceStringLen;
+}
+
+void MyStrcpyWithSep(char* bufferDest, char* lineDest, char* src, int* ptrBufferInd, size_t* ptrLineSize) {
+    int srcLen = strlen(src);
+
+    strncpy(bufferDest + *ptrBufferInd, src, srcLen);
+    strncpy(lineDest,                   src, srcLen);
+
+    *ptrBufferInd += srcLen;
+    *ptrLineSize   = srcLen;
+
+    *(bufferDest + *ptrBufferInd)         = '\n';
+    *(lineDest   + *ptrLineSize)          = '\n';
+
+    (*ptrBufferInd)++;
+    (*ptrLineSize)++;
+
+    // ON_DEBUG(fprintf(stderr, "(MyStrcpyWithSep): src: <%s>\n", src);)
+
+    // ON_DEBUG(fprintf(stderr, "(MyStrcpyWithSep): just copied buffer: <%s>\n", bufferDest);)
+    // ON_DEBUG(fprintf(stderr, "(MyStrcpyWithSep): just copied line: <%s>\n", lineDest);)
 }
