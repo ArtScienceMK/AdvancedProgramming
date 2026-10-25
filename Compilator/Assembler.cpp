@@ -28,6 +28,11 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 
+struct Arguments {
+    bool needHelp;
+    char* inputFilename, *outputFilename;
+};
+
 struct Text {
     size_t bufferSize, maxLines;
 
@@ -47,6 +52,11 @@ const char* DefaultInputFilename = "SourceFile.txt";
 const char* DefaultOutputFilename = "ExecutableFile.txt";
 
 const int MaxLabelsSize = 50;
+
+Arguments InitArguments(void);
+ERROR_STATUSES GetArguments(int argc, char** argv, Arguments* ptrArguments);
+void ProvideInfo(void);
+
 
 ERROR_STATUSES Assemble(AssembleContext* asmContext);
 
@@ -82,14 +92,28 @@ ERROR_STATUSES InitLabels(int* labels);
 
 ERROR_STATUSES ResolveLabels(Text* ptrTextSource, int* labels);
 
-void AddSpace(char* buffer, char* line, int* ptrBufferInd, int* ptrIndexInd);
+void AddString(char* buffer, char* line, int* ptrBufferInd, int* ptrIndexInd, const char* toAdd);
 
 void MyStrcpyWithSep(char* bufferDest, char* lineDest, char* src, int* ptrBufferInd, size_t* ptrLineSize);
 
-int main() {  
+int main(int argc, char** argv) {
+    Arguments myArgv = InitArguments();
+
+    ERROR_STATUSES GetArgumentsErrorStatus = GetArguments(argc, argv, &myArgv);
+    ASSERT(GetArgumentsErrorStatus == OK, GetErrorString(GetArgumentsErrorStatus), GetArgumentsErrorStatus);
+
+    LOG(fprintf(stderr, "MyArgv: help: %i, input file: <%s>, output file: <%s>\n", 
+                    myArgv.needHelp,   myArgv.inputFilename, myArgv.outputFilename);)
+
+    if (myArgv.needHelp) {
+        ProvideInfo();
+        
+        return 0;
+    }
+
     AssembleContext asmContext = {};
 
-    ERROR_STATUSES ReadTextErrorStatus = ReadText(DefaultInputFilename, true, &asmContext.textSource);
+    ERROR_STATUSES ReadTextErrorStatus = ReadText(myArgv.inputFilename, true, &asmContext.textSource);
     
     // LOG(fprintf(stderr, "Info about first 3 lines!\n"));
     // LOG(fprintf(stderr, "index[0].size: %zu\n", textSource.index[0].size);)
@@ -102,7 +126,7 @@ int main() {
     
     // return 0;
         
-    ERROR_STATUSES UnlinkFileErrorStatuses = UnlinkFile(DefaultOutputFilename);
+    ERROR_STATUSES UnlinkFileErrorStatuses = UnlinkFile(myArgv.outputFilename);
     ON_DEBUG(ASSERT(UnlinkFileErrorStatuses == OK, GetErrorString(UNLINK_FILE_ERROR), UNLINK_FILE_ERROR);)
     
     int labels[MaxLabelsSize] = {};
@@ -114,13 +138,13 @@ int main() {
     ASSERT(ResolveLabelsErrorStatus == OK, GetErrorString(ResolveLabelsErrorStatus), ResolveLabelsErrorStatus);
 
     ERROR_STATUSES AssembleErrorStatus = Assemble(&asmContext);
-    ON_DEBUG(ASSERT(AssembleErrorStatus == OK, GetErrorString(ASSEMBLE_ERROR), ASSEMBLE_ERROR);)
+    ON_DEBUG(ASSERT(AssembleErrorStatus == OK, GetErrorString(AssembleErrorStatus), AssembleErrorStatus);)
     
-    ERROR_STATUSES WriteBufferToFileErrorStatus = WriteBufferToFile(DefaultOutputFilename,
+    ERROR_STATUSES WriteBufferToFileErrorStatus = WriteBufferToFile(myArgv.outputFilename,
          asmContext.textExec.buffer, asmContext.textExec.bufferSize);
     ON_DEBUG(ASSERT(WriteBufferToFileErrorStatus == OK, GetErrorString(WRITE_BUFFER_TO_FILE_ERROR), WRITE_BUFFER_TO_FILE_ERROR);)
 
-    // ERROR_STATUSES WriteSepToFileErrorStatus = WriteSepToFile(DefaultOutputFilename);
+    // ERROR_STATUSES WriteSepToFileErrorStatus = WriteSepToFile(myArgv.outputFilename);
     // ON_DEBUG(ASSERT(WriteSepToFileErrorStatus == OK, GetErrorString(WriteSepToFileErrorStatus), WriteSepToFileErrorStatus);)
 
     free(asmContext.textSource.buffer);
@@ -130,6 +154,50 @@ int main() {
     free(asmContext.textExec.index);
 
     return 0;
+}
+
+Arguments InitArguments(void) {
+    Arguments myArgv = {};
+    myArgv.inputFilename = strdup(DefaultInputFilename);
+    myArgv.outputFilename = strdup(DefaultOutputFilename);
+    
+    return myArgv; 
+}
+
+ERROR_STATUSES GetArguments(int argc, char** argv, Arguments* ptrArguments) {
+    ASSERT(argv != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+
+    for (int i = 1; i < argc; i++) {
+
+        LOG(fprintf(stderr, "(GetArguments): argv[%i]: <%s>\n", i, argv[i]));
+
+        if (strcmp(argv[i], "-h") == 0) {
+            ptrArguments->needHelp = true;
+            LOG(fprintf(stderr, "(GetArguments): help mode activated!\n");)
+        }
+        else if (strncmp(argv[i], "-i=", 3) == 0) {
+            ptrArguments->inputFilename = strdup(argv[i] + 3);
+            LOG(fprintf(stderr, "(GetArguments): input filename: <%s>!\n", 
+                        ptrArguments->inputFilename);)    
+        } 
+        else if (strncmp(argv[i], "-o=", 3) == 0) {
+            ptrArguments->outputFilename = strdup(argv[i] + 3);
+            LOG(fprintf(stderr, "(GetArguments): output filename: <%s>!\n", 
+                        ptrArguments->outputFilename);)
+        }
+        else {
+            ptrArguments->needHelp = true;
+
+            LOG(fprintf(stderr, "(GetArguments): incorrect user input!\n");)
+            LOG(fprintf(stderr, "(GetArguments): help mode activated!\n");)
+        }
+    }
+    
+    return OK;
+}
+
+void ProvideInfo() {
+    fprintf(stderr, "./vm -i=[Path to input file], -o=[Path to output file], -h (for help)\n");
 }
 
 ERROR_STATUSES ResolveLabels(Text* ptrTextSource, int* labels) {
@@ -355,6 +423,10 @@ ERROR_STATUSES Assemble(AssembleContext* asmContext) {
             opcode = IN;
             lenExpr = strlen("IN");
         }
+        else if (strncmp(curLine, "MDUMP", strlen("MDUMP")) == 0) {
+            opcode = MDUMP;
+            lenExpr = strlen("MDUMP");
+        }
         else if (strcmp(curLine, "") == 0 && curLineInd == ptrTextSource->maxLines - 1) {
 
             ON_DEBUG(fprintf(stderr, "END OF FILE!\n");)
@@ -397,8 +469,8 @@ ERROR_STATUSES Assemble(AssembleContext* asmContext) {
                 int labelInd = -1;
                 
                 if (sscanf(curLine + lenExpr + 2, "%i", &labelInd)) {
-                    AddSpace(ptrTextExec->buffer, ptrTextExec->index[curLineInd].line,
-                                   &ptrTextExecBufferInd, &ptrTextExecIndexInd);
+                    AddString(ptrTextExec->buffer, ptrTextExec->index[curLineInd].line,
+                                   &ptrTextExecBufferInd, &ptrTextExecIndexInd, " ");
 
                 ASSERT(labelInd < MaxLabelsSize, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
                 ASSERT(labels[labelInd] != -1, GetErrorString(NOT_INITIALIZED_LABEL), NOT_INITIALIZED_LABEL);
@@ -437,8 +509,8 @@ ERROR_STATUSES Assemble(AssembleContext* asmContext) {
 
             curLine += 1;
 
-            AddSpace(ptrTextExec->buffer, ptrTextExec->index[curLineInd].line,
-                                   &ptrTextExecBufferInd, &ptrTextExecIndexInd);
+            AddString(ptrTextExec->buffer, ptrTextExec->index[curLineInd].line,
+                                   &ptrTextExecBufferInd, &ptrTextExecIndexInd, " ");
 
             
             char* argTypeString = NULL;
@@ -448,19 +520,17 @@ ERROR_STATUSES Assemble(AssembleContext* asmContext) {
             
             ON_DEBUG(fprintf(stderr, "(Assemble): found type of arguments <%s>\n", argTypeString);)
 
-            strcpy(ptrTextExec->buffer + ptrTextExecBufferInd, argTypeString);
-            strcpy(ptrTextExec->index[curLineInd].line + ptrTextExecIndexInd, argTypeString);
-            
-            ptrTextExecBufferInd += strlen(argTypeString);
-            ptrTextExecIndexInd += strlen(argTypeString);
+            AddString(ptrTextExec->buffer, ptrTextExec->index[curLineInd].line,
+                     &ptrTextExecBufferInd, &ptrTextExecIndexInd, argTypeString);
         }
+
         
 
         int registerLen = 0;
 
         if (argType == VARIABLE) {
-            AddSpace(ptrTextExec->buffer, ptrTextExec->index[curLineInd].line,
-                     &ptrTextExecBufferInd, &ptrTextExecIndexInd);
+            AddString(ptrTextExec->buffer, ptrTextExec->index[curLineInd].line,
+                     &ptrTextExecBufferInd, &ptrTextExecIndexInd, " ");
 
             char* registerNameString = curLine;
 
@@ -489,6 +559,37 @@ ERROR_STATUSES Assemble(AssembleContext* asmContext) {
             ptrTextExecIndexInd  += registerNameLineLen;
 
             registerLen += strlen(registerNameString);
+            curLine += registerLen;
+        } 
+        else if (argType == MEMORY) {
+            
+            AddString(ptrTextExec->buffer, ptrTextExec->index[curLineInd].line,
+                &ptrTextExecBufferInd, &ptrTextExecIndexInd, " ");
+                
+            ON_DEBUG(fprintf(stderr, "lenExpr: %i, wanna find memory index in <%s>\n", lenExpr, curLine);)
+
+            int memoryIndex = -1;
+
+            // ON_DEBUG(fprintf(stderr, "curLineInd (before buggy code): %i\n", curLineInd);)
+
+            if (sscanf(curLine, "[%i]", &memoryIndex) == 0) {
+                return READING_MEMORY_INDEX_ERROR;
+            }
+
+            // ON_DEBUG(fprintf(stderr, "curLineInd (after buggy code): %i\n", curLineInd);)
+            
+            char* memoryLine = NULL;
+                
+            
+            ERROR_STATUSES MyIntToStringErrorStatus = MyIntToString(memoryIndex, &memoryLine);
+            ASSERT(MyIntToStringErrorStatus == OK, GetErrorString(INT_TO_STRING_ERROR), INT_TO_STRING_ERROR);
+            
+            ON_DEBUG(fprintf(stderr, "memoryLine: <%s>\n", memoryLine);)
+
+            AddString(ptrTextExec->buffer, ptrTextExec->index[curLineInd].line,
+                &ptrTextExecBufferInd, &ptrTextExecIndexInd, memoryLine);
+            
+            curLine += 1 + strlen(memoryLine) + 1;
         }
         // exit(0);
         // if (NOT LineVerify(curLine)) {
@@ -496,34 +597,26 @@ ERROR_STATUSES Assemble(AssembleContext* asmContext) {
         //     return ASSEMBLE_VERIFICATION_ERROR;
         // } TODO
         
-        curLine += registerLen;
 
-        AddSpace(ptrTextExec->buffer, ptrTextExec->index[curLineInd].line,
-                &ptrTextExecBufferInd, &ptrTextExecIndexInd);
-
+        AddString(ptrTextExec->buffer, ptrTextExec->index[curLineInd].line,
+                &ptrTextExecBufferInd, &ptrTextExecIndexInd, " ");
         ON_DEBUG(fprintf(stderr, "(Assemble): wanna copy <%s>\n", curLine);)
         ON_DEBUG(DebugPrintLine(curLine);)
 
-        strcpy(ptrTextExec->buffer + ptrTextExecBufferInd,                curLine);
-        // strcpy(ptrTextExec->index[curLineInd].line + ptrTextExecIndexInd, curLine);
-
-        int addedLen = strlen(curLine);
         
-        ptrTextExecBufferInd += addedLen;
-        // ptrTextExecIndexInd  += addedLen;
-
-        ptrTextExec->buffer[ptrTextExecBufferInd]                   = '\n';
-        // ptrTextExec->index[curLineInd].line[ptrTextExecIndexInd] = '\n';
-
-        ptrTextExecBufferInd++;
-
-        // ptrTextExec->index[curLineInd].size = strlen(ptrTextExec->index[curLineInd].line) + 1;
+        MyStrcpyWithSep(ptrTextExec->buffer, ptrTextExec->index[curLineInd].line,
+                        curLine, &ptrTextExecBufferInd, &(ptrTextExec->index[curLineInd].size));
+        // if (argType == MEMORY) {
+            // fprintf(stderr, "full buffer:<%s>\n", ptrTextExec->buffer);
+            // exit(0);
+        // }
+        ON_DEBUG(fprintf(stderr, "curLineInd (end of cycle): %i\n", curLineInd);)
     }
-
+    
     ptrTextExec->buffer[ptrTextExecBufferInd] = '\0';
-            
+    
     ptrTextExecBufferInd++;
-
+    
     ptrTextExec->bufferSize = ptrTextExecBufferInd;
 
     return OK;
@@ -864,9 +957,14 @@ ERROR_STATUSES TrimSpaces(char** ptrLine) {
 }
 
 ERROR_STATUSES GetArgumentType(const char* line, int lenExpr, ARG_TYPES* ptrArgType) {
-    double arg = 0;
+    StackElement_t arg = 0;
 
     if (!sscanf(line + lenExpr, "%lf", &arg)) {
+        
+        if (sscanf(line + lenExpr + 1, "[%i]", &arg)) {
+            *ptrArgType = MEMORY;
+            return OK;
+        }
 
         char* registerName = (char*)calloc(MaxRegisterNameLen, sizeof(char));
 
@@ -953,15 +1051,13 @@ ERROR_STATUSES InitLabels(int* labels) {
     return OK;
 }
 
-void AddSpace(char* buffer, char* line, int* ptrBufferInd, int* ptrLineInd) {
-    const char* spaceString = " ";
-
-    strcpy(buffer + *ptrBufferInd, spaceString);
-    strcpy(line   + *ptrLineInd, spaceString);
+void AddString(char* buffer, char* line, int* ptrBufferInd, int* ptrLineInd, const char* toAdd) {
+    strcpy(buffer + *ptrBufferInd, toAdd);
+    strcpy(line   + *ptrLineInd, toAdd);
     
-    int spaceStringLen = 1;
-    *ptrBufferInd += spaceStringLen;
-    *ptrLineInd   += spaceStringLen;
+    int toAddLen = strlen(toAdd);
+    *ptrBufferInd += toAddLen;
+    *ptrLineInd   += toAddLen;
 }
 
 void MyStrcpyWithSep(char* bufferDest, char* lineDest, char* src, int* ptrBufferInd, size_t* ptrLineSize) {

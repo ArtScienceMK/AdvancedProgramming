@@ -57,6 +57,11 @@ const double Eps = 1e-3;
 #include <fcntl.h>
 #include <sys/stat.h>
 
+struct Arguments {
+    bool needHelp;
+    char* inputFilename, *outputFilename;
+};
+
 struct Text {
     size_t bufferSize, maxLines;
 
@@ -69,7 +74,9 @@ struct Comand {
     ARG_TYPES argType;
     StackElement_t argValue;
     REGISTERS_NAMES registerName;
+    
     int jumpLineIndex;
+    int memoryIndex; 
 };
 
 struct VirtualMachine {
@@ -80,10 +87,17 @@ struct VirtualMachine {
     
     Stack_t stack;
     Stack_t callStack;
+
+    int* memory;
 };
 
 const char* DefaultInputFilename = "ExecutableFile.txt";
 const char* DefaultOutputFilename = "VirtualMachineOut.txt";
+
+Arguments InitArguments(void);
+ERROR_STATUSES GetArguments(int argc, char** argv, Arguments* ptrArguments);
+void ProvideInfo(void);
+
 
 ERROR_STATUSES ReadText(const char* filename, bool fillIndex, Text* ptrText);
 ERROR_STATUSES ReadLinesText(Text* ptrText);
@@ -109,6 +123,7 @@ ERROR_STATUSES Execute(VirtualMachine vm);
 int NumLen(int num);
 
 bool IsValidJumpLineIndex(int index);
+bool IsValidMemoryIndex(int index);
 
 ERROR_STATUSES JumpVerify(int jumpLineIndex);
 
@@ -116,9 +131,24 @@ void DebugPrintCode(Comand* code);
 
 ERROR_STATUSES VirtualMachineDump(VirtualMachine vm, SourceLocation sourceLocation);
 
-int main() {   
+
+int main(int argc, char** argv) {
+    Arguments myArgv = InitArguments();
+
+    ERROR_STATUSES GetArgumentsErrorStatus = GetArguments(argc, argv, &myArgv);
+    ASSERT(GetArgumentsErrorStatus == OK, GetErrorString(GetArgumentsErrorStatus), GetArgumentsErrorStatus);
+
+    LOG(fprintf(stderr, "MyArgv: help: %i, input file: <%s>, output file: <%s>\n", 
+                    myArgv.needHelp,   myArgv.inputFilename, myArgv.outputFilename);)
+
+    if (myArgv.needHelp) {
+        ProvideInfo();
+        
+        return 0;
+    }
+
     Text textExec = {};
-    ERROR_STATUSES ReadTextErrorStatus = ReadText(DefaultInputFilename, true, &textExec);
+    ERROR_STATUSES ReadTextErrorStatus = ReadText(myArgv.inputFilename, true, &textExec);
     
     VirtualMachine vm = {};
 
@@ -138,6 +168,8 @@ int main() {
     // DebugPrintCode(code);
     // exit(0);
 
+    vm.memory = (int*)calloc(MemorySize, sizeof(vm.memory[0]));
+
     ERROR_STATUSES ExecuteErrorStatus = Execute(vm);
     
     ON_DEBUG((ExecuteErrorStatus == HALT_EXIT) ? GetErrorString(ExecuteErrorStatus) : GetErrorString(OK);)
@@ -145,7 +177,7 @@ int main() {
     ON_DEBUG(ASSERT(ExecuteErrorStatus == OK || 
                     ExecuteErrorStatus == HALT_EXIT, GetErrorString(ExecuteErrorStatus), ExecuteErrorStatus))
         
-    ERROR_STATUSES UnlinkFileErrorStatuses = UnlinkFile(DefaultOutputFilename);
+    ERROR_STATUSES UnlinkFileErrorStatuses = UnlinkFile(myArgv.outputFilename);
     ON_DEBUG(ASSERT(UnlinkFileErrorStatuses == OK, GetErrorString(UNLINK_FILE_ERROR), UNLINK_FILE_ERROR))
 
     // ERROR_STATUSES WriteBufferToFileErrorStatus = WriteBufferToFile(DefaultOutputFilename, textExec.buffer, textExec.bufferSize);
@@ -158,6 +190,50 @@ int main() {
     free(textExec.index);
 
     return 0;
+}
+
+Arguments InitArguments(void) {
+    Arguments myArgv = {};
+    myArgv.inputFilename = strdup(DefaultInputFilename);
+    myArgv.outputFilename = strdup(DefaultOutputFilename);
+    
+    return myArgv; 
+}
+
+ERROR_STATUSES GetArguments(int argc, char** argv, Arguments* ptrArguments) {
+    ASSERT(argv != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+
+    for (int i = 1; i < argc; i++) {
+
+        LOG(fprintf(stderr, "(GetArguments): argv[%i]: <%s>\n", i, argv[i]));
+
+        if (strcmp(argv[i], "-h") == 0) {
+            ptrArguments->needHelp = true;
+            LOG(fprintf(stderr, "(GetArguments): help mode activated!\n");)
+        }
+        else if (strncmp(argv[i], "-i=", 3) == 0) {
+            ptrArguments->inputFilename = strdup(argv[i] + 3);
+            LOG(fprintf(stderr, "(GetArguments): input filename: <%s>!\n", 
+                        ptrArguments->inputFilename);)    
+        } 
+        else if (strncmp(argv[i], "-o=", 3) == 0) {
+            ptrArguments->outputFilename = strdup(argv[i] + 3);
+            LOG(fprintf(stderr, "(GetArguments): output filename: <%s>!\n", 
+                        ptrArguments->outputFilename);)
+        }
+        else {
+            ptrArguments->needHelp = true;
+
+            LOG(fprintf(stderr, "(GetArguments): incorrect user input!\n");)
+            LOG(fprintf(stderr, "(GetArguments): help mode activated!\n");)
+        }
+    }
+    
+    return OK;
+}
+
+void ProvideInfo() {
+    fprintf(stderr, "./vm -i=[Path to input file], -o=[Path to output file], -h (for help)\n");
 }
 
 ERROR_STATUSES ReadText(const char* filename, bool fillIndex, Text* ptrText) {
@@ -710,6 +786,8 @@ ERROR_STATUSES LoadProgram(Text* ptrExec, Comand* ptrCode, int* ptrCodeSize) {
                 ERROR_STATUSES IsValidRegisterNameErrorStatus  = OK;
                 ERROR_STATUSES StringToRegisterNameErrorStatus = OK;
 
+                int memoryIndex = -1;
+                
                 ON_DEBUG(fprintf(stderr, "Wanna read arg value from line:\n");)
                 ON_DEBUG(DebugPrintLine(curLine + NumLen(opcode) + 1 + NumLen(argType) + 1);)
 
@@ -739,6 +817,21 @@ ERROR_STATUSES LoadProgram(Text* ptrExec, Comand* ptrCode, int* ptrCodeSize) {
                         
                         ON_DEBUG(fprintf(stderr, "(LoadProgram): have a variable arg: %i\n", ptrCode[codeInd].registerName);)
                                
+                        break;
+                    
+                    case MEMORY:
+                        if (sscanf(curLine + NumLen(opcode) + 1 + NumLen(argType) + 1, "%i", &memoryIndex) == 0) {
+                            ASSERT(false, GetErrorString(ARGS_INPUT_ERROR), ARGS_INPUT_ERROR);
+                        }
+
+                        if (!IsValidMemoryIndex(memoryIndex)) {
+                            return BAD_MEMORY_ADDRESS;
+                        }
+                                                
+                        ptrCode[codeInd].memoryIndex = memoryIndex;
+                        
+                        ON_DEBUG(fprintf(stderr, "(LoadProgram): have a variable arg: %i\n", ptrCode[codeInd].memoryIndex);)
+
                         break;
                     
                     default:
@@ -777,7 +870,6 @@ ERROR_STATUSES LoadProgram(Text* ptrExec, Comand* ptrCode, int* ptrCodeSize) {
 
 ERROR_STATUSES Execute(VirtualMachine vm) {
     Comand* ptrCode = vm.code;
-    StackElement_t* Registers = vm.registers;
 
     ON_DEBUG(ASSERT(ptrCode         != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);)
 
@@ -811,6 +903,7 @@ ERROR_STATUSES Execute(VirtualMachine vm) {
         REGISTERS_NAMES registerIndex = ptrCode[codeLine].registerName;
         
         int             jumpLineIndex = ptrCode[codeLine].jumpLineIndex;
+        int             memoryIndex   = ptrCode[codeLine].memoryIndex;
 
         // if (strcmp(curLine, "") == 0) {
         //     fprintf(stderr, "Exitting...\n");
@@ -820,8 +913,8 @@ ERROR_STATUSES Execute(VirtualMachine vm) {
         //  Добавить stop opcode. Норм идея, Дед?
         //  BUG: считывай строку во второй раз, учитывая длину opcode
         
-        ON_DEBUG(fprintf(stderr, "(Execute): code[%i], opcode: %i, argType: %i, args: %lf, registerIndex: %i, jumpLineIndex: %i\n",  
-                                  codeLine, opcode, argType, args, registerIndex, jumpLineIndex);)
+        ON_DEBUG(fprintf(stderr, "(Execute): code[%i], opcode: %i, argType: %i, args: %lf, registerIndex: %i, jumpLineIndex: %i, memoryIndex: %i\n",  
+                                  codeLine, opcode, argType, args, registerIndex, jumpLineIndex, memoryIndex);)
 
         switch((OPCODES)opcode) {
             case PUSH: {
@@ -835,13 +928,20 @@ ERROR_STATUSES Execute(VirtualMachine vm) {
                         break;
 
                     case VARIABLE:
-                        StackPush(&vm.stack, Registers[registerIndex]);
+                        StackPush(&vm.stack, vm.registers[registerIndex]);
 
-                        ON_DEBUG(fprintf(stderr, "(Execute): want to push %lf from Registers[%i]\n",
-                                 Registers[registerIndex], registerIndex);)
+                        ON_DEBUG(fprintf(stderr, "(Execute): want to push %lf from vm.registers[%i]\n",
+                                 vm.registers[registerIndex], registerIndex);)
 
                         break;
                     
+                    case MEMORY:
+                        StackPush(&vm.stack, vm.memory[memoryIndex]);
+
+                        ON_DEBUG(fprintf(stderr, "(Execute): want to push %i from memory[%i]\n",
+                                 vm.memory[memoryIndex], memoryIndex);)
+
+                        break;
                     default:
                         ASSERT(false, GetErrorString(UNKNOWN_ARGUMENT_TYPE), UNKNOWN_ARGUMENT_TYPE);
                         break;
@@ -853,16 +953,29 @@ ERROR_STATUSES Execute(VirtualMachine vm) {
             case POP: {
                 StackElement_t popValue = 0;
                 StackPop(&vm.stack, &popValue);
+                switch (argType) {
+                    case CONSTANT:
+                        break;
 
-                if (registerIndex != NO_NAME) {
-                    Registers[registerIndex] = popValue;
+                    case VARIABLE:
+                        vm.registers[registerIndex] = popValue;
 
-                    ON_DEBUG(fprintf(stderr, "(Execute): want to pop %lf in Registers[%i]\n",
-                             Registers[registerIndex], registerIndex);)
+                    ON_DEBUG(fprintf(stderr, "(Execute): want to pop %lf in vm.registers[%i]\n",
+                             vm.registers[registerIndex], registerIndex);)
+
+                        break;
+                    
+                    case MEMORY:
+                        vm.memory[memoryIndex] = (int)popValue;
+
+                    ON_DEBUG(fprintf(stderr, "(Execute): want to pop %i in vm.memory[%i]\n",
+                             vm.memory[memoryIndex], memoryIndex);)
+                        break;
+
+                    default:
+                        ASSERT(false, GetErrorString(UNKNOWN_ARGUMENT_TYPE), UNKNOWN_ARGUMENT_TYPE);
+                        break;
                 }
-
-                ON_DEBUG(fprintf(stderr, "(Execute): want to pop: %lf\n", popValue);)
-
                 break;
             }
             
@@ -924,7 +1037,7 @@ ERROR_STATUSES Execute(VirtualMachine vm) {
                 StackPop(&vm.stack, &op1);
                 StackPop(&vm.stack, &op2);
 
-                ASSERT(op2 != 0, GetErrorString(ZERO_DIVISION_ERROR), ZERO_DIVISION_ERROR);
+                ASSERT(op1 != 0, GetErrorString(ZERO_DIVISION_ERROR), ZERO_DIVISION_ERROR);
 
                 StackPush(&vm.stack, op2 / op1);
                 break;
@@ -1135,6 +1248,30 @@ ERROR_STATUSES Execute(VirtualMachine vm) {
                 break;
             }
 
+            case MDUMP: {
+                fprintf(stderr, "Memory dump:\n");
+                int ellipseX0 = 5;
+                int ellipseY0 = 5;
+
+                int ellipseASquared = 16;
+                int ellipseBSquared = 10;
+
+                for (int i = 0; i < 10; i++) {
+                    for (int j = 0; j < 10; j++) {
+                        if ((i - ellipseX0) * (i - ellipseX0) * ellipseASquared
+                          + (j - ellipseY0) * (j - ellipseY0) * ellipseBSquared <= ellipseASquared * ellipseBSquared) {
+                            
+                            fprintf(stderr, ".");
+                        } else {
+                            fprintf(stderr, "#");
+                        }
+                        // fprintf(stderr, "%i ", vm.memory[i * 10 + j]);
+                    }
+                    fprintf(stderr, "\n");
+                }
+                break;
+            }
+
             default: {
                 ASSERT(0, GetErrorString(UNKNOWN_OPCODE), UNKNOWN_OPCODE);
                 break;
@@ -1176,7 +1313,11 @@ ERROR_STATUSES IsValidRegisterName(REGISTERS_NAMES registerName, bool* res) {
 }
 
 bool IsValidJumpLineIndex(int index) {
-    return index >= 0;  // TODO: узнавать верхнюю границу допустимой памяти
+    return index >= 0 && index < MaxCodeSize;
+}
+
+bool IsValidMemoryIndex(int index) {
+    return index >= 0 && index < MemorySize;
 }
 
 ERROR_STATUSES JumpVerify(int jumpLineIndex) {
