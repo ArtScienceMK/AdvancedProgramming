@@ -4,7 +4,8 @@
 
 const int MaxCodeSize        = 1200;
 const int MaxRegisterNameLen = 3;
-const int RegistersSize       = 8;
+const int RegistersSize      = 8;
+const int MemorySize         = 100; 
 
 enum OPCODES {
     PUSH      = 0,
@@ -27,13 +28,19 @@ enum OPCODES {
     JAE       = 17,
     JBE       = 18,
     JE        = 19,
-    JNE       = 20
+    JNE       = 20,
+    CALL      = 21,
+    RET       = 22,
+    SKIP      = 23,
+    IN        = 24,
+    MDUMP     = 25
 };
 
 enum ARG_TYPES {
     NO_ARG    = 0,
     CONSTANT  = 1,
-    VARIABLE  = 2
+    VARIABLE  = 2,
+    MEMORY    = 3
 };
 
 enum REGISTERS_NAMES {

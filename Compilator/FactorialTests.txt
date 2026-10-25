@@ -1,0 +1,3 @@
+5 -> 120
+6 -> 720
+Current status: All tests OK

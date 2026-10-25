@@ -75,8 +75,10 @@ struct Comand {
     StackElement_t argValue;
     REGISTERS_NAMES registerName;
     
-    int jumpLineIndex;
-    int memoryIndex; 
+    union {
+        int jumpLineIndex;
+        int memoryIndex; 
+    };
 };
 
 struct VirtualMachine {
