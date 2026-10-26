@@ -28,6 +28,8 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 
+#define POISON 67
+
 typedef int StackElement_t;
 
 struct Comand {
@@ -38,7 +40,7 @@ struct Comand {
     
     struct {
         int jumpLineIndex;  // 4 bites
-        int memoryIndex;   //  4 bites
+        int memoryRegIndex;   //  4 bites
     };
 };
 
@@ -63,7 +65,7 @@ struct AssembleContext{
 
 
 const char* DefaultInputFilename = "SourceFile.txt";
-const char* DefaultOutputFilename = "ExecutableFile.txt";
+const char* DefaultOutputFilename = "ExecFile.txt";
 
 const int MaxLabelsSize = 50;
 
@@ -114,6 +116,8 @@ void AddString(char* buffer, char* line, int* ptrBufferInd, int* ptrIndexInd, co
 
 void MyStrcpyWithSep(char* bufferDest, char* lineDest, char* src, int* ptrBufferInd, size_t* ptrLineSize);
 
+void DebugCode(int* execBuffer);
+
 int main(int argc, char** argv) {
     Arguments myArgv = InitArguments();
 
@@ -155,20 +159,22 @@ int main(int argc, char** argv) {
     ERROR_STATUSES ResolveLabelsErrorStatus = ResolveLabels(&asmContext.textSource, asmContext.labels);
     ASSERT(ResolveLabelsErrorStatus == OK, GetErrorString(ResolveLabelsErrorStatus), ResolveLabelsErrorStatus);
 
-    ERROR_STATUSES ListingErrorStatus = MakeListing(&asmContext);
-    ON_DEBUG(ASSERT(ListingErrorStatus == OK, GetErrorString(ListingErrorStatus), ListingErrorStatus);)
+    // ERROR_STATUSES ListingErrorStatus = MakeListing(&asmContext);
+    // ON_DEBUG(ASSERT(ListingErrorStatus == OK, GetErrorString(ListingErrorStatus), ListingErrorStatus);)
 
     ERROR_STATUSES AssembleErrorStatus = Assemble(&asmContext);
     ASSERT(AssembleErrorStatus == OK, GetErrorString(AssembleErrorStatus), AssembleErrorStatus);
-    
+
+    // ON_DEBUG(DebugCode(asmContext.execBuffer);)
+        
     // ERROR_STATUSES WriteBufferToFileErrorStatus = WriteBufferToFile(myArgv.outputFilename,
     //      asmContext.textList.buffer, asmContext.textList.bufferSize);
     // ON_DEBUG(ASSERT(WriteBufferToFileErrorStatus == OK, GetErrorString(WRITE_BUFFER_TO_FILE_ERROR), WRITE_BUFFER_TO_FILE_ERROR);)
     
-    ERROR_STATUSES WriteExecBufferToFileErrorStatus = WriteIntBufferToFile(myArgv.outputFilename,
+    ERROR_STATUSES WriteListBufferToFileErrorStatus = WriteIntBufferToFile(myArgv.outputFilename,
          asmContext.execBuffer, asmContext.execBufferSize);
 
-    ON_DEBUG(ASSERT(WriteExecBufferToFileErrorStatus == OK, GetErrorString(WRITE_BUFFER_TO_FILE_ERROR), WRITE_BUFFER_TO_FILE_ERROR);)
+    ON_DEBUG(ASSERT(WriteListBufferToFileErrorStatus == OK, GetErrorString(WRITE_BUFFER_TO_FILE_ERROR), WRITE_BUFFER_TO_FILE_ERROR);)
 
     // ERROR_STATUSES 
     // ERROR_STATUSES WriteSepToFileErrorStatus = WriteSepToFile(myArgv.outputFilename);
@@ -236,6 +242,8 @@ ERROR_STATUSES ResolveLabels(Text* ptrTextSource, int* labels) {
 
     ASSERT(labels                  != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
 
+    int curInd = 0;
+
     for (int curLineInd = 0; curLineInd < ptrTextSource->maxLines; curLineInd++) {
         
         ON_DEBUG(fprintf(stderr, "(ResolveLabels): curLineInd: %i\n", curLineInd);)
@@ -249,6 +257,9 @@ ERROR_STATUSES ResolveLabels(Text* ptrTextSource, int* labels) {
         ASSERT(curLine != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
         
         // DebugPrintLine(curLine);
+        if (strncmp(curLine, ";", strlen(";")) == 0) {
+            continue;
+        }
 
         if (strncmp(curLine, ":", strlen(":")) == 0) {
             int labelInd = -1;
@@ -260,7 +271,9 @@ ERROR_STATUSES ResolveLabels(Text* ptrTextSource, int* labels) {
             ASSERT(labelInd < MaxLabelsSize, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
             ASSERT(labels[labelInd] == -1, GetErrorString(LABEL_REDEFINITION), LABEL_REDEFINITION);
 
-            labels[labelInd] = curLineInd;
+            labels[labelInd] = curInd;
+        } else {
+            curInd++;
         }
 
     }
@@ -380,6 +393,10 @@ ERROR_STATUSES MakeListing(AssembleContext* asmContext) {
             opcode = DIV;
             lenExpr = strlen("DIV");
         }
+        else if (strncmp(curLine, "MDUMP", strlen("MDUMP")) == 0) {
+            opcode = MDUMP;
+            lenExpr = strlen("MDUMP");
+        }
         else if (strncmp(curLine, "DUMP", strlen("DUMP")) == 0) {
             opcode = DUMP;
             lenExpr = strlen("DUMP");
@@ -452,10 +469,6 @@ ERROR_STATUSES MakeListing(AssembleContext* asmContext) {
             opcode = IN;
             lenExpr = strlen("IN");
         }
-        else if (strncmp(curLine, "MDUMP", strlen("MDUMP")) == 0) {
-            opcode = MDUMP;
-            lenExpr = strlen("MDUMP");
-        }
         else if (strcmp(curLine, "") == 0 && curLineInd == ptrTextSource->maxLines - 1) {
 
             ON_DEBUG(fprintf(stderr, "END OF FILE!\n");)
@@ -476,7 +489,7 @@ ERROR_STATUSES MakeListing(AssembleContext* asmContext) {
             return UNKNOWN_OPCODE;
         }
 
-        int ptrTextExecIndexInd = 0;
+        int ptrTextListIndexInd = 0;
         
         char* opcodeString = NULL;
         
@@ -485,10 +498,10 @@ ERROR_STATUSES MakeListing(AssembleContext* asmContext) {
        
         
         strcpy(ptrTextList->buffer + ptrTextListBufferInd, opcodeString);
-        strcpy(ptrTextList->index[curLineInd].line + ptrTextExecIndexInd, opcodeString);
+        strcpy(ptrTextList->index[curLineInd].line + ptrTextListIndexInd, opcodeString);
         
         ptrTextListBufferInd += strlen(opcodeString);
-        ptrTextExecIndexInd += strlen(opcodeString);
+        ptrTextListIndexInd += strlen(opcodeString);
 
         if (needJumpingIndex) {
             ON_DEBUG(fprintf(stderr, "(MakeListing): jump comand detected: curline + %i\n", lenExpr + 2););
@@ -499,7 +512,7 @@ ERROR_STATUSES MakeListing(AssembleContext* asmContext) {
                 
                 if (sscanf(curLine + lenExpr + 2, "%i", &labelInd)) {
                     AddString(ptrTextList->buffer, ptrTextList->index[curLineInd].line,
-                                   &ptrTextListBufferInd, &ptrTextExecIndexInd, " ");
+                                   &ptrTextListBufferInd, &ptrTextListIndexInd, " ");
 
                 ASSERT(labelInd < MaxLabelsSize, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
                 ASSERT(labels[labelInd] != -1, GetErrorString(NOT_INITIALIZED_LABEL), NOT_INITIALIZED_LABEL);
@@ -512,19 +525,19 @@ ERROR_STATUSES MakeListing(AssembleContext* asmContext) {
                 ON_DEBUG(fprintf(stderr, "wanna insert label value: <%s>\n", labelAddressString););
 
                 strcpy(ptrTextList->buffer + ptrTextListBufferInd, labelAddressString);
-                strcpy(ptrTextList->index[curLineInd].line + ptrTextExecIndexInd, labelAddressString);
+                strcpy(ptrTextList->index[curLineInd].line + ptrTextListIndexInd, labelAddressString);
 
                 int labelIndLen = strlen(labelAddressString);
 
                 ptrTextListBufferInd += labelIndLen;
-                ptrTextExecIndexInd  += labelIndLen;
+                ptrTextListIndexInd  += labelIndLen;
                 
                 *(ptrTextList->buffer + ptrTextListBufferInd)                = '\n';
-                *(ptrTextList->index[curLineInd].line + ptrTextExecIndexInd) = '\n';
+                *(ptrTextList->index[curLineInd].line + ptrTextListIndexInd) = '\n';
                 
                 ptrTextListBufferInd++;
-                ptrTextExecIndexInd++;
-                ptrTextList->index[curLineInd].size = ptrTextExecIndexInd;
+                ptrTextListIndexInd++;
+                ptrTextList->index[curLineInd].size = ptrTextListIndexInd;
                 
                 continue;
             }
@@ -539,7 +552,7 @@ ERROR_STATUSES MakeListing(AssembleContext* asmContext) {
             curLine += 1;
 
             AddString(ptrTextList->buffer, ptrTextList->index[curLineInd].line,
-                                   &ptrTextListBufferInd, &ptrTextExecIndexInd, " ");
+                                   &ptrTextListBufferInd, &ptrTextListIndexInd, " ");
 
             
             char* argTypeString = NULL;
@@ -550,7 +563,7 @@ ERROR_STATUSES MakeListing(AssembleContext* asmContext) {
             ON_DEBUG(fprintf(stderr, "(MakeListing): found type of arguments <%s>\n", argTypeString);)
 
             AddString(ptrTextList->buffer, ptrTextList->index[curLineInd].line,
-                     &ptrTextListBufferInd, &ptrTextExecIndexInd, argTypeString);
+                     &ptrTextListBufferInd, &ptrTextListIndexInd, argTypeString);
         }
 
         
@@ -559,7 +572,7 @@ ERROR_STATUSES MakeListing(AssembleContext* asmContext) {
 
         if (argType == VARIABLE) {
             AddString(ptrTextList->buffer, ptrTextList->index[curLineInd].line,
-                     &ptrTextListBufferInd, &ptrTextExecIndexInd, " ");
+                     &ptrTextListBufferInd, &ptrTextListIndexInd, " ");
 
             char* registerNameString = curLine;
 
@@ -580,12 +593,12 @@ ERROR_STATUSES MakeListing(AssembleContext* asmContext) {
 
 
             strcpy(ptrTextList->buffer + ptrTextListBufferInd, registerNameLine);
-            strcpy(ptrTextList->index[curLineInd].line + ptrTextExecIndexInd, registerNameLine);
+            strcpy(ptrTextList->index[curLineInd].line + ptrTextListIndexInd, registerNameLine);
             
             int registerNameLineLen = strlen(registerNameLine);
 
             ptrTextListBufferInd += registerNameLineLen;
-            ptrTextExecIndexInd  += registerNameLineLen;
+            ptrTextListIndexInd  += registerNameLineLen;
 
             registerLen += strlen(registerNameString);
             curLine += registerLen;
@@ -593,60 +606,55 @@ ERROR_STATUSES MakeListing(AssembleContext* asmContext) {
         else if (argType == MEMORY) {
             
             AddString(ptrTextList->buffer, ptrTextList->index[curLineInd].line,
-                &ptrTextListBufferInd, &ptrTextExecIndexInd, " ");
+                &ptrTextListBufferInd, &ptrTextListIndexInd, " ");
                 
             ON_DEBUG(fprintf(stderr, "lenExpr: %i, wanna find memory index in <%s>\n", lenExpr, curLine);)
+            
+            char* registerNameLine = (char*)calloc(MaxRegisterNameLen, sizeof(registerNameLine[0]));
+            ASSERT(registerNameLine != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
 
-            int memoryIndex = -1;
+            if (sscanf(curLine, "[%s]", registerNameLine) == 0) {
+                return READING_MEMORY_INDEX_ERROR;
+            }
 
-            // ON_DEBUG(fprintf(stderr, "curLineInd (before buggy code): %i\n", curLineInd);)
+            bool isValid = false;
+            
+            ERROR_STATUSES IsValidRegisterNameStringErrorStatus = IsValidRegisterNameString(registerNameLine, &isValid);
+            ASSERT(IsValidRegisterNameStringErrorStatus == OK, GetErrorString(IsValidRegisterNameStringErrorStatus),
+                    IsValidRegisterNameStringErrorStatus);
+            
+            if (!isValid) {
+                return READING_MEMORY_INDEX_ERROR;
+            }
 
-            if (sscanf(curLine, "[%i]", &memoryIndex) == 0) {
-                char* registerNameLine = (char*)calloc(MaxRegisterNameLen, sizeof(registerNameLine[0]));
-                ASSERT(registerNameLine != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
+            REGISTERS_NAMES registerName = NO_NAME;
 
-                if (sscanf(curLine, "[%s]", registerNameLine) == 0) {
-                    return READING_MEMORY_INDEX_ERROR;
-                }
+            ERROR_STATUSES RegisterNameStringToIndexErrorStatus = RegisterNameStringToIndex(registerNameLine, &registerName);
+            ASSERT(RegisterNameStringToIndexErrorStatus == OK, GetErrorString(RegisterNameStringToIndexErrorStatus), RegisterNameStringToIndexErrorStatus);
 
-                bool isValid = false;
-                
-                ERROR_STATUSES IsValidRegisterNameStringErrorStatus = IsValidRegisterNameString(registerNameLine, &isValid);
-                ASSERT(IsValidRegisterNameStringErrorStatus == OK, GetErrorString(IsValidRegisterNameStringErrorStatus),
-                       IsValidRegisterNameStringErrorStatus);
-                
-                if (!isValid) {
-                    return READING_MEMORY_INDEX_ERROR;
-                }
-
-                REGISTERS_NAMES registerName = NO_NAME;
-
-                ERROR_STATUSES RegisterNameStringToIndexErrorStatus = RegisterNameStringToIndex(registerNameLine, &registerName);
-                ASSERT(RegisterNameStringToIndexErrorStatus == OK, GetErrorString(RegisterNameStringToIndexErrorStatus), RegisterNameStringToIndexErrorStatus);
-
-                char* registerNameResLine = NULL;
+            char* registerNameResLine = NULL;
 
             ERROR_STATUSES MyIntToStringErrorStatus = MyIntToString((int)registerName, &registerNameResLine);
             ASSERT(MyIntToStringErrorStatus == OK, GetErrorString(INT_TO_STRING_ERROR), INT_TO_STRING_ERROR);
 
-                AddString(ptrTextList->buffer, ptrTextList->index[curLineInd].line,
-                &ptrTextListBufferInd, &ptrTextExecIndexInd, registerNameResLine);                
-            } else {
-                char* memoryLine = NULL;
-                // ON_DEBUG(fprintf(stderr, "curLineInd (after buggy code): %i\n", curLineInd);)
+            AddString(ptrTextList->buffer, ptrTextList->index[curLineInd].line,
+            &ptrTextListBufferInd, &ptrTextListIndexInd, registerNameResLine);                
+            // } else {
+            //     char* memoryLine = NULL;
+            //     // ON_DEBUG(fprintf(stderr, "curLineInd (after buggy code): %i\n", curLineInd);)
                 
                     
                 
-                ERROR_STATUSES MyIntToStringErrorStatus = MyIntToString(memoryIndex, &memoryLine);
-                ASSERT(MyIntToStringErrorStatus == OK, GetErrorString(INT_TO_STRING_ERROR), INT_TO_STRING_ERROR);
+            //     ERROR_STATUSES MyIntToStringErrorStatus = MyIntToString(memoryRegIndex, &memoryLine);
+            //     ASSERT(MyIntToStringErrorStatus == OK, GetErrorString(INT_TO_STRING_ERROR), INT_TO_STRING_ERROR);
                 
-                ON_DEBUG(fprintf(stderr, "memoryLine: <%s>\n", memoryLine);)
+            //     ON_DEBUG(fprintf(stderr, "memoryLine: <%s>\n", memoryLine);)
     
-                AddString(ptrTextList->buffer, ptrTextList->index[curLineInd].line,
-                    &ptrTextListBufferInd, &ptrTextExecIndexInd, memoryLine);
+            //     AddString(ptrTextList->buffer, ptrTextList->index[curLineInd].line,
+            //         &ptrTextListBufferInd, &ptrTextListIndexInd, memoryLine);
                 
-                curLine += 1 + strlen(memoryLine) + 1;
-            }
+            //     curLine += 1 + strlen(memoryLine) + 1;
+            // }
 
         }
         // exit(0);
@@ -657,7 +665,7 @@ ERROR_STATUSES MakeListing(AssembleContext* asmContext) {
         
 
         AddString(ptrTextList->buffer, ptrTextList->index[curLineInd].line,
-                &ptrTextListBufferInd, &ptrTextExecIndexInd, " ");
+                &ptrTextListBufferInd, &ptrTextListIndexInd, " ");
         ON_DEBUG(fprintf(stderr, "(MakeListing): wanna copy <%s>\n", curLine);)
         ON_DEBUG(DebugPrintLine(curLine);)
 
@@ -683,15 +691,15 @@ ERROR_STATUSES MakeListing(AssembleContext* asmContext) {
 ERROR_STATUSES Assemble(AssembleContext* asmContext) {
     Text* ptrTextSource = &(asmContext->textSource);
     int* labels         = asmContext->labels;
-    int* execBuffer     = asmContext->execBuffer;
 
     ASSERT(ptrTextSource           != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
     ASSERT(ptrTextSource->buffer   != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
     ASSERT(ptrTextSource->index    != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
 
-    ASSERT(labels                  == NULL, GetErrorString(BAD_CLEAR_INIT), BAD_CLEAR_INIT);
-    ASSERT(execBuffer              == NULL, GetErrorString(BAD_CLEAR_INIT), BAD_CLEAR_INIT);
-        
+    ASSERT(asmContext->execBuffer              == NULL, GetErrorString(BAD_CLEAR_INIT), BAD_CLEAR_INIT);
+    
+    asmContext->execBuffer = (int*)calloc(MaxExecBufferSize, sizeof(asmContext->execBuffer[0]));
+
     int execBufferInd = 0;
 
     for (int curLineInd = 0; curLineInd < ptrTextSource->maxLines; curLineInd++) {
@@ -711,17 +719,17 @@ ERROR_STATUSES Assemble(AssembleContext* asmContext) {
 
         ASSERT(curLine != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
 
-        DebugPrintLine(curLine);
+        // DebugPrintLine(curLine);
 
         int lenExpr = 0;
         
         
         OPCODES opcode               = NO_OPCODE;
         ARG_TYPES argType            = NO_ARG;
-        StackElement_t argValue      = 0;
+        StackElement_t argValue      = POISON;
         REGISTERS_NAMES registerName = NO_NAME;
         int jumpLineIndex            = -1;
-        int memoryIndex              = -1;
+        int memoryRegIndex              = -1;
 
         bool needJumpingIndex = false;
 
@@ -848,6 +856,7 @@ ERROR_STATUSES Assemble(AssembleContext* asmContext) {
             lenExpr = strlen("MDUMP");
         }
         else if (strcmp(curLine, "") == 0 && curLineInd == ptrTextSource->maxLines - 1) {
+            asmContext->execBufferSize = execBufferInd;
 
             ON_DEBUG(fprintf(stderr, "END OF FILE!\n");)
 
@@ -860,7 +869,6 @@ ERROR_STATUSES Assemble(AssembleContext* asmContext) {
                                 
         if (needJumpingIndex) {
             ON_DEBUG(fprintf(stderr, "(Assemble): jump comand detected: curline + %i\n", lenExpr + 2););
-
             ON_DEBUG(fprintf(stderr, "(Assemble): jump comand detected: <%s>\n", curLine + lenExpr + 2););
 
                 int labelInd = -1;
@@ -873,11 +881,11 @@ ERROR_STATUSES Assemble(AssembleContext* asmContext) {
 
                     ON_DEBUG(fprintf(stderr, "wanna insert label value: %i\n", jumpLineIndex););                    
                     
-                    continue;
+                    // continue;
             }
         }
 
-        curLine += lenExpr;        
+        curLine += lenExpr + 1;        
 
         int registerLen = 0;
 
@@ -902,44 +910,51 @@ ERROR_STATUSES Assemble(AssembleContext* asmContext) {
 
             // ON_DEBUG(fprintf(stderr, "curLineInd (before buggy code): %i\n", curLineInd);)
 
-            if (sscanf(curLine, "[%i]", &memoryIndex) == 0) {
-                char* registerNameLine = (char*)calloc(MaxRegisterNameLen, sizeof(registerNameLine[0]));
-                ASSERT(registerNameLine != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
+            char* registerNameLine = (char*)calloc(MaxRegisterNameLen, sizeof(registerNameLine[0]));
+            ASSERT(registerNameLine != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
 
-                if (sscanf(curLine, "[%s]", registerNameLine) == 0) {
-                    return READING_MEMORY_INDEX_ERROR;
-                }
-
-                bool isValid = false;
-                
-                ERROR_STATUSES IsValidRegisterNameErrorStatus = IsValidRegisterNameString(registerNameLine, &isValid);
-                ASSERT(IsValidRegisterNameErrorStatus == OK, GetErrorString(IsValidRegisterNameErrorStatus),
-                       IsValidRegisterNameErrorStatus);
-                
-                if (!isValid) {
-                    return READING_MEMORY_INDEX_ERROR;
-                }
-
-                ERROR_STATUSES registerNameStringToIndexErrorStatus = RegisterNameStringToIndex(registerNameLine, &registerName);
-                ASSERT(registerNameStringToIndexErrorStatus == OK, GetErrorString(registerNameStringToIndexErrorStatus),
-                       registerNameStringToIndexErrorStatus);
-
-                memoryIndex = registerName;
+            if (sscanf(curLine, "[%s]", registerNameLine) == 0) {
+                return READING_MEMORY_INDEX_ERROR;
             }
-        }
-        ON_DEBUG(fprintf(stderr, "(MakeListing): wanna copy <%s>\n", curLine);)
-        ON_DEBUG(DebugPrintLine(curLine);)
-        ON_DEBUG(fprintf(stderr, "curLineInd (end of cycle): %i\n", curLineInd);)
 
-        execBuffer[execBufferInd++] = opcode;
-        execBuffer[execBufferInd++] = argType;
-        execBuffer[execBufferInd++] = argValue;
-        execBuffer[execBufferInd++] = registerName;
-        execBuffer[execBufferInd++] = jumpLineIndex;
-        execBuffer[execBufferInd++] = memoryIndex;
+            bool isValid = false;
+            
+            ERROR_STATUSES IsValidRegisterNameErrorStatus = IsValidRegisterNameString(registerNameLine, &isValid);
+            ASSERT(IsValidRegisterNameErrorStatus == OK, GetErrorString(IsValidRegisterNameErrorStatus),
+                    IsValidRegisterNameErrorStatus);
+            
+            if (!isValid) {
+                return READING_MEMORY_INDEX_ERROR;
+            }
+
+            ERROR_STATUSES registerNameStringToIndexErrorStatus = RegisterNameStringToIndex(registerNameLine, &registerName);
+            ASSERT(registerNameStringToIndexErrorStatus == OK, GetErrorString(registerNameStringToIndexErrorStatus),
+                    registerNameStringToIndexErrorStatus);
+
+            memoryRegIndex = registerName;
+        }
+
+        // ON_DEBUG(DebugPrintLine(curLine);)
+        
+        asmContext->execBuffer[execBufferInd++] = opcode;
+        asmContext->execBuffer[execBufferInd++] = argType;
+        asmContext->execBuffer[execBufferInd++] = argValue;
+        asmContext->execBuffer[execBufferInd++] = registerName;
+        asmContext->execBuffer[execBufferInd++] = jumpLineIndex;
+        asmContext->execBuffer[execBufferInd++] = memoryRegIndex;
+        
+        ON_DEBUG(fprintf(stderr, "(Assemble): curLineInd: %i, opcode: %i, argType: %i,\
+                         argValue: %i, registerName: %i, jumpLineIndex: %i, memoryRegIndex: %i\n", 
+                         curLineInd, opcode, argType, argValue, registerName, jumpLineIndex, memoryRegIndex);)
+
+        ON_DEBUG(fprintf(stderr, "curLineInd (end of cycle): %i\n", curLineInd);)
     }
     
     asmContext->execBufferSize = execBufferInd;
+
+    ON_DEBUG(fprintf(stderr, "(Assemble): execBufferSize SHOULD BE: %i\n", execBufferInd);)
+
+    ON_DEBUG(fprintf(stderr, "(Assemble): execBufferSize: %i\n", asmContext->execBufferSize);)
 
     return OK;
 }
@@ -1071,7 +1086,7 @@ ERROR_STATUSES WriteBufferToFile(const char* filename, char* buffer, size_t buff
     ASSERT(fileDesc >= 0, GetErrorString(FILE_ACCESS_DENIED), FILE_ACCESS_DENIED);
 
     ON_DEBUG(fprintf(stderr, "(WriteBufferToFile): bufferSize: %i\n", bufferSize);)
-    ON_DEBUG(fprintf(stderr, "(WriteBufferToFile): buffer: ");)
+    ON_DEBUG(fprintf(stderr, "(WriteBufferToFile): buffer:\n");)
 
     for (int i = 0; i < bufferSize; i++) {
         ON_DEBUG(fprintf(stderr, "<%c> has number %i\n", buffer[i], buffer[i]);)
@@ -1138,11 +1153,11 @@ ERROR_STATUSES WriteIntBufferToFile(const char* filename, int* buffer, size_t bu
     ASSERT(fileDesc >= 0, GetErrorString(FILE_ACCESS_DENIED), FILE_ACCESS_DENIED);
 
     ON_DEBUG(fprintf(stderr, "(WriteBufferToFile): bufferSize: %i\n", bufferSize);)
-    ON_DEBUG(fprintf(stderr, "(WriteBufferToFile): buffer: ");)
+    ON_DEBUG(fprintf(stderr, "(WriteBufferToFile): buffer:\n");)
 
-    for (int i = 0; i < bufferSize; i++) {
-        ON_DEBUG(fprintf(stderr, "%i\n", buffer[i], buffer[i]);)
-    }
+    // for (int i = 0; i < bufferSize; i++) {
+    //     ON_DEBUG(fprintf(stderr, "%i\n", buffer[i], buffer[i]);)
+    // }
     // const char* s = "MEOW\n";
     write(fileDesc, buffer, sizeof(buffer[0]) * bufferSize);  //  Почему не пишет, коли в буфере все ок
     
@@ -1302,11 +1317,14 @@ ERROR_STATUSES TrimSpaces(char** ptrLine) {
 }
 
 ERROR_STATUSES GetArgumentType(const char* line, int lenExpr, ARG_TYPES* ptrArgType) {
+
+    ON_DEBUG(fprintf(stderr, "(GetArgumentType): line:<%s>,  lenExpr: %i\n", line, lenExpr);)
+
     StackElement_t arg = 0;
 
-    if (!sscanf(line + lenExpr, "%lf", &arg)) {
+    if (!sscanf(line + lenExpr, "%i", &arg)) {
         
-        if (strncmp(line + lenExpr + 1, "[", 1)) {
+        if (strncmp(line + lenExpr + 1, "[", 1) == 0) {
             *ptrArgType = (ARG_TYPES)(*ptrArgType  | MEMORY);
             return OK;
         }
@@ -1426,4 +1444,21 @@ void MyStrcpyWithSep(char* bufferDest, char* lineDest, char* src, int* ptrBuffer
 
     // ON_DEBUG(fprintf(stderr, "(MyStrcpyWithSep): just copied buffer: <%s>\n", bufferDest);)
     // ON_DEBUG(fprintf(stderr, "(MyStrcpyWithSep): just copied line: <%s>\n", lineDest);)
+}
+
+void DebugCode(int* execBuffer) {
+    int execBufferInd = 0;
+    
+    for (int i = 0; i < MaxCodeSize; i++) {
+        int opcode         = execBuffer[execBufferInd++];
+        int argType        = execBuffer[execBufferInd++];
+        int argValue       = execBuffer[execBufferInd++];
+        int registerName   = execBuffer[execBufferInd++];
+        int jumpLineIndex  = execBuffer[execBufferInd++];
+        int memoryRegIndex = execBuffer[execBufferInd++];
+        ON_DEBUG(fprintf(stderr, "(Assemble): curLineInd: %i, opcode: %i, argType: %i,\
+                         argValue: %i, registerName: %i, jumpLineIndex: %i, memoryRegIndex: %i\n", 
+                         i, opcode, argType, argValue, registerName, jumpLineIndex, memoryRegIndex);)
+    }
+
 }

@@ -16,6 +16,7 @@ MUL
 POP RGX
 ; i = RAX, j = RBX, x0 = RCX, y0 = RDX, a^2 = REX, b^2 = RFX, a^2 * b^2 = RGX
 :1
+;
 PUSH RAX
 PUSH 10
 JE :3
@@ -47,15 +48,25 @@ JE :3
         JA :5
             PUSH 35
             POP [RJX]
+            PUSH 67
+            OUT 
+            PUSH RJX
+            OUT
             JMP :6
         :5
         PUSH 46
         POP [RJX]
+        PUSH -67
+        OUT 
+        PUSH RJX
+        OUT
         :6
         PUSH 1
         PUSH RBX
         ADD
         POP RBX
+        PUSH RBX
+        OUT
         JMP :7
     :4
     PUSH 0

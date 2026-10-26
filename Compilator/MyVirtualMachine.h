@@ -3,9 +3,13 @@
 #define _MY_VIRTUAL_MACHINE_H
 
 const int MaxCodeSize        = 1200;
+const int MaxExecBufferSize  = 10000;
 const int MaxRegisterNameLen = 3;
+
 const int RegistersSize      = 8;
 const int MemorySize         = 100; 
+const int StackCapacity      = 1000;
+const int CallStackCapacity  = 100;
 
 enum OPCODES {
     PUSH      = 0,

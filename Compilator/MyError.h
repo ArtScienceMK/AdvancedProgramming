@@ -44,7 +44,9 @@ enum ERROR_STATUSES {
     READ_LABEL_ERROR                     = 39,
     LABEL_REDEFINITION                   = 40,
     UNKNOWN_LABEL                        = 41,
-    NOT_INITIALIZED_LABEL                = 42
+    NOT_INITIALIZED_LABEL                = 42,
+    READING_MEMORY_INDEX_ERROR           = 43,
+    BAD_MEMORY_ADDRESS                   = 44
 };
 
 const char* GetErrorString(ERROR_STATUSES errorStatus);
@@ -173,6 +175,12 @@ const char* GetErrorString(ERROR_STATUSES errorStatus) {
         
         case NOT_INITIALIZED_LABEL:
             return "Label was not initialized!\n";
+
+        case READING_MEMORY_INDEX_ERROR:
+            return "When reading memory index error happened!\n";
+
+        case BAD_MEMORY_ADDRESS:
+            return "Memory address is out of allocated (for this vm) RAM!\n";
 
         default:
             return "Unknown error status!\n";
