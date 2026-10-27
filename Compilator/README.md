@@ -22,6 +22,18 @@
 * Registers supported
 * RAM supported (allocated in program)
 
+## Feature list 
+
+1. Basic math operations supported! (+, -, *, /, sin, cos, square, sqrt)
+2. Jumps on the certain line supported!
+3. Jumps on the numeric labels address supported!
+4. Creating functions supported!
+5. Comments supported!
+6. Spaces and tabs on the beginning on the line supported!
+7. Program, calculating roots of the quadratic equations, is available!
+8. Program, recursively calculating the factorial, is available!
+9. Program, sketching circle, is available!
+
 ## Quickstart
 
 Download latest version from releases :) That's it!
@@ -51,6 +63,7 @@ If you want to compile virtual machine
 5) ``` ./asm ```
 
 Congratulations!  
+
 
 ## What's New
 
