@@ -17,6 +17,7 @@
 
 **Assembler** V2.0 is a powerful tool, which allows you to translate ASM-like language into binary code. Moreover, you can use our VirtualMachine to execute such code. Here some key facts about this project:  
 
+* minimal Turing-complete VM
 * Only integers available
 * Registers supported
 * RAM supported (allocated in program)
@@ -60,7 +61,29 @@ Added processing of command line arguments! Following flags are available in ass
 
 ## Documentation
 
-Basic instructions:
+### Instruction structure:
+
+``` 
+struct Comand {
+    OPCODES opcode;
+    ARG_TYPES argType;
+    StackElement_t argValue;
+    REGISTERS_NAMES registerName;
+    
+    struct {
+        int jumpLineIndex;
+        int memoryIndex; 
+    };
+};
+```
+
+### Byte code format:
+
+No separators, one value to one integer.
+
+opcode1, argType1, argValue1, registerName1, jumpLineIndex1, memoryIndex1, opcode 2, ....
+
+### Basic instructions:
 
 1) PUSH value - pushes value into the stack. Value may be an constant integer, register name (e.g. RAX, RBX, ..., RJX) or memory index (e.g. PUSH [12] pushes value = memory[12] into the stack)
 2) POP (Nothing or RAX or [memoryIndex]) - pops value out of the stack (if it's not empty), this value may be saved in register (e.g. POP RAX, saves popped element in RAX) or memory (e.g. POP [12], saves popped element in memory[12])
@@ -77,13 +100,13 @@ Basic instructions:
 13) SQRT - pops first value, calculates square root, pushes in the stack
 14) HALT - immediately stops program
 
-Labels:
+### Labels:
 You may created numeric labels e.g. :1, :2 to make a destination point for jump.
 
-Comments and spaces/tabs:
+### Comments and spaces/tabs:
 String starting with ";" (without quotes) are comments, they are ignored. Spaces and tabs are ignored, too.
 
-More advanced instructions
+### More advanced instructions
 
 15) JMP (constant integer or numeric label (e.g. :1, :2)) - continue executing on the line, code of which you provided
 16) JA  (constant integer or numeric label (e.g. :1, :2)) - op2 = POP, op1 = POP, jumps if op1 > op2
@@ -99,7 +122,7 @@ More advanced instructions
 25) IN - reading a constant integer from stdin, then pushes it to the stack
 26) MDUMP - prints the memory as a matrix (by default it 10x10)
 
-Code sample:
+### Code sample:
 
 ``` 
 ;  Calculating factorial 
