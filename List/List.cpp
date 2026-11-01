@@ -23,15 +23,26 @@
 #include <string.h>
 #include <math.h>
 
-const int MaxDotLineSize = 100;
+int DUMP_CNT = 1;
+
 const int MaxFilenameLen = 30;
 const int MaxNumberLineSize = 3;
 
 const char* VizDumpFilename =  "Dump";
 const char* VizDumpExtension = ".png";
 
-const char* DotFilename = "dot.txt";
-const int DotFileSize = 10000;
+const char* DotFilename  = "dot.txt";
+const int   DotFileSize  = 10000;
+const int MaxDotLineSize = 100;
+
+const char* HtmlFilename    = "Dump.html";
+const int   HtmlFileSize    = 10000;
+const int   MaxHtmlLineSize = 100;
+
+
+const char* TxtFilename    = "Dump.txt";
+const int   TxtFileSize    = 10000;
+const int   MaxTxtLineSize = 100;
 
 const char* DotFileTemplate = "digraph G{\n\trankdir=LR;\n\tnode[color=\"#00ff00\", style=filled, fillcolor=\"#00ff88\", fontsize=14, shape=\"Mrecord\"];\n";
 
@@ -53,9 +64,17 @@ struct List_t {
 };
 
 ERROR_STATUSES ClearLine(char* line);
+ERROR_STATUSES AddLine(     char* buffer, size_t* ptrBufferSize, const char* toAdd);
+ERROR_STATUSES AddLineClean(char* buffer, size_t* ptrBufferSize, const char* toAdd);
 
-ERROR_STATUSES GenerateDotFile(List_t* ptrList, char** ptrBuffer, int* ptrBufferSize);
+ERROR_STATUSES GenerateDotFile(List_t* ptrList, char** ptrBuffer, size_t* ptrBufferSize);
+
 ERROR_STATUSES GenerateDumpFilename(char** ptrFilename);
+
+ERROR_STATUSES GenerateHtmlFile(List_t* ptrList, char** ptrBuffer, size_t* ptrBufferSize,
+    int DUMP_CNT, SourceLocation sourceLocation);
+
+ERROR_STATUSES GenerateTxtFileDump(List_t* ptrList, char** ptrBuffer, size_t* ptrBufferSize, SourceLocation sourceLocation);
 
 ERROR_STATUSES UnlinkFile(const char* filename);
 
@@ -66,8 +85,10 @@ ERROR_STATUSES ListInit(List_t* ptrList, size_t _capacity);
 void ListDestroy(List_t* ptrList);
 
 ERROR_STATUSES ListVerify(List_t* ptrList);
+
 ERROR_STATUSES ListTextDump(List_t list, SourceLocation sourceLocation);
-ERROR_STATUSES ListVizDump(List_t list, SourceLocation sourceLocation);
+ERROR_STATUSES ListVizDump( List_t list, SourceLocation sourceLocation);
+ERROR_STATUSES ListHtmlDump(List_t list, SourceLocation sourceLocation);
 
 int NumLen(int num);
 
@@ -85,19 +106,19 @@ int main() {
 
     ListInsert(&list, 0, 100);
     // ListInsert(&list, 0, 2);
-    ListInsert(&list, 1, 150);
+    ListInsert(&list, 0, 150);
 
     SourceLocation sourceLocation1 = {};
     GET_SOURCE_LOCATION(sourceLocation1, list)
 
-    ListVizDump(list, sourceLocation1);
+    ListHtmlDump(list, sourceLocation1);
 
-    ListDelete(&list, 2);
+    // ListDelete(&list, 2);
 
-    SourceLocation sourceLocation2 = {};
-    GET_SOURCE_LOCATION(sourceLocation2, list)
+    // SourceLocation sourceLocation2 = {};
+    // GET_SOURCE_LOCATION(sourceLocation2, list)
 
-    ListVizDump(list, sourceLocation2);
+    // ListVizDump(list, sourceLocation2);
 
 
     return 0;
@@ -109,6 +130,33 @@ ERROR_STATUSES ClearLine(char* line) {
     for (; *line != '\0'; line++) {
         *line = '\0';
     }
+
+    return OK;
+}
+
+ERROR_STATUSES AddLine(char* buffer, size_t* ptrBufferSize, char* toAdd) {
+    ASSERT(buffer        != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+    ASSERT(ptrBufferSize != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+    ASSERT(toAdd         != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+
+    strcpy(buffer + *ptrBufferSize, toAdd);
+    
+    int toAddLen = strlen(toAdd);
+    *ptrBufferSize += toAddLen;
+
+    return OK;
+}
+
+ERROR_STATUSES AddLineClean(char* buffer, size_t* ptrBufferSize, char* toAdd) {
+    ERROR_STATUSES AddLineErrorStatus = AddLine(buffer, ptrBufferSize, toAdd);
+
+    ASSERT(AddLineErrorStatus == OK, GetErrorString(AddLineErrorStatus),
+           AddLineErrorStatus);
+
+    ERROR_STATUSES ClearLineErrorStatus = ClearLine(toAdd);
+
+    ASSERT(ClearLineErrorStatus == OK, GetErrorString(ClearLineErrorStatus),
+           ClearLineErrorStatus);
 
     return OK;
 }
@@ -244,48 +292,25 @@ ERROR_STATUSES ListVerify(List_t* ptrList) {
 }
 
 ERROR_STATUSES ListTextDump(List_t list, SourceLocation sourceLocation) {
-    ON_DEBUG(ListVerify(&list);)
+    ListVerify(&list);
 
-    LOG(fprintf(stderr, "\n-----------\n");)
-    LOG(fprintf(stderr, "(ListTextDump): Starting...\n");)
+    char* buffer = NULL;
+    size_t bufferSize = 0;
 
-    LOG(fprintf(stderr, "List_t <%s> [%p] %s at %s {\n",
-                sourceLocation.name, &list, sourceLocation.function, sourceLocation.file);)  //  TODO make STRINGIFY
+    ERROR_STATUSES GenerateTxtFileDumpErrorStatus = GenerateTxtFileDump(&list, &buffer, &bufferSize, sourceLocation);
 
-    LOG(fprintf(stderr, "size     = %zu\n", list.size);)
-    LOG(fprintf(stderr, "capacity = %zu\n", list.capacity);)
+    ASSERT(GenerateTxtFileDumpErrorStatus == OK, GetErrorString(GenerateTxtFileDumpErrorStatus),
+           GenerateTxtFileDumpErrorStatus);
 
-    LOG(fprintf(stderr, "head = %i\n",  list.head);)
-    LOG(fprintf(stderr, "tail = %i\n",  list.tail);)
+    ERROR_STATUSES UnlinkFileErrorStatus = UnlinkFile(TxtFilename);
+
+    ASSERT(UnlinkFileErrorStatus == OK, GetErrorString(UnlinkFileErrorStatus), UnlinkFileErrorStatus);
+
+    ERROR_STATUSES WriteBufferToFileErrorStatus = WriteBufferToFile(TxtFilename, buffer, bufferSize);
+
+    ASSERT(WriteBufferToFileErrorStatus == OK, GetErrorString(WriteBufferToFileErrorStatus),
+           WriteBufferToFileErrorStatus);
     
-    if (isatty(fileno(stderr))) {
-        LOG(fprintf(stderr, "%s", GREEN);)
-    }
-
-    for (size_t i = 0; i < list.size; i++) {
-        LOG(fprintf(stderr, "*[%zu] = {info: %i, next: %i, prev: %i}\n",
-                    i, list.elems[i].info, list.elems[i].next, 
-                    list.elems[i].prev);)
-    }
-
-    if (isatty(fileno(stderr))) {
-        LOG(fprintf(stderr, "%s", RED);)
-    }
-
-    for (size_t i = list.size; i + 1 < list.capacity; i++) {
-        LOG(fprintf(stderr, "*[%zu] = {info: %i, next: %i, prev: %i}\n",
-                    i, list.elems[i].info, list.elems[i].next, 
-                    list.elems[i].prev);)
-    }
-
-    if (isatty(fileno(stderr))) {
-        LOG(fprintf(stderr, "%s", RESET);)
-    }
-
-    LOG(fprintf(stderr, "}\n");)
-
-    LOG(fprintf(stderr, "(ListTextDump): Ending...\n");)
-
     ON_DEBUG(ListVerify(&list);)
 
     return OK;
@@ -352,7 +377,7 @@ ERROR_STATUSES GenerateDotFile(List_t* ptrList, char** ptrBuffer, int* ptrBuffer
     for (size_t i = 0; i < ptrList->size; i++) {
         
         if (ptrList->elems[i].next != -1) {
-            sprintf(curLine, "%zu->%i;\n", i, ptrList->elems[i].next);
+            sprintf(curLine, "%zu->%i[color=\"#7b00ff\", dir=both];\n", i, ptrList->elems[i].next);
         }
 
         strcpy(buffer + bufferInd, curLine);
@@ -379,7 +404,7 @@ ERROR_STATUSES GenerateDotFile(List_t* ptrList, char** ptrBuffer, int* ptrBuffer
 }
 
 ERROR_STATUSES GenerateDumpFilename(char** ptrFilename) {
-    static int DumpCnt = 1;
+    // static int DUMP_CNT = 1;
 
     ASSERT(ptrFilename != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
 
@@ -396,7 +421,7 @@ ERROR_STATUSES GenerateDumpFilename(char** ptrFilename) {
 
     ASSERT(numberLine != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
 
-    sprintf(numberLine, "%i", DumpCnt);
+    sprintf(numberLine, "%i", DUMP_CNT);
 
     strcpy(curDumpFilename + curDumpFilenameInd, numberLine);
     curDumpFilenameInd += strlen(numberLine);
@@ -406,7 +431,237 @@ ERROR_STATUSES GenerateDumpFilename(char** ptrFilename) {
 
     *ptrFilename = curDumpFilename;
 
-    DumpCnt++;
+    DUMP_CNT++;
+
+    return OK;
+}
+
+ERROR_STATUSES GenerateHtmlFile(List_t* ptrList, char** ptrBuffer, size_t* ptrBufferSize, int DUMP_CNT, SourceLocation sourceLocation) {
+    // No verification, because it's always call after calling functions, requiring verification
+
+    char* buffer = (char*) calloc(HtmlFileSize, sizeof(buffer[0]));
+
+    ASSERT(buffer != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
+
+    size_t bufferInd = 0;
+
+    char* curLine = (char*) calloc(MaxHtmlLineSize, sizeof(curLine[0]));
+
+    ASSERT(curLine != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
+
+    sprintf(curLine, "<pre>\n");
+
+    ERROR_STATUSES AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
+
+    ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus),
+           AddLineCleanErrorStatus);
+
+
+
+    sprintf(curLine, "Dump %i\n", DUMP_CNT);
+
+    AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
+
+    ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus),
+           AddLineCleanErrorStatus);
+           
+
+    sprintf(curLine, "Was called from %s, %s\n", sourceLocation.function, sourceLocation.file);
+    
+    AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
+
+    ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus),
+           AddLineCleanErrorStatus);
+
+
+    sprintf(curLine, "List_t <%s> at [%p] \n\n",
+                sourceLocation.name, ptrList);
+    
+    AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
+
+    ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus),
+           AddLineCleanErrorStatus);
+
+    
+    sprintf(curLine, "Head = %i\n", ptrList->head);
+    
+    AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
+
+    ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus),
+           AddLineCleanErrorStatus);
+
+    
+    sprintf(curLine, "Tail = %i\n", ptrList->tail);
+    
+    AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
+
+    ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus),
+           AddLineCleanErrorStatus);
+
+    
+    sprintf(curLine, "Size = %i\n", ptrList->size);
+    
+    AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
+
+    ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus),
+           AddLineCleanErrorStatus);
+
+        
+    sprintf(curLine, "Capacity = %i\n\n", ptrList->capacity);
+    
+    AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
+
+    ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus),
+           AddLineCleanErrorStatus);
+    
+
+    sprintf(curLine, "Visual dump\n <img src=%s%i%s>", VizDumpFilename, DUMP_CNT - 1, VizDumpExtension);
+    
+    AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
+
+    ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus),
+           AddLineCleanErrorStatus);
+
+    sprintf(curLine, "Text dump\n <embed src=%s>", TxtFilename);
+    
+    AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
+
+    ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus),
+           AddLineCleanErrorStatus);
+
+    *ptrBuffer     = buffer;
+    *ptrBufferSize = bufferInd;
+
+    return OK;
+}
+
+ERROR_STATUSES GenerateTxtFileDump(List_t* ptrList, char** ptrBuffer, size_t* ptrBufferSize, SourceLocation sourceLocation) {
+    ListVerify(ptrList);
+
+    char* buffer = (char*) calloc(TxtFileSize, sizeof(buffer[0]));
+
+    ASSERT(buffer != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
+
+    size_t bufferInd = 0;
+
+    char* curLine = (char*) calloc(MaxTxtLineSize, sizeof(curLine[0]));
+
+    ASSERT(curLine != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
+
+    sprintf(curLine,  "\n-----------\n(ListTextDump): Starting...\n");
+
+    ERROR_STATUSES AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
+
+    ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus),
+           AddLineCleanErrorStatus);
+
+
+    sprintf(curLine,  "List_t <%s> [%p] %s at %s {\n",
+                sourceLocation.name, ptrList, sourceLocation.function, sourceLocation.file);
+
+    AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
+
+    ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus),
+           AddLineCleanErrorStatus);
+
+    sprintf(curLine, "Head = %i\n", ptrList->head);
+    
+    AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
+
+    ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus),
+           AddLineCleanErrorStatus);
+
+    
+    sprintf(curLine, "Tail = %i\n", ptrList->tail);
+    
+    AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
+
+    ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus),
+           AddLineCleanErrorStatus);
+
+    
+    sprintf(curLine, "Size = %i\n", ptrList->size);
+    
+    AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
+
+    ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus),
+           AddLineCleanErrorStatus);
+
+        
+    sprintf(curLine, "Capacity = %i\n\n", ptrList->capacity);
+    
+    AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
+
+    ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus),
+           AddLineCleanErrorStatus);
+    
+    // if (isatty(fileno(stderr))) {
+    //     sprintf(curLine, "%s", GREEN);
+    
+    //     AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
+
+    //     ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus),
+    //         AddLineCleanErrorStatus);
+    // }
+
+    for (size_t i = 0; i < ptrList->size; i++) {
+
+        sprintf(curLine, "*[%zu] = {info: %i, next: %i, prev: %i}\n",
+                i, ptrList->elems[i].info, ptrList->elems[i].next, 
+                ptrList->elems[i].prev);
+    
+        AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
+
+        ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus),
+            AddLineCleanErrorStatus);
+    }
+
+    // if (isatty(fileno(stderr))) {
+    //     printf(curLine, "%s", RED);
+    
+    //     AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
+
+    //     ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus),
+    //         AddLineCleanErrorStatus);
+    // }
+
+    for (size_t i = ptrList->size; i + 1 < ptrList->capacity; i++) {
+        sprintf(curLine, "*[%zu] = {info: %i, next: %i, prev: %i}\n",
+                i, ptrList->elems[i].info, ptrList->elems[i].next, 
+                ptrList->elems[i].prev);
+    
+        AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
+
+        ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus),
+            AddLineCleanErrorStatus);
+    }
+
+    // if (isatty(fileno(stderr))) {
+    //     sprintf(curLine, "%s", RESET);
+    
+    //     AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
+
+    //     ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus),
+    //         AddLineCleanErrorStatus);
+    // }
+
+    sprintf(curLine, "}\n");
+
+    AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
+
+    ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus),
+        AddLineCleanErrorStatus);
+
+
+    sprintf(curLine, "(ListTextDump): Ending...\n");
+
+    AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
+
+    ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus),
+        AddLineCleanErrorStatus);
+
+    *ptrBuffer     = buffer;
+    *ptrBufferSize = bufferInd;
 
     return OK;
 }
@@ -476,6 +731,27 @@ ERROR_STATUSES ListVizDump(List_t list, SourceLocation sourceLocation) {
     return OK;
 }
 
+ERROR_STATUSES ListHtmlDump(List_t list, SourceLocation sourceLocation) {
+    ListVizDump( list, sourceLocation);
+    ListTextDump(list, sourceLocation);
+
+    char* buffer = NULL;
+
+    size_t bufferSize = 0;
+
+    ERROR_STATUSES GenerateHtmlFileErrorStatus = GenerateHtmlFile(&list, &buffer, &bufferSize, DUMP_CNT, sourceLocation);
+
+    ASSERT(GenerateHtmlFileErrorStatus == OK, GetErrorString(GenerateHtmlFileErrorStatus),
+           GenerateHtmlFileErrorStatus);
+    
+    ERROR_STATUSES WriteBufferToFileErrorStatus = WriteBufferToFile(HtmlFilename, buffer, bufferSize);
+
+    ASSERT(WriteBufferToFileErrorStatus == OK, GetErrorString(WriteBufferToFileErrorStatus), 
+           WriteBufferToFileErrorStatus);
+
+    return OK;
+}
+
 int NumLen(int num) {
     if (num == 0) {
         return 1;
@@ -528,38 +804,16 @@ ERROR_STATUSES ListInsert(List_t* ptrList, int insIndex, int value) {
 
     ptrList->size++;
 
-    if (insIndex == 0) {
-        if (ptrList->head == 0) {
-            ptrList->head = curFree;
-            
-            ptrList->elems[curFree].prev = 0;
+    int nextInd = ptrList->elems[insIndex].next;
 
-            ptrList->elems[0].next = ptrList->head;
-        } else {
-            int oldHead = ptrList->head;
+    ptrList->elems[curFree].next = nextInd;
+    ptrList->elems[nextInd].prev = curFree;
 
-            ptrList->elems[curFree].next = oldHead;
-            ptrList->elems[oldHead].prev = curFree;
+    ptrList->elems[curFree].prev = insIndex;
+    ptrList->elems[insIndex].next = curFree;
 
-            ptrList->elems[curFree].prev = 0;
-
-            ptrList->head = curFree;
-        }
-    }
-
-    if (insIndex == ptrList->size - 2) {
-        if (ptrList->tail == 0) {
-            ptrList->tail = curFree;
-            ptrList->elems[curFree].prev = 0;
-        } else {
-            int oldTail = ptrList->tail;
-
-            ptrList->elems[curFree].prev = oldTail;
-            ptrList->elems[oldTail].next = curFree;
-
-            ptrList->tail = curFree;
-        }
-    }
+    ptrList->head = ptrList->elems[0].next;
+    ptrList->tail = ptrList->elems[0].prev;
 
     return OK;
 }
@@ -580,17 +834,13 @@ ERROR_STATUSES ListDelete(List_t* ptrList, int delIndex) {
         ptrList->elems[nextInd].prev = prevInd;
     }
 
-    if (delIndex == ptrList->head) {
-        ptrList->head = nextInd;
-    }
-
-    if (delIndex == ptrList->tail) {
-        ptrList->tail = prevInd;
-    }
-
     // ptrList->elems[delIndex].info = POISON;
     ptrList->elems[delIndex].prev = -1;
     ptrList->elems[delIndex].next = -1;
+
+    ptrList->head = ptrList->elems[0].next;
+    ptrList->tail = ptrList->elems[0].prev;
+
 
     return OK;
 }
