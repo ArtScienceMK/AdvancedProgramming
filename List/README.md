@@ -66,7 +66,7 @@ Added html dump!
 
 ## Documentation
 
-[Index page](docs/html/index.html)
+Go to [index page](https://artsciencemk.github.io/AdvancedProgramming/structListElem__t.html), find needed function with search bar in the right upper corner.
 
 ### Why list, cycled on fictive element is better, than usual list?
 
