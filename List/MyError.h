@@ -53,7 +53,8 @@ enum ERROR_STATUSES {
     BAD_LIST_TAIL                        = 48,
     BAD_LIST_ZERO_ELEM                   = 49,
     LIST_CYCLE                           = 50,
-    SYSTEM_CALL_ERROR                    = 51
+    SYSTEM_CALL_ERROR                    = 51,
+    NO_EDGE_ERROR                        = 52
 };
 
 const char* GetErrorString(ERROR_STATUSES errorStatus);
@@ -209,6 +210,9 @@ const char* GetErrorString(ERROR_STATUSES errorStatus) {
 
         case SYSTEM_CALL_ERROR:
             return "Error while executing system()!\n";
+
+        case NO_EDGE_ERROR:
+            return "Node have less than two edges!\n";
 
         default:
             return "Unknown error status!\n";

@@ -27,10 +27,11 @@
 2. Dump to the .txt file supported!
 3. Dump to the .png file supported!
 4. Dump to the .html file provided (incorporating both .txt and .png files inside!)!
+5. Insertion & deletion with constant time complexity!
 
 The visual dump sample:
 
-![Dump1](Dump1.png)
+![README_DUMP.png](README_DUMP.png)
 
 ## Quickstart
 
@@ -67,6 +68,23 @@ Added html dump!
 
 [Index page](docs/html/index.html)
 
+### Why list, cycled on fictive element is better, than usual list?
+
+Let's consider insertion function in usual case:
+
+You should handle at least 4 edge cases:
+
+![UsualListInsert.png](UsualListInsert.png)
+
+While handling all of them, it's easy to make a mistake.
+
+BUT THERE IS A SOLUTION!
+
+Consider cycling list on fictive element, it will look like.
+
+![CycledList.png](CycledList.png)
+
+Note, there is no need in handling 4 edge cases now!
 
 ## Contacts
 

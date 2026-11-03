@@ -44,7 +44,7 @@ const char* TxtFilename    = "Dump.txt";
 const int   TxtFileSize    = 10000;
 const int   MaxTxtLineSize = 100;
 
-const char* DotFileTemplate = "digraph G{\n\trankdir=LR;\n\tnode[color=\"#00ff00\", style=filled, fillcolor=\"#00ff88\", fontsize=14, shape=\"Mrecord\"];\n";
+const char* DotFileTemplate = "digraph G{\n\trankdir=LR;\n\tnode[color=\"#000000\", style=filled, fillcolor=\"#00ff88\", fontsize=14, shape=\"Mrecord\"];\n";
 
 const char* DotSystemCallTemplate = "dot dot.txt -Tpng -o ";
 
@@ -85,6 +85,7 @@ ERROR_STATUSES ListInit(List_t* ptrList, size_t _capacity);
 void ListDestroy(List_t* ptrList);
 
 ERROR_STATUSES ListVerify(List_t* ptrList);
+ERROR_STATUSES NodeVerify(ListElem_t* ptrElem);
 
 ERROR_STATUSES ListTextDump(List_t list, SourceLocation sourceLocation);
 ERROR_STATUSES ListVizDump( List_t list, SourceLocation sourceLocation);
@@ -104,9 +105,27 @@ int main() {
 
     ListInit(&list, listCapacity);
 
-    ListInsert(&list, 0, 100);
-    // ListInsert(&list, 0, 2);
-    ListInsert(&list, 0, 150);
+    ListInsert(&list, 0, 10);
+    ListInsert(&list, 0, 20);
+    ListInsert(&list, 0, 30);
+
+    ListInsert(&list, 1, 40);
+    ListInsert(&list, 1, 50);
+    ListInsert(&list, 1, 60);
+
+    ListInsert(&list, 1, 70);
+    ListInsert(&list, 1, 80);
+    ListInsert(&list, 1, 90);
+
+    ListInsert(&list, 1, 100);
+    ListInsert(&list, 1, 110);
+    ListInsert(&list, 1, 120);
+
+    // ListInsert(&list, 1, 60);
+
+    list.elems[2].prev = -1;
+
+    ListDelete(&list, 1);
 
     SourceLocation sourceLocation1 = {};
     GET_SOURCE_LOCATION(sourceLocation1, list)
@@ -291,6 +310,17 @@ ERROR_STATUSES ListVerify(List_t* ptrList) {
     return OK;
 }
 
+ERROR_STATUSES ElemVerify(ListElem_t* ptrElem, size_t capacity) {
+    ASSERT(ptrElem != NULL,  GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+
+    ASSERT(ptrElem->index >= 0 && ptrElem->index < capacity; GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+
+    ASSERT(ptrElem->prev >= 0; GetErrorString(NO_EDGE_ERROR), NO_EDGE_ERROR);
+    ASSERT(ptrElem->next >= 0; GetErrorString(NO_EDGE_ERROR), NO_EDGE_ERROR);
+
+    return OK;
+}
+
 ERROR_STATUSES ListTextDump(List_t list, SourceLocation sourceLocation) {
     ListVerify(&list);
 
@@ -322,7 +352,7 @@ ERROR_STATUSES GenerateDotFile(List_t* ptrList, char** ptrBuffer, int* ptrBuffer
     
     ASSERT(buffer != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
     
-    int bufferInd = 0;
+    size_t bufferInd = 0;
 
     strcpy(buffer + bufferInd, DotFileTemplate);
     bufferInd += strlen(DotFileTemplate);
@@ -331,29 +361,52 @@ ERROR_STATUSES GenerateDotFile(List_t* ptrList, char** ptrBuffer, int* ptrBuffer
    
     ASSERT(curLine != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
 
-    for (size_t i = 0; i < ptrList->size; i++) {
+    ERROR_STATUSES AddLineCleanErrorStatus = OK;
+
+    sprintf(curLine, "\t 0 [color=\"#000000\", fillcolor=\"#ffea5f\", label=\"{ prev = %i | { index = %i | info = %i } | next = %i }\"];\n", 0,
+            ptrList->elems[0].prev,ptrList->elems[0].index, ptrList->elems[0].info, ptrList->elems[0].next);
+    
+    AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
+
+    ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus), AddLineCleanErrorStatus);
+
+    for (size_t i = 1; i < ptrList->size; i++) {
+        
+        
         sprintf(curLine, "\t %i [label=\"{ prev = %i | { index = %i | info = %i } | next = %i }\"];\n", i,
                 ptrList->elems[i].prev,ptrList->elems[i].index, ptrList->elems[i].info, ptrList->elems[i].next);
         
-        strcpy(buffer + bufferInd, curLine);
-        bufferInd += strlen(curLine);
+        AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
 
-        ERROR_STATUSES ClearLineErrorStatus = ClearLine(curLine);
-
-        ASSERT(ClearLineErrorStatus == OK, GetErrorString(ClearLineErrorStatus), ClearLineErrorStatus);
+        ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus), AddLineCleanErrorStatus);
     }
 
     for (size_t i = ptrList->size; i < ptrList->capacity; i++) {
-        sprintf(curLine, "\t %zu [color=\"#ff0000\", fillcolor=\"#ff0088\", label=\"{prev = %i | { index = %i | info = %i } | next = %i }\"];\n", 
+        sprintf(curLine, "\t %zu [color=\"#000000\", fillcolor=\"#fc6666\", label=\"{prev = %i | { index = %i | info = %i } | next = %i }\"];\n", 
                 i, ptrList->elems[i].prev, ptrList->elems[i].index,  ptrList->elems[i].info, ptrList->elems[i].next);
         
-        strcpy(buffer + bufferInd, curLine);
-        bufferInd += strlen(curLine);
+        AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
 
-        ERROR_STATUSES ClearLineErrorStatus = ClearLine(curLine);
-
-        ASSERT(ClearLineErrorStatus == OK, GetErrorString(ClearLineErrorStatus), ClearLineErrorStatus);
+        ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus), AddLineCleanErrorStatus);
     }
+
+    sprintf(curLine, "\t HEAD [color=\"#000000\", fillcolor=\"#fb62ee\", label=\"HEAD\"];\n");
+
+    AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
+
+    ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus), AddLineCleanErrorStatus);
+
+    sprintf(curLine, "\t TAIL [color=\"#000000\", fillcolor=\"#fbff00\", label=\"TAIL\"];\n");
+
+    AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
+
+    ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus), AddLineCleanErrorStatus);
+
+    sprintf(curLine, "\t FREE [color=\"#000000\", fillcolor=\"#ff1e1e\", label=\"FREE\"];\n");
+
+    AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
+
+    ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus), AddLineCleanErrorStatus);
 
     int curLineInd = 0;
 
@@ -365,37 +418,58 @@ ERROR_STATUSES GenerateDotFile(List_t* ptrList, char** ptrBuffer, int* ptrBuffer
     sprintf(curLine + curLineInd, "%zu[color=\"#ffffff\", weight=1000];\n", ptrList->capacity - 1);
     curLineInd += NumLen(ptrList->capacity - 1) + strlen("[color=\"#ffffff\", weight=1000];\n");
 
-    strcpy(buffer + bufferInd, curLine);
-    bufferInd += curLineInd;
+    AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
 
-    ERROR_STATUSES ClearLineErrorStatus = ClearLine(curLine);
-
-    ASSERT(ClearLineErrorStatus == OK, GetErrorString(ClearLineErrorStatus), ClearLineErrorStatus);
+    ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus), AddLineCleanErrorStatus);
 
     curLineInd = 0;
     
     for (size_t i = 0; i < ptrList->size; i++) {
         
-        if (ptrList->elems[i].next != -1) {
-            sprintf(curLine, "%zu->%i[color=\"#7b00ff\", dir=both];\n", i, ptrList->elems[i].next);
+        if (ptrList->elems[i].next >= 0 && ptrList->elems[i].prev >= 0) {
+            sprintf(curLine, "%zu->%i[color=\"#9028ff\", dir=both];\n", i, ptrList->elems[i].next);
+        } else {
+            sprintf(curLine, "%zu->%i[color=\"#ff2222\", penwidth=5];\n", i, ptrList->elems[i].next);
         }
 
-        strcpy(buffer + bufferInd, curLine);
-        bufferInd += strlen(curLine);
+        AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
 
-        ERROR_STATUSES ClearLineErrorStatus = ClearLine(curLine);
-
-        ASSERT(ClearLineErrorStatus == OK, GetErrorString(ClearLineErrorStatus), ClearLineErrorStatus);
+        ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus), AddLineCleanErrorStatus);
     }
 
     ON_DEBUG(fprintf(stderr, "curLine: <%s>\n", curLine);)
 
-    strcpy(buffer + bufferInd, curLine);
-    bufferInd += strlen(curLine);
+    AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
+
+    ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus), AddLineCleanErrorStatus);
+
+    
+    sprintf(curLine, "HEAD->%i[color=\"#ff0077\", dir=both];\n", ptrList->head);
+
+    AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
+
+    ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus), AddLineCleanErrorStatus);
 
 
-    strcpy(buffer + bufferInd, "}");
-    bufferInd += 1;
+    sprintf(curLine, "TAIL->%i[color=\"#eaff00\", dir=both];\n", ptrList->tail);
+
+    AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
+
+    ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus), AddLineCleanErrorStatus);
+
+
+    sprintf(curLine, "FREE->%i[color=\"#ff0000\", dir=both];\n", ptrList->size);
+
+    AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
+
+    ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus), AddLineCleanErrorStatus);
+    
+
+    sprintf(curLine, "}");
+
+    AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
+
+    ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus), AddLineCleanErrorStatus);
 
     *ptrBuffer     = buffer;
     *ptrBufferSize = bufferInd;
@@ -787,18 +861,18 @@ ERROR_STATUSES ListInsert(List_t* ptrList, int insIndex, int value) {
         ptrList->capacity *= 2;
     }
 
-    int curFree = -1;
+    int curFree = ptrList->size;
 
-    for (size_t i = 0; i < ptrList->size; i++) {
-        if (ptrList->elems[i].next == -1 && ptrList->elems[i].prev == -1) {
-            curFree = i;
-            break;
-        }
-    }
+    // for (size_t i = 0; i < ptrList->size; i++) {
+    //     if (ptrList->elems[i].next == -1 && ptrList->elems[i].prev == -1) {
+    //         curFree = i;
+    //         break;
+    //     }
+    // }
 
-    if (curFree == -1) {
-        curFree = ptrList->size;
-    }
+    // if (curFree == -1) {
+    //     curFree = ptrList->size;
+    // }
 
     ptrList->elems[curFree].info = value;
 
