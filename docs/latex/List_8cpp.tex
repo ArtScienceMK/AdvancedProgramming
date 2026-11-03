@@ -1,0 +1,1600 @@
+\doxysection{List.\+cpp File Reference}
+\hypertarget{List_8cpp}{}\label{List_8cpp}\index{List.cpp@{List.cpp}}
+{\ttfamily \+\#include $<$fcntl.\+h$>$}\newline
+{\ttfamily \+\#include $<$stdio.\+h$>$}\newline
+{\ttfamily \+\#include "{}My\+Error.\+h"{}}\newline
+{\ttfamily \+\#include "{}My\+Assert.\+h"{}}\newline
+{\ttfamily \+\#include $<$unistd.\+h$>$}\newline
+{\ttfamily \+\#include $<$string.\+h$>$}\newline
+{\ttfamily \+\#include $<$math.\+h$>$}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \doxymbox{\hyperlink{structListElem__t}{List\+Elem\+\_\+t}}
+\item 
+struct \doxymbox{\hyperlink{structList__t}{List\+\_\+t}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{List_8cpp_a1bdd7c1369b250215a080e8421d4ecf3}{ON\+\_\+\+DEBUG}}(...)
+\item 
+\+\#define \doxymbox{\hyperlink{List_8cpp_a6df1d22fb5f09eccc23b9f399670cfd7}{STRINGIFY}}(x)
+\item 
+\+\#define \doxymbox{\hyperlink{List_8cpp_aff44bdb7611a5f354b42b78f080e8112}{GET\+\_\+\+SOURCE\+\_\+\+LOCATION}}(source\+Location,  var\+Name)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} \doxymbox{\hyperlink{List_8cpp_a465dbd280204ab3ce699d4f07d8ce0f7}{Clear\+Line}} (char \texorpdfstring{$\ast$}{*}line)
+\item 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} \doxymbox{\hyperlink{List_8cpp_aba53dbc527ebfe3ea74aceb2797eac82}{Add\+Line}} (char \texorpdfstring{$\ast$}{*}buffer, size\+\_\+t \texorpdfstring{$\ast$}{*}ptr\+Buffer\+Size, const char \texorpdfstring{$\ast$}{*}to\+Add)
+\item 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} \doxymbox{\hyperlink{List_8cpp_a161d34e83472a680c358facb2cdde9ea}{Add\+Line\+Clean}} (char \texorpdfstring{$\ast$}{*}buffer, size\+\_\+t \texorpdfstring{$\ast$}{*}ptr\+Buffer\+Size, const char \texorpdfstring{$\ast$}{*}to\+Add)
+\item 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} \doxymbox{\hyperlink{List_8cpp_a417f1a5b9114c8ab62d17e5fd3a55828}{Generate\+Dot\+File}} (\doxymbox{\hyperlink{structList__t}{List\+\_\+t}} \texorpdfstring{$\ast$}{*}ptr\+List, char \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}ptr\+Buffer, size\+\_\+t \texorpdfstring{$\ast$}{*}ptr\+Buffer\+Size)
+\item 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} \doxymbox{\hyperlink{List_8cpp_a4999d30cc75d83932171a581a9435aba}{Generate\+Dump\+Filename}} (char \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}ptr\+Filename)
+\item 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} \doxymbox{\hyperlink{List_8cpp_a2674ad6410ad54121020776700b8b109}{Generate\+Html\+File}} (\doxymbox{\hyperlink{structList__t}{List\+\_\+t}} \texorpdfstring{$\ast$}{*}ptr\+List, char \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}ptr\+Buffer, size\+\_\+t \texorpdfstring{$\ast$}{*}ptr\+Buffer\+Size, int DUMP\+\_\+\+CNT, \doxymbox{\hyperlink{structSourceLocation}{Source\+Location}} source\+Location)
+\item 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} \doxymbox{\hyperlink{List_8cpp_a8d0eff6f4f4f88769fcfcb5f79d2bb22}{Generate\+Txt\+File\+Dump}} (\doxymbox{\hyperlink{structList__t}{List\+\_\+t}} \texorpdfstring{$\ast$}{*}ptr\+List, char \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}ptr\+Buffer, size\+\_\+t \texorpdfstring{$\ast$}{*}ptr\+Buffer\+Size, \doxymbox{\hyperlink{structSourceLocation}{Source\+Location}} source\+Location)
+\item 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} \doxymbox{\hyperlink{List_8cpp_ab218a0c2a19b865f184c97ba6357e0cf}{Unlink\+File}} (const char \texorpdfstring{$\ast$}{*}filename)
+\item 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} \doxymbox{\hyperlink{List_8cpp_ad11955f002dbcc0c30ed8f5121df8237}{Write\+Buffer\+To\+File}} (const char \texorpdfstring{$\ast$}{*}filename, char \texorpdfstring{$\ast$}{*}buffer, size\+\_\+t buffer\+Size)
+\item 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} \doxymbox{\hyperlink{List_8cpp_a20a9c20114cdeae7f64dfb497a36591f}{List\+Init}} (\doxymbox{\hyperlink{structList__t}{List\+\_\+t}} \texorpdfstring{$\ast$}{*}ptr\+List, size\+\_\+t \+\_\+capacity)
+\item 
+void \doxymbox{\hyperlink{List_8cpp_a2ac3b3a872cb35e740d8ec0d76ac5192}{List\+Destroy}} (\doxymbox{\hyperlink{structList__t}{List\+\_\+t}} \texorpdfstring{$\ast$}{*}ptr\+List)
+\item 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} \doxymbox{\hyperlink{List_8cpp_a1550a93699407e315a6e672afe25f99d}{List\+Verify}} (\doxymbox{\hyperlink{structList__t}{List\+\_\+t}} \texorpdfstring{$\ast$}{*}ptr\+List)
+\item 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} \doxymbox{\hyperlink{List_8cpp_ae7e09f09df103da9371d33ffa22b1d67}{List\+Text\+Dump}} (\doxymbox{\hyperlink{structList__t}{List\+\_\+t}} list, \doxymbox{\hyperlink{structSourceLocation}{Source\+Location}} source\+Location)
+\item 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} \doxymbox{\hyperlink{List_8cpp_a6859e439dc35b30d3e90dee32f5f6156}{List\+Viz\+Dump}} (\doxymbox{\hyperlink{structList__t}{List\+\_\+t}} list, \doxymbox{\hyperlink{structSourceLocation}{Source\+Location}} source\+Location)
+\item 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} \doxymbox{\hyperlink{List_8cpp_a0fdfb7239a7861db9bc276f1eb56b536}{List\+Html\+Dump}} (\doxymbox{\hyperlink{structList__t}{List\+\_\+t}} list, \doxymbox{\hyperlink{structSourceLocation}{Source\+Location}} source\+Location)
+\item 
+int \doxymbox{\hyperlink{List_8cpp_a724f451794731a69e1d469668c6d48f1}{Num\+Len}} (int num)
+\item 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} \doxymbox{\hyperlink{List_8cpp_aabb4f5874197fdccec971dcfee3237f9}{List\+Insert}} (\doxymbox{\hyperlink{structList__t}{List\+\_\+t}} \texorpdfstring{$\ast$}{*}ptr\+List, int insert\+Index, int value)
+\item 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} \doxymbox{\hyperlink{List_8cpp_a908f9d45d823ad37e067b5fae2e3b21d}{List\+Delete}} (\doxymbox{\hyperlink{structList__t}{List\+\_\+t}} \texorpdfstring{$\ast$}{*}ptr\+List, int insert\+Index)
+\item 
+bool \doxymbox{\hyperlink{List_8cpp_a8504dec6697aaa82ab65287a2571a9da}{is\+Valid\+List\+Index}} (int ind, int left, int right)
+\item 
+int \doxymbox{\hyperlink{List_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4}{main}} ()
+\item 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} \doxymbox{\hyperlink{List_8cpp_ad8d51fac9ff16420716388b8029ce737}{Add\+Line}} (char \texorpdfstring{$\ast$}{*}buffer, size\+\_\+t \texorpdfstring{$\ast$}{*}ptr\+Buffer\+Size, char \texorpdfstring{$\ast$}{*}to\+Add)
+\item 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} \doxymbox{\hyperlink{List_8cpp_a7518dc034979bdd0960f05ec47ba584f}{Add\+Line\+Clean}} (char \texorpdfstring{$\ast$}{*}buffer, size\+\_\+t \texorpdfstring{$\ast$}{*}ptr\+Buffer\+Size, char \texorpdfstring{$\ast$}{*}to\+Add)
+\item 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} \doxymbox{\hyperlink{List_8cpp_a8a80617621d9915c1fe2339fade9487b}{Generate\+Dot\+File}} (\doxymbox{\hyperlink{structList__t}{List\+\_\+t}} \texorpdfstring{$\ast$}{*}ptr\+List, char \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}ptr\+Buffer, int \texorpdfstring{$\ast$}{*}ptr\+Buffer\+Size)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+int \doxymbox{\hyperlink{List_8cpp_ad560682c07cd940258e4dae98d78bbf9}{DUMP\+\_\+\+CNT}} = 1
+\item 
+const int \doxymbox{\hyperlink{List_8cpp_a76de2b299ceba83da7fb010e6d5ba11e}{Max\+Filename\+Len}} = 30
+\item 
+const int \doxymbox{\hyperlink{List_8cpp_a25393286bfbefd91a5def2f87ed2cb4c}{Max\+Number\+Line\+Size}} = 3
+\item 
+const char \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{List_8cpp_a7655d6ee1e81334b5cc1b7e3043e0d74}{Viz\+Dump\+Filename}} = "{}Dump"{}
+\item 
+const char \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{List_8cpp_a74b4e4947006b3f5f18534a51fbc9215}{Viz\+Dump\+Extension}} = "{}.png"{}
+\item 
+const char \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{List_8cpp_aa487ee14964fd569fb6fc4201f961fa1}{Dot\+Filename}} = "{}dot.\+txt"{}
+\item 
+const int \doxymbox{\hyperlink{List_8cpp_a2edf69ea07ed9ef502534e0460b4767b}{Dot\+File\+Size}} = 10000
+\item 
+const int \doxymbox{\hyperlink{List_8cpp_ab756c4af8c2c752b53f2b2ad56e189f7}{Max\+Dot\+Line\+Size}} = 100
+\item 
+const char \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{List_8cpp_a564b02d54ec424579607eda7e5d85655}{Html\+Filename}} = "{}Dump.\+html"{}
+\item 
+const int \doxymbox{\hyperlink{List_8cpp_a0ec10d738d69b281af0aa8153a2cafae}{Html\+File\+Size}} = 10000
+\item 
+const int \doxymbox{\hyperlink{List_8cpp_a442017a3b16d76b221139c2c6a62624c}{Max\+Html\+Line\+Size}} = 100
+\item 
+const char \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{List_8cpp_adfb0271ebf9d7e844233467fea601d51}{Txt\+Filename}} = "{}Dump.\+txt"{}
+\item 
+const int \doxymbox{\hyperlink{List_8cpp_a011b629708d381df3824f22b6a61731a}{Txt\+File\+Size}} = 10000
+\item 
+const int \doxymbox{\hyperlink{List_8cpp_a74c8fc1ac326c74d6485781d0ac1e44b}{Max\+Txt\+Line\+Size}} = 100
+\item 
+const char \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{List_8cpp_aa690c53038f0067f31cb5c6112a5c237}{Dot\+File\+Template}} = "{}digraph G\{\textbackslash{}n\textbackslash{}trankdir=LR;\textbackslash{}n\textbackslash{}tnode\+[color=\textbackslash{}"{}\+\#00ff00\textbackslash{}"{}, style=filled, fillcolor=\textbackslash{}"{}\+\#00ff88\textbackslash{}"{}, fontsize=14, shape=\textbackslash{}"{}Mrecord\textbackslash{}"{}]\+;\textbackslash{}n"{}
+\item 
+const char \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{List_8cpp_a1aa1cc38e4ac74e47e619f7749ecec32}{Dot\+System\+Call\+Template}} = "{}dot dot.\+txt -\/Tpng -\/o "{}
+\end{DoxyCompactItemize}
+
+
+\label{List_8cpp_doc-define-members}
+\Hypertarget{List_8cpp_doc-define-members}
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{List_8cpp_aff44bdb7611a5f354b42b78f080e8112}\index{List.cpp@{List.cpp}!GET\_SOURCE\_LOCATION@{GET\_SOURCE\_LOCATION}}
+\index{GET\_SOURCE\_LOCATION@{GET\_SOURCE\_LOCATION}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{GET\_SOURCE\_LOCATION}{GET\_SOURCE\_LOCATION}}
+{\footnotesize\ttfamily \label{List_8cpp_aff44bdb7611a5f354b42b78f080e8112} 
+\+\#define GET\+\_\+\+SOURCE\+\_\+\+LOCATION(\begin{DoxyParamCaption}\item[{}]{source\+Location}{, }\item[{}]{var\+Name}{}\end{DoxyParamCaption})}
+
+{\bfseries Value:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{sourceLocation.file\ =\ strdup(\_\_FILE\_\_);\(\backslash\)}
+\DoxyCodeLine{sourceLocation.function\ =\ strdup(\_\_FUNCTION\_\_);\(\backslash\)}
+\DoxyCodeLine{sourceLocation.line\ =\ \_\_LINE\_\_;\(\backslash\)}
+\DoxyCodeLine{sourceLocation.name\ =\ strdup(\doxymbox{\hyperlink{List_8cpp_a6df1d22fb5f09eccc23b9f399670cfd7}{STRINGIFY}}(varName));}
+
+\end{DoxyCode}
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00012}{12}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_source_l00101}{main()}}.
+
+\Hypertarget{List_8cpp_a1bdd7c1369b250215a080e8421d4ecf3}\index{List.cpp@{List.cpp}!ON\_DEBUG@{ON\_DEBUG}}
+\index{ON\_DEBUG@{ON\_DEBUG}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{ON\_DEBUG}{ON\_DEBUG}}
+{\footnotesize\ttfamily \label{List_8cpp_a1bdd7c1369b250215a080e8421d4ecf3} 
+\+\#define ON\+\_\+\+DEBUG(\begin{DoxyParamCaption}\item[{}]{}...{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00007}{7}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_source_l00319}{Generate\+Dot\+File()}}, \doxymbox{\hyperlink{List_8cpp_source_l00294}{List\+Text\+Dump()}}, \doxymbox{\hyperlink{List_8cpp_source_l00669}{List\+Viz\+Dump()}}, \doxymbox{\hyperlink{List_8cpp_source_l00755}{Num\+Len()}}, and \doxymbox{\hyperlink{List_8cpp_source_l00178}{Write\+Buffer\+To\+File()}}.
+
+\Hypertarget{List_8cpp_a6df1d22fb5f09eccc23b9f399670cfd7}\index{List.cpp@{List.cpp}!STRINGIFY@{STRINGIFY}}
+\index{STRINGIFY@{STRINGIFY}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{STRINGIFY}{STRINGIFY}}
+{\footnotesize\ttfamily \label{List_8cpp_a6df1d22fb5f09eccc23b9f399670cfd7} 
+\+\#define STRINGIFY(\begin{DoxyParamCaption}\item[{}]{x}{}\end{DoxyParamCaption})}
+
+{\bfseries Value:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{(\#\ x)}
+
+\end{DoxyCode}
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00011}{11}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+
+\label{List_8cpp_doc-func-members}
+\Hypertarget{List_8cpp_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{List_8cpp_ad8d51fac9ff16420716388b8029ce737}\index{List.cpp@{List.cpp}!AddLine@{AddLine}}
+\index{AddLine@{AddLine}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{AddLine()}{AddLine()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{List_8cpp_ad8d51fac9ff16420716388b8029ce737} 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} Add\+Line (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{buffer}{, }\item[{size\+\_\+t \texorpdfstring{$\ast$}{*}}]{ptr\+Buffer\+Size}{, }\item[{char \texorpdfstring{$\ast$}{*}}]{to\+Add}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00137}{137}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00138\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(buffer\ \ \ \ \ \ \ \ !=\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}});}
+\DoxyCodeLine{00139\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrBufferSize\ !=\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}});}
+\DoxyCodeLine{00140\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(toAdd\ \ \ \ \ \ \ \ \ !=\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}});}
+\DoxyCodeLine{00141\ }
+\DoxyCodeLine{00142\ \ \ \ \ strcpy(buffer\ +\ *ptrBufferSize,\ toAdd);}
+\DoxyCodeLine{00143\ \ \ \ \ }
+\DoxyCodeLine{00144\ \ \ \ \ \textcolor{keywordtype}{int}\ toAddLen\ =\ strlen(toAdd);}
+\DoxyCodeLine{00145\ \ \ \ \ *ptrBufferSize\ +=\ toAddLen;}
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00147\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}};}
+\DoxyCodeLine{00148\ \}}
+
+\end{DoxyCode}
+
+
+References \doxymbox{\hyperlink{List_8cpp_aba53dbc527ebfe3ea74aceb2797eac82}{Add\+Line()}}, \doxymbox{\hyperlink{MyAssert_8h_source_l00094}{ASSERT}}, \doxymbox{\hyperlink{MyError_8h_source_l00061}{Get\+Error\+String()}}, \doxymbox{\hyperlink{MyError_8h_source_l00005}{OK}}, and \doxymbox{\hyperlink{MyError_8h_source_l00008}{OUT\+\_\+\+OF\+\_\+\+RANGE}}.
+
+\Hypertarget{List_8cpp_aba53dbc527ebfe3ea74aceb2797eac82}\index{List.cpp@{List.cpp}!AddLine@{AddLine}}
+\index{AddLine@{AddLine}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{AddLine()}{AddLine()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{List_8cpp_aba53dbc527ebfe3ea74aceb2797eac82} 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} Add\+Line (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{buffer}{, }\item[{size\+\_\+t \texorpdfstring{$\ast$}{*}}]{ptr\+Buffer\+Size}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{to\+Add}{}\end{DoxyParamCaption})}
+
+
+
+References \doxymbox{\hyperlink{List_8cpp_aba53dbc527ebfe3ea74aceb2797eac82}{Add\+Line()}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_source_l00137}{Add\+Line()}}, \doxymbox{\hyperlink{List_8cpp_aba53dbc527ebfe3ea74aceb2797eac82}{Add\+Line()}}, and \doxymbox{\hyperlink{List_8cpp_source_l00150}{Add\+Line\+Clean()}}.
+
+\Hypertarget{List_8cpp_a7518dc034979bdd0960f05ec47ba584f}\index{List.cpp@{List.cpp}!AddLineClean@{AddLineClean}}
+\index{AddLineClean@{AddLineClean}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{AddLineClean()}{AddLineClean()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{List_8cpp_a7518dc034979bdd0960f05ec47ba584f} 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} Add\+Line\+Clean (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{buffer}{, }\item[{size\+\_\+t \texorpdfstring{$\ast$}{*}}]{ptr\+Buffer\+Size}{, }\item[{char \texorpdfstring{$\ast$}{*}}]{to\+Add}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00150}{150}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00150\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00151\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\_STATUSES}}\ AddLineErrorStatus\ =\ \doxymbox{\hyperlink{List_8cpp_aba53dbc527ebfe3ea74aceb2797eac82}{AddLine}}(buffer,\ ptrBufferSize,\ toAdd);}
+\DoxyCodeLine{00152\ }
+\DoxyCodeLine{00153\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(AddLineErrorStatus\ ==\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(AddLineErrorStatus),}
+\DoxyCodeLine{00154\ \ \ \ \ \ \ \ \ \ \ \ AddLineErrorStatus);}
+\DoxyCodeLine{00155\ }
+\DoxyCodeLine{00156\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\_STATUSES}}\ ClearLineErrorStatus\ =\ \doxymbox{\hyperlink{List_8cpp_a465dbd280204ab3ce699d4f07d8ce0f7}{ClearLine}}(toAdd);}
+\DoxyCodeLine{00157\ }
+\DoxyCodeLine{00158\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ClearLineErrorStatus\ ==\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(ClearLineErrorStatus),}
+\DoxyCodeLine{00159\ \ \ \ \ \ \ \ \ \ \ \ ClearLineErrorStatus);}
+\DoxyCodeLine{00160\ }
+\DoxyCodeLine{00161\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}};}
+\DoxyCodeLine{00162\ \}}
+
+\end{DoxyCode}
+
+
+References \doxymbox{\hyperlink{List_8cpp_aba53dbc527ebfe3ea74aceb2797eac82}{Add\+Line()}}, \doxymbox{\hyperlink{List_8cpp_a161d34e83472a680c358facb2cdde9ea}{Add\+Line\+Clean()}}, \doxymbox{\hyperlink{MyAssert_8h_source_l00094}{ASSERT}}, \doxymbox{\hyperlink{List_8cpp_source_l00127}{Clear\+Line()}}, \doxymbox{\hyperlink{MyError_8h_source_l00061}{Get\+Error\+String()}}, and \doxymbox{\hyperlink{MyError_8h_source_l00005}{OK}}.
+
+\Hypertarget{List_8cpp_a161d34e83472a680c358facb2cdde9ea}\index{List.cpp@{List.cpp}!AddLineClean@{AddLineClean}}
+\index{AddLineClean@{AddLineClean}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{AddLineClean()}{AddLineClean()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{List_8cpp_a161d34e83472a680c358facb2cdde9ea} 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} Add\+Line\+Clean (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{buffer}{, }\item[{size\+\_\+t \texorpdfstring{$\ast$}{*}}]{ptr\+Buffer\+Size}{, }\item[{const char \texorpdfstring{$\ast$}{*}}]{to\+Add}{}\end{DoxyParamCaption})}
+
+
+
+References \doxymbox{\hyperlink{List_8cpp_a161d34e83472a680c358facb2cdde9ea}{Add\+Line\+Clean()}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_source_l00150}{Add\+Line\+Clean()}}, \doxymbox{\hyperlink{List_8cpp_a161d34e83472a680c358facb2cdde9ea}{Add\+Line\+Clean()}}, \doxymbox{\hyperlink{List_8cpp_source_l00439}{Generate\+Html\+File()}}, and \doxymbox{\hyperlink{List_8cpp_source_l00538}{Generate\+Txt\+File\+Dump()}}.
+
+\Hypertarget{List_8cpp_a465dbd280204ab3ce699d4f07d8ce0f7}\index{List.cpp@{List.cpp}!ClearLine@{ClearLine}}
+\index{ClearLine@{ClearLine}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{ClearLine()}{ClearLine()}}
+{\footnotesize\ttfamily \label{List_8cpp_a465dbd280204ab3ce699d4f07d8ce0f7} 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} Clear\+Line (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}}]{line}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00127}{127}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00128\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(line\ !=\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}});}
+\DoxyCodeLine{00129\ }
+\DoxyCodeLine{00130\ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ *line\ !=\ \textcolor{charliteral}{'\(\backslash\)0'};\ line++)\ \{}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ *line\ =\ \textcolor{charliteral}{'\(\backslash\)0'};}
+\DoxyCodeLine{00132\ \ \ \ \ \}}
+\DoxyCodeLine{00133\ }
+\DoxyCodeLine{00134\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}};}
+\DoxyCodeLine{00135\ \}}
+
+\end{DoxyCode}
+
+
+References \doxymbox{\hyperlink{MyAssert_8h_source_l00094}{ASSERT}}, \doxymbox{\hyperlink{List_8cpp_source_l00127}{Clear\+Line()}}, \doxymbox{\hyperlink{MyError_8h_source_l00061}{Get\+Error\+String()}}, \doxymbox{\hyperlink{MyError_8h_source_l00005}{OK}}, and \doxymbox{\hyperlink{MyError_8h_source_l00008}{OUT\+\_\+\+OF\+\_\+\+RANGE}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_source_l00150}{Add\+Line\+Clean()}}, \doxymbox{\hyperlink{List_8cpp_source_l00127}{Clear\+Line()}}, and \doxymbox{\hyperlink{List_8cpp_source_l00319}{Generate\+Dot\+File()}}.
+
+\Hypertarget{List_8cpp_a8a80617621d9915c1fe2339fade9487b}\index{List.cpp@{List.cpp}!GenerateDotFile@{GenerateDotFile}}
+\index{GenerateDotFile@{GenerateDotFile}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{GenerateDotFile()}{GenerateDotFile()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{List_8cpp_a8a80617621d9915c1fe2339fade9487b} 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} Generate\+Dot\+File (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structList__t}{List\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{ptr\+List}{, }\item[{char \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}}]{ptr\+Buffer}{, }\item[{int \texorpdfstring{$\ast$}{*}}]{ptr\+Buffer\+Size}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00319}{319}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00319\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00320\ }
+\DoxyCodeLine{00321\ \ \ \ \ \textcolor{keywordtype}{char}*\ buffer\ =\ (\textcolor{keywordtype}{char}*)calloc(\doxymbox{\hyperlink{List_8cpp_a2edf69ea07ed9ef502534e0460b4767b}{DotFileSize}},\ \textcolor{keyword}{sizeof}(buffer[0]));}
+\DoxyCodeLine{00322\ \ \ \ \ }
+\DoxyCodeLine{00323\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(buffer\ !=\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da}{NOT\_ENOUGH\_MEMORY}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da}{NOT\_ENOUGH\_MEMORY}});}
+\DoxyCodeLine{00324\ \ \ \ \ }
+\DoxyCodeLine{00325\ \ \ \ \ \textcolor{keywordtype}{int}\ bufferInd\ =\ 0;}
+\DoxyCodeLine{00326\ }
+\DoxyCodeLine{00327\ \ \ \ \ strcpy(buffer\ +\ bufferInd,\ \doxymbox{\hyperlink{List_8cpp_aa690c53038f0067f31cb5c6112a5c237}{DotFileTemplate}});}
+\DoxyCodeLine{00328\ \ \ \ \ bufferInd\ +=\ strlen(\doxymbox{\hyperlink{List_8cpp_aa690c53038f0067f31cb5c6112a5c237}{DotFileTemplate}});}
+\DoxyCodeLine{00329\ }
+\DoxyCodeLine{00330\ \ \ \ \ \textcolor{keywordtype}{char}*\ curLine\ =\ (\textcolor{keywordtype}{char}*)calloc(\doxymbox{\hyperlink{List_8cpp_ab756c4af8c2c752b53f2b2ad56e189f7}{MaxDotLineSize}},\ \textcolor{keyword}{sizeof}(curLine[0]));}
+\DoxyCodeLine{00331\ \ \ \ }
+\DoxyCodeLine{00332\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(curLine\ !=\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da}{NOT\_ENOUGH\_MEMORY}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da}{NOT\_ENOUGH\_MEMORY}});}
+\DoxyCodeLine{00333\ }
+\DoxyCodeLine{00334\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a32d7c5f32667a2ed93db83652748a126}{size}};\ i++)\ \{}
+\DoxyCodeLine{00335\ \ \ \ \ \ \ \ \ sprintf(curLine,\ \textcolor{stringliteral}{"{}\(\backslash\)t\ \%i\ [label=\(\backslash\)"{}\{\ prev\ =\ \%i\ |\ \{\ index\ =\ \%i\ |\ info\ =\ \%i\ \}\ |\ next\ =\ \%i\ \}\(\backslash\)"{}];\(\backslash\)n"{}},\ i,}
+\DoxyCodeLine{00336\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[i].\doxymbox{\hyperlink{structListElem__t_a780ed81ab54683b77faf1a8eb9228800}{prev}},ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[i].\doxymbox{\hyperlink{structListElem__t_a6238c997f463b9777ad6c00a4706669a}{index}},\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[i].\doxymbox{\hyperlink{structListElem__t_a6f46b9f1a3fbd83bda61d3258b8fd28b}{info}},\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[i].\doxymbox{\hyperlink{structListElem__t_af50bdaf6d31d50420af94bf8970b9858}{next}});}
+\DoxyCodeLine{00337\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00338\ \ \ \ \ \ \ \ \ strcpy(buffer\ +\ bufferInd,\ curLine);}
+\DoxyCodeLine{00339\ \ \ \ \ \ \ \ \ bufferInd\ +=\ strlen(curLine);}
+\DoxyCodeLine{00340\ }
+\DoxyCodeLine{00341\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\_STATUSES}}\ ClearLineErrorStatus\ =\ \doxymbox{\hyperlink{List_8cpp_a465dbd280204ab3ce699d4f07d8ce0f7}{ClearLine}}(curLine);}
+\DoxyCodeLine{00342\ }
+\DoxyCodeLine{00343\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ClearLineErrorStatus\ ==\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(ClearLineErrorStatus),\ ClearLineErrorStatus);}
+\DoxyCodeLine{00344\ \ \ \ \ \}}
+\DoxyCodeLine{00345\ }
+\DoxyCodeLine{00346\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a32d7c5f32667a2ed93db83652748a126}{size}};\ i\ <\ ptrList-\/>capacity;\ i++)\ \{}
+\DoxyCodeLine{00347\ \ \ \ \ \ \ \ \ sprintf(curLine,\ \textcolor{stringliteral}{"{}\(\backslash\)t\ \%zu\ [color=\(\backslash\)"{}\#ff0000\(\backslash\)"{},\ fillcolor=\(\backslash\)"{}\#ff0088\(\backslash\)"{},\ label=\(\backslash\)"{}\{prev\ =\ \%i\ |\ \{\ index\ =\ \%i\ |\ info\ =\ \%i\ \}\ |\ next\ =\ \%i\ \}\(\backslash\)"{}];\(\backslash\)n"{}},\ }
+\DoxyCodeLine{00348\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ i,\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[i].\doxymbox{\hyperlink{structListElem__t_a780ed81ab54683b77faf1a8eb9228800}{prev}},\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[i].\doxymbox{\hyperlink{structListElem__t_a6238c997f463b9777ad6c00a4706669a}{index}},\ \ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[i].\doxymbox{\hyperlink{structListElem__t_a6f46b9f1a3fbd83bda61d3258b8fd28b}{info}},\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[i].\doxymbox{\hyperlink{structListElem__t_af50bdaf6d31d50420af94bf8970b9858}{next}});}
+\DoxyCodeLine{00349\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00350\ \ \ \ \ \ \ \ \ strcpy(buffer\ +\ bufferInd,\ curLine);}
+\DoxyCodeLine{00351\ \ \ \ \ \ \ \ \ bufferInd\ +=\ strlen(curLine);}
+\DoxyCodeLine{00352\ }
+\DoxyCodeLine{00353\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\_STATUSES}}\ ClearLineErrorStatus\ =\ \doxymbox{\hyperlink{List_8cpp_a465dbd280204ab3ce699d4f07d8ce0f7}{ClearLine}}(curLine);}
+\DoxyCodeLine{00354\ }
+\DoxyCodeLine{00355\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ClearLineErrorStatus\ ==\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(ClearLineErrorStatus),\ ClearLineErrorStatus);}
+\DoxyCodeLine{00356\ \ \ \ \ \}}
+\DoxyCodeLine{00357\ }
+\DoxyCodeLine{00358\ \ \ \ \ \textcolor{keywordtype}{int}\ curLineInd\ =\ 0;}
+\DoxyCodeLine{00359\ }
+\DoxyCodeLine{00360\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a4ad48150d3812a75a194a9f8b14f6cc7}{capacity}}\ -\/\ 1;\ i++)\ \{}
+\DoxyCodeLine{00361\ \ \ \ \ \ \ \ \ sprintf(curLine\ +\ curLineInd,\ \textcolor{stringliteral}{"{}\%zu-\/>"{}},\ i);}
+\DoxyCodeLine{00362\ \ \ \ \ \ \ \ \ curLineInd\ +=\ \doxymbox{\hyperlink{List_8cpp_a724f451794731a69e1d469668c6d48f1}{NumLen}}(i)\ +\ strlen(\textcolor{stringliteral}{"{}-\/>"{}});}
+\DoxyCodeLine{00363\ \ \ \ \ \}}
+\DoxyCodeLine{00364\ }
+\DoxyCodeLine{00365\ \ \ \ \ sprintf(curLine\ +\ curLineInd,\ \textcolor{stringliteral}{"{}\%zu[color=\(\backslash\)"{}\#ffffff\(\backslash\)"{},\ weight=1000];\(\backslash\)n"{}},\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a4ad48150d3812a75a194a9f8b14f6cc7}{capacity}}\ -\/\ 1);}
+\DoxyCodeLine{00366\ \ \ \ \ curLineInd\ +=\ \doxymbox{\hyperlink{List_8cpp_a724f451794731a69e1d469668c6d48f1}{NumLen}}(ptrList-\/>\doxymbox{\hyperlink{structList__t_a4ad48150d3812a75a194a9f8b14f6cc7}{capacity}}\ -\/\ 1)\ +\ strlen(\textcolor{stringliteral}{"{}[color=\(\backslash\)"{}\#ffffff\(\backslash\)"{},\ weight=1000];\(\backslash\)n"{}});}
+\DoxyCodeLine{00367\ }
+\DoxyCodeLine{00368\ \ \ \ \ strcpy(buffer\ +\ bufferInd,\ curLine);}
+\DoxyCodeLine{00369\ \ \ \ \ bufferInd\ +=\ curLineInd;}
+\DoxyCodeLine{00370\ }
+\DoxyCodeLine{00371\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\_STATUSES}}\ ClearLineErrorStatus\ =\ \doxymbox{\hyperlink{List_8cpp_a465dbd280204ab3ce699d4f07d8ce0f7}{ClearLine}}(curLine);}
+\DoxyCodeLine{00372\ }
+\DoxyCodeLine{00373\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ClearLineErrorStatus\ ==\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(ClearLineErrorStatus),\ ClearLineErrorStatus);}
+\DoxyCodeLine{00374\ }
+\DoxyCodeLine{00375\ \ \ \ \ curLineInd\ =\ 0;}
+\DoxyCodeLine{00376\ \ \ \ \ }
+\DoxyCodeLine{00377\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a32d7c5f32667a2ed93db83652748a126}{size}};\ i++)\ \{}
+\DoxyCodeLine{00378\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00379\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[i].\doxymbox{\hyperlink{structListElem__t_af50bdaf6d31d50420af94bf8970b9858}{next}}\ !=\ -\/1)\ \{}
+\DoxyCodeLine{00380\ \ \ \ \ \ \ \ \ \ \ \ \ sprintf(curLine,\ \textcolor{stringliteral}{"{}\%zu-\/>\%i[color=\(\backslash\)"{}\#7b00ff\(\backslash\)"{},\ dir=both];\(\backslash\)n"{}},\ i,\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[i].\doxymbox{\hyperlink{structListElem__t_af50bdaf6d31d50420af94bf8970b9858}{next}});}
+\DoxyCodeLine{00381\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00382\ }
+\DoxyCodeLine{00383\ \ \ \ \ \ \ \ \ strcpy(buffer\ +\ bufferInd,\ curLine);}
+\DoxyCodeLine{00384\ \ \ \ \ \ \ \ \ bufferInd\ +=\ strlen(curLine);}
+\DoxyCodeLine{00385\ }
+\DoxyCodeLine{00386\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\_STATUSES}}\ ClearLineErrorStatus\ =\ \doxymbox{\hyperlink{List_8cpp_a465dbd280204ab3ce699d4f07d8ce0f7}{ClearLine}}(curLine);}
+\DoxyCodeLine{00387\ }
+\DoxyCodeLine{00388\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ClearLineErrorStatus\ ==\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(ClearLineErrorStatus),\ ClearLineErrorStatus);}
+\DoxyCodeLine{00389\ \ \ \ \ \}}
+\DoxyCodeLine{00390\ }
+\DoxyCodeLine{00391\ \ \ \ \ \doxymbox{\hyperlink{List_8cpp_a1bdd7c1369b250215a080e8421d4ecf3}{ON\_DEBUG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}curLine:\ <\%s>\(\backslash\)n"{}},\ curLine);)}
+\DoxyCodeLine{00392\ }
+\DoxyCodeLine{00393\ \ \ \ \ strcpy(buffer\ +\ bufferInd,\ curLine);}
+\DoxyCodeLine{00394\ \ \ \ \ bufferInd\ +=\ strlen(curLine);}
+\DoxyCodeLine{00395\ }
+\DoxyCodeLine{00396\ }
+\DoxyCodeLine{00397\ \ \ \ \ strcpy(buffer\ +\ bufferInd,\ \textcolor{stringliteral}{"{}\}"{}});}
+\DoxyCodeLine{00398\ \ \ \ \ bufferInd\ +=\ 1;}
+\DoxyCodeLine{00399\ }
+\DoxyCodeLine{00400\ \ \ \ \ *ptrBuffer\ \ \ \ \ =\ buffer;}
+\DoxyCodeLine{00401\ \ \ \ \ *ptrBufferSize\ =\ bufferInd;}
+\DoxyCodeLine{00402\ }
+\DoxyCodeLine{00403\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}};}
+\DoxyCodeLine{00404\ \}}
+
+\end{DoxyCode}
+
+
+References \doxymbox{\hyperlink{MyAssert_8h_source_l00094}{ASSERT}}, \doxymbox{\hyperlink{List_8cpp_source_l00060}{List\+\_\+t::\+capacity}}, \doxymbox{\hyperlink{List_8cpp_source_l00127}{Clear\+Line()}}, \doxymbox{\hyperlink{List_8cpp_source_l00035}{Dot\+File\+Size}}, \doxymbox{\hyperlink{List_8cpp_source_l00047}{Dot\+File\+Template}}, \doxymbox{\hyperlink{List_8cpp_source_l00061}{List\+\_\+t::\+elems}}, \doxymbox{\hyperlink{List_8cpp_a417f1a5b9114c8ab62d17e5fd3a55828}{Generate\+Dot\+File()}}, \doxymbox{\hyperlink{MyError_8h_source_l00061}{Get\+Error\+String()}}, \doxymbox{\hyperlink{List_8cpp_source_l00055}{List\+Elem\+\_\+t::\+index}}, \doxymbox{\hyperlink{List_8cpp_source_l00052}{List\+Elem\+\_\+t::\+info}}, \doxymbox{\hyperlink{List_8cpp_source_l00036}{Max\+Dot\+Line\+Size}}, \doxymbox{\hyperlink{List_8cpp_source_l00053}{List\+Elem\+\_\+t::\+next}}, \doxymbox{\hyperlink{MyError_8h_source_l00010}{NOT\+\_\+\+ENOUGH\+\_\+\+MEMORY}}, \doxymbox{\hyperlink{List_8cpp_source_l00755}{Num\+Len()}}, \doxymbox{\hyperlink{MyError_8h_source_l00005}{OK}}, \doxymbox{\hyperlink{List_8cpp_source_l00007}{ON\+\_\+\+DEBUG}}, \doxymbox{\hyperlink{List_8cpp_source_l00054}{List\+Elem\+\_\+t::\+prev}}, and \doxymbox{\hyperlink{List_8cpp_source_l00059}{List\+\_\+t::\+size}}.
+
+\Hypertarget{List_8cpp_a417f1a5b9114c8ab62d17e5fd3a55828}\index{List.cpp@{List.cpp}!GenerateDotFile@{GenerateDotFile}}
+\index{GenerateDotFile@{GenerateDotFile}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{GenerateDotFile()}{GenerateDotFile()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{List_8cpp_a417f1a5b9114c8ab62d17e5fd3a55828} 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} Generate\+Dot\+File (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structList__t}{List\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{ptr\+List}{, }\item[{char \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}}]{ptr\+Buffer}{, }\item[{size\+\_\+t \texorpdfstring{$\ast$}{*}}]{ptr\+Buffer\+Size}{}\end{DoxyParamCaption})}
+
+
+
+References \doxymbox{\hyperlink{List_8cpp_source_l00026}{DUMP\+\_\+\+CNT}}, \doxymbox{\hyperlink{List_8cpp_a417f1a5b9114c8ab62d17e5fd3a55828}{Generate\+Dot\+File()}}, \doxymbox{\hyperlink{List_8cpp_source_l00406}{Generate\+Dump\+Filename()}}, \doxymbox{\hyperlink{List_8cpp_source_l00439}{Generate\+Html\+File()}}, \doxymbox{\hyperlink{List_8cpp_source_l00538}{Generate\+Txt\+File\+Dump()}}, \doxymbox{\hyperlink{List_8cpp_source_l00848}{is\+Valid\+List\+Index()}}, \doxymbox{\hyperlink{List_8cpp_source_l00821}{List\+Delete()}}, \doxymbox{\hyperlink{List_8cpp_source_l00232}{List\+Destroy()}}, \doxymbox{\hyperlink{List_8cpp_source_l00734}{List\+Html\+Dump()}}, \doxymbox{\hyperlink{List_8cpp_source_l00201}{List\+Init()}}, \doxymbox{\hyperlink{List_8cpp_source_l00773}{List\+Insert()}}, \doxymbox{\hyperlink{List_8cpp_source_l00294}{List\+Text\+Dump()}}, \doxymbox{\hyperlink{List_8cpp_source_l00239}{List\+Verify()}}, \doxymbox{\hyperlink{List_8cpp_source_l00669}{List\+Viz\+Dump()}}, \doxymbox{\hyperlink{List_8cpp_source_l00755}{Num\+Len()}}, \doxymbox{\hyperlink{List_8cpp_source_l00164}{Unlink\+File()}}, and \doxymbox{\hyperlink{List_8cpp_source_l00178}{Write\+Buffer\+To\+File()}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_source_l00319}{Generate\+Dot\+File()}}, \doxymbox{\hyperlink{List_8cpp_a417f1a5b9114c8ab62d17e5fd3a55828}{Generate\+Dot\+File()}}, and \doxymbox{\hyperlink{List_8cpp_source_l00669}{List\+Viz\+Dump()}}.
+
+\Hypertarget{List_8cpp_a4999d30cc75d83932171a581a9435aba}\index{List.cpp@{List.cpp}!GenerateDumpFilename@{GenerateDumpFilename}}
+\index{GenerateDumpFilename@{GenerateDumpFilename}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{GenerateDumpFilename()}{GenerateDumpFilename()}}
+{\footnotesize\ttfamily \label{List_8cpp_a4999d30cc75d83932171a581a9435aba} 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} Generate\+Dump\+Filename (\begin{DoxyParamCaption}\item[{char \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}}]{ptr\+Filename}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00406}{406}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00406\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00407\ \ \ \ \ \textcolor{comment}{//\ static\ int\ DUMP\_CNT\ =\ 1;}}
+\DoxyCodeLine{00408\ }
+\DoxyCodeLine{00409\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrFilename\ !=\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}});}
+\DoxyCodeLine{00410\ }
+\DoxyCodeLine{00411\ \ \ \ \ \textcolor{keywordtype}{char}*\ curDumpFilename\ =\ (\textcolor{keywordtype}{char}*)\ calloc(\doxymbox{\hyperlink{List_8cpp_a76de2b299ceba83da7fb010e6d5ba11e}{MaxFilenameLen}},\ \textcolor{keyword}{sizeof}(curDumpFilename[0]));}
+\DoxyCodeLine{00412\ }
+\DoxyCodeLine{00413\ \ \ \ \ \textcolor{keywordtype}{int}\ curDumpFilenameInd\ =\ 0;}
+\DoxyCodeLine{00414\ }
+\DoxyCodeLine{00415\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(curDumpFilename\ !=\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da}{NOT\_ENOUGH\_MEMORY}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da}{NOT\_ENOUGH\_MEMORY}});}
+\DoxyCodeLine{00416\ }
+\DoxyCodeLine{00417\ \ \ \ \ strcpy(curDumpFilename\ +\ curDumpFilenameInd,\ \doxymbox{\hyperlink{List_8cpp_a7655d6ee1e81334b5cc1b7e3043e0d74}{VizDumpFilename}});}
+\DoxyCodeLine{00418\ \ \ \ \ curDumpFilenameInd\ +=\ strlen(\doxymbox{\hyperlink{List_8cpp_a7655d6ee1e81334b5cc1b7e3043e0d74}{VizDumpFilename}});}
+\DoxyCodeLine{00419\ }
+\DoxyCodeLine{00420\ \ \ \ \ \textcolor{keywordtype}{char}*\ numberLine\ =\ (\textcolor{keywordtype}{char}*)\ calloc(\doxymbox{\hyperlink{List_8cpp_a25393286bfbefd91a5def2f87ed2cb4c}{MaxNumberLineSize}},\ \textcolor{keyword}{sizeof}(numberLine[0]));}
+\DoxyCodeLine{00421\ }
+\DoxyCodeLine{00422\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(numberLine\ !=\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da}{NOT\_ENOUGH\_MEMORY}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da}{NOT\_ENOUGH\_MEMORY}});}
+\DoxyCodeLine{00423\ }
+\DoxyCodeLine{00424\ \ \ \ \ sprintf(numberLine,\ \textcolor{stringliteral}{"{}\%i"{}},\ \doxymbox{\hyperlink{List_8cpp_ad560682c07cd940258e4dae98d78bbf9}{DUMP\_CNT}});}
+\DoxyCodeLine{00425\ }
+\DoxyCodeLine{00426\ \ \ \ \ strcpy(curDumpFilename\ +\ curDumpFilenameInd,\ numberLine);}
+\DoxyCodeLine{00427\ \ \ \ \ curDumpFilenameInd\ +=\ strlen(numberLine);}
+\DoxyCodeLine{00428\ }
+\DoxyCodeLine{00429\ \ \ \ \ strcpy(curDumpFilename\ +\ curDumpFilenameInd,\ \doxymbox{\hyperlink{List_8cpp_a74b4e4947006b3f5f18534a51fbc9215}{VizDumpExtension}});}
+\DoxyCodeLine{00430\ \ \ \ \ curDumpFilenameInd\ +=\ strlen(\doxymbox{\hyperlink{List_8cpp_a74b4e4947006b3f5f18534a51fbc9215}{VizDumpExtension}});}
+\DoxyCodeLine{00431\ }
+\DoxyCodeLine{00432\ \ \ \ \ *ptrFilename\ =\ curDumpFilename;}
+\DoxyCodeLine{00433\ }
+\DoxyCodeLine{00434\ \ \ \ \ \doxymbox{\hyperlink{List_8cpp_ad560682c07cd940258e4dae98d78bbf9}{DUMP\_CNT}}++;}
+\DoxyCodeLine{00435\ }
+\DoxyCodeLine{00436\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}};}
+\DoxyCodeLine{00437\ \}}
+
+\end{DoxyCode}
+
+
+References \doxymbox{\hyperlink{MyAssert_8h_source_l00094}{ASSERT}}, \doxymbox{\hyperlink{List_8cpp_source_l00026}{DUMP\+\_\+\+CNT}}, \doxymbox{\hyperlink{List_8cpp_source_l00406}{Generate\+Dump\+Filename()}}, \doxymbox{\hyperlink{MyError_8h_source_l00061}{Get\+Error\+String()}}, \doxymbox{\hyperlink{List_8cpp_source_l00028}{Max\+Filename\+Len}}, \doxymbox{\hyperlink{List_8cpp_source_l00029}{Max\+Number\+Line\+Size}}, \doxymbox{\hyperlink{MyError_8h_source_l00010}{NOT\+\_\+\+ENOUGH\+\_\+\+MEMORY}}, \doxymbox{\hyperlink{MyError_8h_source_l00005}{OK}}, \doxymbox{\hyperlink{MyError_8h_source_l00008}{OUT\+\_\+\+OF\+\_\+\+RANGE}}, \doxymbox{\hyperlink{List_8cpp_source_l00032}{Viz\+Dump\+Extension}}, and \doxymbox{\hyperlink{List_8cpp_source_l00031}{Viz\+Dump\+Filename}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_a417f1a5b9114c8ab62d17e5fd3a55828}{Generate\+Dot\+File()}}, \doxymbox{\hyperlink{List_8cpp_source_l00406}{Generate\+Dump\+Filename()}}, and \doxymbox{\hyperlink{List_8cpp_source_l00669}{List\+Viz\+Dump()}}.
+
+\Hypertarget{List_8cpp_a2674ad6410ad54121020776700b8b109}\index{List.cpp@{List.cpp}!GenerateHtmlFile@{GenerateHtmlFile}}
+\index{GenerateHtmlFile@{GenerateHtmlFile}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{GenerateHtmlFile()}{GenerateHtmlFile()}}
+{\footnotesize\ttfamily \label{List_8cpp_a2674ad6410ad54121020776700b8b109} 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} Generate\+Html\+File (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structList__t}{List\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{ptr\+List}{, }\item[{char \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}}]{ptr\+Buffer}{, }\item[{size\+\_\+t \texorpdfstring{$\ast$}{*}}]{ptr\+Buffer\+Size}{, }\item[{int}]{DUMP\+\_\+\+CNT}{, }\item[{\doxymbox{\hyperlink{structSourceLocation}{Source\+Location}}}]{source\+Location}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00439}{439}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00439\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00440\ \ \ \ \ \textcolor{comment}{//\ No\ verification,\ because\ it's\ always\ call\ after\ calling\ functions,\ requiring\ verification}}
+\DoxyCodeLine{00441\ }
+\DoxyCodeLine{00442\ \ \ \ \ \textcolor{keywordtype}{char}*\ buffer\ =\ (\textcolor{keywordtype}{char}*)\ calloc(\doxymbox{\hyperlink{List_8cpp_a0ec10d738d69b281af0aa8153a2cafae}{HtmlFileSize}},\ \textcolor{keyword}{sizeof}(buffer[0]));}
+\DoxyCodeLine{00443\ }
+\DoxyCodeLine{00444\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(buffer\ !=\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da}{NOT\_ENOUGH\_MEMORY}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da}{NOT\_ENOUGH\_MEMORY}});}
+\DoxyCodeLine{00445\ }
+\DoxyCodeLine{00446\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ bufferInd\ =\ 0;}
+\DoxyCodeLine{00447\ }
+\DoxyCodeLine{00448\ \ \ \ \ \textcolor{keywordtype}{char}*\ curLine\ =\ (\textcolor{keywordtype}{char}*)\ calloc(\doxymbox{\hyperlink{List_8cpp_a442017a3b16d76b221139c2c6a62624c}{MaxHtmlLineSize}},\ \textcolor{keyword}{sizeof}(curLine[0]));}
+\DoxyCodeLine{00449\ }
+\DoxyCodeLine{00450\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(curLine\ !=\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da}{NOT\_ENOUGH\_MEMORY}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da}{NOT\_ENOUGH\_MEMORY}});}
+\DoxyCodeLine{00451\ }
+\DoxyCodeLine{00452\ \ \ \ \ sprintf(curLine,\ \textcolor{stringliteral}{"{}<pre>\(\backslash\)n"{}});}
+\DoxyCodeLine{00453\ }
+\DoxyCodeLine{00454\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\_STATUSES}}\ AddLineCleanErrorStatus\ =\ \doxymbox{\hyperlink{List_8cpp_a161d34e83472a680c358facb2cdde9ea}{AddLineClean}}(buffer,\ \&bufferInd,\ curLine);}
+\DoxyCodeLine{00455\ }
+\DoxyCodeLine{00456\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(AddLineCleanErrorStatus\ ==\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(AddLineCleanErrorStatus),}
+\DoxyCodeLine{00457\ \ \ \ \ \ \ \ \ \ \ \ AddLineCleanErrorStatus);}
+\DoxyCodeLine{00458\ }
+\DoxyCodeLine{00459\ }
+\DoxyCodeLine{00460\ }
+\DoxyCodeLine{00461\ \ \ \ \ sprintf(curLine,\ \textcolor{stringliteral}{"{}Dump\ \%i\(\backslash\)n"{}},\ \doxymbox{\hyperlink{List_8cpp_ad560682c07cd940258e4dae98d78bbf9}{DUMP\_CNT}});}
+\DoxyCodeLine{00462\ }
+\DoxyCodeLine{00463\ \ \ \ \ AddLineCleanErrorStatus\ =\ \doxymbox{\hyperlink{List_8cpp_a161d34e83472a680c358facb2cdde9ea}{AddLineClean}}(buffer,\ \&bufferInd,\ curLine);}
+\DoxyCodeLine{00464\ }
+\DoxyCodeLine{00465\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(AddLineCleanErrorStatus\ ==\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(AddLineCleanErrorStatus),}
+\DoxyCodeLine{00466\ \ \ \ \ \ \ \ \ \ \ \ AddLineCleanErrorStatus);}
+\DoxyCodeLine{00467\ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00468\ }
+\DoxyCodeLine{00469\ \ \ \ \ sprintf(curLine,\ \textcolor{stringliteral}{"{}Was\ called\ from\ \%s,\ \%s\(\backslash\)n"{}},\ sourceLocation.\doxymbox{\hyperlink{structSourceLocation_a5d88cd40250b64307d4b2acf8e79aa99}{function}},\ sourceLocation.\doxymbox{\hyperlink{structSourceLocation_abe1a3fee04b49b1ea16c433d345d9e3d}{file}});}
+\DoxyCodeLine{00470\ \ \ \ \ }
+\DoxyCodeLine{00471\ \ \ \ \ AddLineCleanErrorStatus\ =\ \doxymbox{\hyperlink{List_8cpp_a161d34e83472a680c358facb2cdde9ea}{AddLineClean}}(buffer,\ \&bufferInd,\ curLine);}
+\DoxyCodeLine{00472\ }
+\DoxyCodeLine{00473\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(AddLineCleanErrorStatus\ ==\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(AddLineCleanErrorStatus),}
+\DoxyCodeLine{00474\ \ \ \ \ \ \ \ \ \ \ \ AddLineCleanErrorStatus);}
+\DoxyCodeLine{00475\ }
+\DoxyCodeLine{00476\ }
+\DoxyCodeLine{00477\ \ \ \ \ sprintf(curLine,\ \textcolor{stringliteral}{"{}List\_t\ <\%s>\ at\ [\%p]\ \(\backslash\)n\(\backslash\)n"{}},}
+\DoxyCodeLine{00478\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sourceLocation.\doxymbox{\hyperlink{structSourceLocation_a2da792b833f8df18ed7ba28fca670630}{name}},\ ptrList);}
+\DoxyCodeLine{00479\ \ \ \ \ }
+\DoxyCodeLine{00480\ \ \ \ \ AddLineCleanErrorStatus\ =\ \doxymbox{\hyperlink{List_8cpp_a161d34e83472a680c358facb2cdde9ea}{AddLineClean}}(buffer,\ \&bufferInd,\ curLine);}
+\DoxyCodeLine{00481\ }
+\DoxyCodeLine{00482\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(AddLineCleanErrorStatus\ ==\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(AddLineCleanErrorStatus),}
+\DoxyCodeLine{00483\ \ \ \ \ \ \ \ \ \ \ \ AddLineCleanErrorStatus);}
+\DoxyCodeLine{00484\ }
+\DoxyCodeLine{00485\ \ \ \ \ }
+\DoxyCodeLine{00486\ \ \ \ \ sprintf(curLine,\ \textcolor{stringliteral}{"{}Head\ =\ \%i\(\backslash\)n"{}},\ ptrList-\/>\doxymbox{\hyperlink{structList__t_afe8f830b955d3c0986a318315ed7e26f}{head}});}
+\DoxyCodeLine{00487\ \ \ \ \ }
+\DoxyCodeLine{00488\ \ \ \ \ AddLineCleanErrorStatus\ =\ \doxymbox{\hyperlink{List_8cpp_a161d34e83472a680c358facb2cdde9ea}{AddLineClean}}(buffer,\ \&bufferInd,\ curLine);}
+\DoxyCodeLine{00489\ }
+\DoxyCodeLine{00490\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(AddLineCleanErrorStatus\ ==\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(AddLineCleanErrorStatus),}
+\DoxyCodeLine{00491\ \ \ \ \ \ \ \ \ \ \ \ AddLineCleanErrorStatus);}
+\DoxyCodeLine{00492\ }
+\DoxyCodeLine{00493\ \ \ \ \ }
+\DoxyCodeLine{00494\ \ \ \ \ sprintf(curLine,\ \textcolor{stringliteral}{"{}Tail\ =\ \%i\(\backslash\)n"{}},\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a4833bc1e7037ccfaecd04ee59a73021c}{tail}});}
+\DoxyCodeLine{00495\ \ \ \ \ }
+\DoxyCodeLine{00496\ \ \ \ \ AddLineCleanErrorStatus\ =\ \doxymbox{\hyperlink{List_8cpp_a161d34e83472a680c358facb2cdde9ea}{AddLineClean}}(buffer,\ \&bufferInd,\ curLine);}
+\DoxyCodeLine{00497\ }
+\DoxyCodeLine{00498\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(AddLineCleanErrorStatus\ ==\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(AddLineCleanErrorStatus),}
+\DoxyCodeLine{00499\ \ \ \ \ \ \ \ \ \ \ \ AddLineCleanErrorStatus);}
+\DoxyCodeLine{00500\ }
+\DoxyCodeLine{00501\ \ \ \ \ }
+\DoxyCodeLine{00502\ \ \ \ \ sprintf(curLine,\ \textcolor{stringliteral}{"{}Size\ =\ \%i\(\backslash\)n"{}},\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a32d7c5f32667a2ed93db83652748a126}{size}});}
+\DoxyCodeLine{00503\ \ \ \ \ }
+\DoxyCodeLine{00504\ \ \ \ \ AddLineCleanErrorStatus\ =\ \doxymbox{\hyperlink{List_8cpp_a161d34e83472a680c358facb2cdde9ea}{AddLineClean}}(buffer,\ \&bufferInd,\ curLine);}
+\DoxyCodeLine{00505\ }
+\DoxyCodeLine{00506\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(AddLineCleanErrorStatus\ ==\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(AddLineCleanErrorStatus),}
+\DoxyCodeLine{00507\ \ \ \ \ \ \ \ \ \ \ \ AddLineCleanErrorStatus);}
+\DoxyCodeLine{00508\ }
+\DoxyCodeLine{00509\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00510\ \ \ \ \ sprintf(curLine,\ \textcolor{stringliteral}{"{}Capacity\ =\ \%i\(\backslash\)n\(\backslash\)n"{}},\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a4ad48150d3812a75a194a9f8b14f6cc7}{capacity}});}
+\DoxyCodeLine{00511\ \ \ \ \ }
+\DoxyCodeLine{00512\ \ \ \ \ AddLineCleanErrorStatus\ =\ \doxymbox{\hyperlink{List_8cpp_a161d34e83472a680c358facb2cdde9ea}{AddLineClean}}(buffer,\ \&bufferInd,\ curLine);}
+\DoxyCodeLine{00513\ }
+\DoxyCodeLine{00514\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(AddLineCleanErrorStatus\ ==\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(AddLineCleanErrorStatus),}
+\DoxyCodeLine{00515\ \ \ \ \ \ \ \ \ \ \ \ AddLineCleanErrorStatus);}
+\DoxyCodeLine{00516\ \ \ \ \ }
+\DoxyCodeLine{00517\ }
+\DoxyCodeLine{00518\ \ \ \ \ sprintf(curLine,\ \textcolor{stringliteral}{"{}Visual\ dump\(\backslash\)n\ <img\ src=\%s\%i\%s>"{}},\ \doxymbox{\hyperlink{List_8cpp_a7655d6ee1e81334b5cc1b7e3043e0d74}{VizDumpFilename}},\ \doxymbox{\hyperlink{List_8cpp_ad560682c07cd940258e4dae98d78bbf9}{DUMP\_CNT}}\ -\/\ 1,\ \doxymbox{\hyperlink{List_8cpp_a74b4e4947006b3f5f18534a51fbc9215}{VizDumpExtension}});}
+\DoxyCodeLine{00519\ \ \ \ \ }
+\DoxyCodeLine{00520\ \ \ \ \ AddLineCleanErrorStatus\ =\ \doxymbox{\hyperlink{List_8cpp_a161d34e83472a680c358facb2cdde9ea}{AddLineClean}}(buffer,\ \&bufferInd,\ curLine);}
+\DoxyCodeLine{00521\ }
+\DoxyCodeLine{00522\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(AddLineCleanErrorStatus\ ==\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(AddLineCleanErrorStatus),}
+\DoxyCodeLine{00523\ \ \ \ \ \ \ \ \ \ \ \ AddLineCleanErrorStatus);}
+\DoxyCodeLine{00524\ }
+\DoxyCodeLine{00525\ \ \ \ \ sprintf(curLine,\ \textcolor{stringliteral}{"{}Text\ dump\(\backslash\)n\ <embed\ src=\%s>"{}},\ \doxymbox{\hyperlink{List_8cpp_adfb0271ebf9d7e844233467fea601d51}{TxtFilename}});}
+\DoxyCodeLine{00526\ \ \ \ \ }
+\DoxyCodeLine{00527\ \ \ \ \ AddLineCleanErrorStatus\ =\ \doxymbox{\hyperlink{List_8cpp_a161d34e83472a680c358facb2cdde9ea}{AddLineClean}}(buffer,\ \&bufferInd,\ curLine);}
+\DoxyCodeLine{00528\ }
+\DoxyCodeLine{00529\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(AddLineCleanErrorStatus\ ==\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(AddLineCleanErrorStatus),}
+\DoxyCodeLine{00530\ \ \ \ \ \ \ \ \ \ \ \ AddLineCleanErrorStatus);}
+\DoxyCodeLine{00531\ }
+\DoxyCodeLine{00532\ \ \ \ \ *ptrBuffer\ \ \ \ \ =\ buffer;}
+\DoxyCodeLine{00533\ \ \ \ \ *ptrBufferSize\ =\ bufferInd;}
+\DoxyCodeLine{00534\ }
+\DoxyCodeLine{00535\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}};}
+\DoxyCodeLine{00536\ \}}
+
+\end{DoxyCode}
+
+
+References \doxymbox{\hyperlink{List_8cpp_a161d34e83472a680c358facb2cdde9ea}{Add\+Line\+Clean()}}, \doxymbox{\hyperlink{MyAssert_8h_source_l00094}{ASSERT}}, \doxymbox{\hyperlink{List_8cpp_source_l00060}{List\+\_\+t::\+capacity}}, \doxymbox{\hyperlink{List_8cpp_source_l00026}{DUMP\+\_\+\+CNT}}, \doxymbox{\hyperlink{MyAssert_8h_source_l00022}{Source\+Location::\+file}}, \doxymbox{\hyperlink{MyAssert_8h_source_l00023}{Source\+Location::\+function}}, \doxymbox{\hyperlink{List_8cpp_source_l00439}{Generate\+Html\+File()}}, \doxymbox{\hyperlink{MyError_8h_source_l00061}{Get\+Error\+String()}}, \doxymbox{\hyperlink{List_8cpp_source_l00062}{List\+\_\+t::\+head}}, \doxymbox{\hyperlink{List_8cpp_source_l00039}{Html\+File\+Size}}, \doxymbox{\hyperlink{List_8cpp_source_l00040}{Max\+Html\+Line\+Size}}, \doxymbox{\hyperlink{MyAssert_8h_source_l00021}{Source\+Location::\+name}}, \doxymbox{\hyperlink{MyError_8h_source_l00010}{NOT\+\_\+\+ENOUGH\+\_\+\+MEMORY}}, \doxymbox{\hyperlink{MyError_8h_source_l00005}{OK}}, \doxymbox{\hyperlink{List_8cpp_source_l00059}{List\+\_\+t::\+size}}, \doxymbox{\hyperlink{List_8cpp_source_l00063}{List\+\_\+t::\+tail}}, \doxymbox{\hyperlink{List_8cpp_source_l00043}{Txt\+Filename}}, \doxymbox{\hyperlink{List_8cpp_source_l00032}{Viz\+Dump\+Extension}}, and \doxymbox{\hyperlink{List_8cpp_source_l00031}{Viz\+Dump\+Filename}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_a417f1a5b9114c8ab62d17e5fd3a55828}{Generate\+Dot\+File()}}, \doxymbox{\hyperlink{List_8cpp_source_l00439}{Generate\+Html\+File()}}, and \doxymbox{\hyperlink{List_8cpp_source_l00734}{List\+Html\+Dump()}}.
+
+\Hypertarget{List_8cpp_a8d0eff6f4f4f88769fcfcb5f79d2bb22}\index{List.cpp@{List.cpp}!GenerateTxtFileDump@{GenerateTxtFileDump}}
+\index{GenerateTxtFileDump@{GenerateTxtFileDump}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{GenerateTxtFileDump()}{GenerateTxtFileDump()}}
+{\footnotesize\ttfamily \label{List_8cpp_a8d0eff6f4f4f88769fcfcb5f79d2bb22} 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} Generate\+Txt\+File\+Dump (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structList__t}{List\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{ptr\+List}{, }\item[{char \texorpdfstring{$\ast$}{*}\texorpdfstring{$\ast$}{*}}]{ptr\+Buffer}{, }\item[{size\+\_\+t \texorpdfstring{$\ast$}{*}}]{ptr\+Buffer\+Size}{, }\item[{\doxymbox{\hyperlink{structSourceLocation}{Source\+Location}}}]{source\+Location}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00538}{538}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00538\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00539\ \ \ \ \ \doxymbox{\hyperlink{List_8cpp_a1550a93699407e315a6e672afe25f99d}{ListVerify}}(ptrList);}
+\DoxyCodeLine{00540\ }
+\DoxyCodeLine{00541\ \ \ \ \ \textcolor{keywordtype}{char}*\ buffer\ =\ (\textcolor{keywordtype}{char}*)\ calloc(\doxymbox{\hyperlink{List_8cpp_a011b629708d381df3824f22b6a61731a}{TxtFileSize}},\ \textcolor{keyword}{sizeof}(buffer[0]));}
+\DoxyCodeLine{00542\ }
+\DoxyCodeLine{00543\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(buffer\ !=\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da}{NOT\_ENOUGH\_MEMORY}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da}{NOT\_ENOUGH\_MEMORY}});}
+\DoxyCodeLine{00544\ }
+\DoxyCodeLine{00545\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ bufferInd\ =\ 0;}
+\DoxyCodeLine{00546\ }
+\DoxyCodeLine{00547\ \ \ \ \ \textcolor{keywordtype}{char}*\ curLine\ =\ (\textcolor{keywordtype}{char}*)\ calloc(\doxymbox{\hyperlink{List_8cpp_a74c8fc1ac326c74d6485781d0ac1e44b}{MaxTxtLineSize}},\ \textcolor{keyword}{sizeof}(curLine[0]));}
+\DoxyCodeLine{00548\ }
+\DoxyCodeLine{00549\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(curLine\ !=\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da}{NOT\_ENOUGH\_MEMORY}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da}{NOT\_ENOUGH\_MEMORY}});}
+\DoxyCodeLine{00550\ }
+\DoxyCodeLine{00551\ \ \ \ \ sprintf(curLine,\ \ \textcolor{stringliteral}{"{}\(\backslash\)n-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\(\backslash\)n(ListTextDump):\ Starting...\(\backslash\)n"{}});}
+\DoxyCodeLine{00552\ }
+\DoxyCodeLine{00553\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\_STATUSES}}\ AddLineCleanErrorStatus\ =\ \doxymbox{\hyperlink{List_8cpp_a161d34e83472a680c358facb2cdde9ea}{AddLineClean}}(buffer,\ \&bufferInd,\ curLine);}
+\DoxyCodeLine{00554\ }
+\DoxyCodeLine{00555\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(AddLineCleanErrorStatus\ ==\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(AddLineCleanErrorStatus),}
+\DoxyCodeLine{00556\ \ \ \ \ \ \ \ \ \ \ \ AddLineCleanErrorStatus);}
+\DoxyCodeLine{00557\ }
+\DoxyCodeLine{00558\ }
+\DoxyCodeLine{00559\ \ \ \ \ sprintf(curLine,\ \ \textcolor{stringliteral}{"{}List\_t\ <\%s>\ [\%p]\ \%s\ at\ \%s\ \{\(\backslash\)n"{}},}
+\DoxyCodeLine{00560\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sourceLocation.\doxymbox{\hyperlink{structSourceLocation_a2da792b833f8df18ed7ba28fca670630}{name}},\ ptrList,\ sourceLocation.\doxymbox{\hyperlink{structSourceLocation_a5d88cd40250b64307d4b2acf8e79aa99}{function}},\ sourceLocation.\doxymbox{\hyperlink{structSourceLocation_abe1a3fee04b49b1ea16c433d345d9e3d}{file}});}
+\DoxyCodeLine{00561\ }
+\DoxyCodeLine{00562\ \ \ \ \ AddLineCleanErrorStatus\ =\ \doxymbox{\hyperlink{List_8cpp_a161d34e83472a680c358facb2cdde9ea}{AddLineClean}}(buffer,\ \&bufferInd,\ curLine);}
+\DoxyCodeLine{00563\ }
+\DoxyCodeLine{00564\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(AddLineCleanErrorStatus\ ==\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(AddLineCleanErrorStatus),}
+\DoxyCodeLine{00565\ \ \ \ \ \ \ \ \ \ \ \ AddLineCleanErrorStatus);}
+\DoxyCodeLine{00566\ }
+\DoxyCodeLine{00567\ \ \ \ \ sprintf(curLine,\ \textcolor{stringliteral}{"{}Head\ =\ \%i\(\backslash\)n"{}},\ ptrList-\/>\doxymbox{\hyperlink{structList__t_afe8f830b955d3c0986a318315ed7e26f}{head}});}
+\DoxyCodeLine{00568\ \ \ \ \ }
+\DoxyCodeLine{00569\ \ \ \ \ AddLineCleanErrorStatus\ =\ \doxymbox{\hyperlink{List_8cpp_a161d34e83472a680c358facb2cdde9ea}{AddLineClean}}(buffer,\ \&bufferInd,\ curLine);}
+\DoxyCodeLine{00570\ }
+\DoxyCodeLine{00571\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(AddLineCleanErrorStatus\ ==\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(AddLineCleanErrorStatus),}
+\DoxyCodeLine{00572\ \ \ \ \ \ \ \ \ \ \ \ AddLineCleanErrorStatus);}
+\DoxyCodeLine{00573\ }
+\DoxyCodeLine{00574\ \ \ \ \ }
+\DoxyCodeLine{00575\ \ \ \ \ sprintf(curLine,\ \textcolor{stringliteral}{"{}Tail\ =\ \%i\(\backslash\)n"{}},\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a4833bc1e7037ccfaecd04ee59a73021c}{tail}});}
+\DoxyCodeLine{00576\ \ \ \ \ }
+\DoxyCodeLine{00577\ \ \ \ \ AddLineCleanErrorStatus\ =\ \doxymbox{\hyperlink{List_8cpp_a161d34e83472a680c358facb2cdde9ea}{AddLineClean}}(buffer,\ \&bufferInd,\ curLine);}
+\DoxyCodeLine{00578\ }
+\DoxyCodeLine{00579\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(AddLineCleanErrorStatus\ ==\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(AddLineCleanErrorStatus),}
+\DoxyCodeLine{00580\ \ \ \ \ \ \ \ \ \ \ \ AddLineCleanErrorStatus);}
+\DoxyCodeLine{00581\ }
+\DoxyCodeLine{00582\ \ \ \ \ }
+\DoxyCodeLine{00583\ \ \ \ \ sprintf(curLine,\ \textcolor{stringliteral}{"{}Size\ =\ \%i\(\backslash\)n"{}},\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a32d7c5f32667a2ed93db83652748a126}{size}});}
+\DoxyCodeLine{00584\ \ \ \ \ }
+\DoxyCodeLine{00585\ \ \ \ \ AddLineCleanErrorStatus\ =\ \doxymbox{\hyperlink{List_8cpp_a161d34e83472a680c358facb2cdde9ea}{AddLineClean}}(buffer,\ \&bufferInd,\ curLine);}
+\DoxyCodeLine{00586\ }
+\DoxyCodeLine{00587\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(AddLineCleanErrorStatus\ ==\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(AddLineCleanErrorStatus),}
+\DoxyCodeLine{00588\ \ \ \ \ \ \ \ \ \ \ \ AddLineCleanErrorStatus);}
+\DoxyCodeLine{00589\ }
+\DoxyCodeLine{00590\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00591\ \ \ \ \ sprintf(curLine,\ \textcolor{stringliteral}{"{}Capacity\ =\ \%i\(\backslash\)n\(\backslash\)n"{}},\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a4ad48150d3812a75a194a9f8b14f6cc7}{capacity}});}
+\DoxyCodeLine{00592\ \ \ \ \ }
+\DoxyCodeLine{00593\ \ \ \ \ AddLineCleanErrorStatus\ =\ \doxymbox{\hyperlink{List_8cpp_a161d34e83472a680c358facb2cdde9ea}{AddLineClean}}(buffer,\ \&bufferInd,\ curLine);}
+\DoxyCodeLine{00594\ }
+\DoxyCodeLine{00595\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(AddLineCleanErrorStatus\ ==\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(AddLineCleanErrorStatus),}
+\DoxyCodeLine{00596\ \ \ \ \ \ \ \ \ \ \ \ AddLineCleanErrorStatus);}
+\DoxyCodeLine{00597\ \ \ \ \ }
+\DoxyCodeLine{00598\ \ \ \ \ \textcolor{comment}{//\ if\ (isatty(fileno(stderr)))\ \{}}
+\DoxyCodeLine{00599\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ sprintf(curLine,\ "{}\%s"{},\ GREEN);}}
+\DoxyCodeLine{00600\ \ \ \ \ }
+\DoxyCodeLine{00601\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ AddLineCleanErrorStatus\ =\ AddLineClean(buffer,\ \&bufferInd,\ curLine);}}
+\DoxyCodeLine{00602\ }
+\DoxyCodeLine{00603\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ ASSERT(AddLineCleanErrorStatus\ ==\ OK,\ GetErrorString(AddLineCleanErrorStatus),}}
+\DoxyCodeLine{00604\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ AddLineCleanErrorStatus);}}
+\DoxyCodeLine{00605\ \ \ \ \ \textcolor{comment}{//\ \}}}
+\DoxyCodeLine{00606\ }
+\DoxyCodeLine{00607\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a32d7c5f32667a2ed93db83652748a126}{size}};\ i++)\ \{}
+\DoxyCodeLine{00608\ }
+\DoxyCodeLine{00609\ \ \ \ \ \ \ \ \ sprintf(curLine,\ \textcolor{stringliteral}{"{}*[\%zu]\ =\ \{info:\ \%i,\ next:\ \%i,\ prev:\ \%i\}\(\backslash\)n"{}},}
+\DoxyCodeLine{00610\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ i,\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[i].\doxymbox{\hyperlink{structListElem__t_a6f46b9f1a3fbd83bda61d3258b8fd28b}{info}},\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[i].\doxymbox{\hyperlink{structListElem__t_af50bdaf6d31d50420af94bf8970b9858}{next}},\ }
+\DoxyCodeLine{00611\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[i].\doxymbox{\hyperlink{structListElem__t_a780ed81ab54683b77faf1a8eb9228800}{prev}});}
+\DoxyCodeLine{00612\ \ \ \ \ }
+\DoxyCodeLine{00613\ \ \ \ \ \ \ \ \ AddLineCleanErrorStatus\ =\ \doxymbox{\hyperlink{List_8cpp_a161d34e83472a680c358facb2cdde9ea}{AddLineClean}}(buffer,\ \&bufferInd,\ curLine);}
+\DoxyCodeLine{00614\ }
+\DoxyCodeLine{00615\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(AddLineCleanErrorStatus\ ==\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(AddLineCleanErrorStatus),}
+\DoxyCodeLine{00616\ \ \ \ \ \ \ \ \ \ \ \ \ AddLineCleanErrorStatus);}
+\DoxyCodeLine{00617\ \ \ \ \ \}}
+\DoxyCodeLine{00618\ }
+\DoxyCodeLine{00619\ \ \ \ \ \textcolor{comment}{//\ if\ (isatty(fileno(stderr)))\ \{}}
+\DoxyCodeLine{00620\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ printf(curLine,\ "{}\%s"{},\ RED);}}
+\DoxyCodeLine{00621\ \ \ \ \ }
+\DoxyCodeLine{00622\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ AddLineCleanErrorStatus\ =\ AddLineClean(buffer,\ \&bufferInd,\ curLine);}}
+\DoxyCodeLine{00623\ }
+\DoxyCodeLine{00624\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ ASSERT(AddLineCleanErrorStatus\ ==\ OK,\ GetErrorString(AddLineCleanErrorStatus),}}
+\DoxyCodeLine{00625\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ AddLineCleanErrorStatus);}}
+\DoxyCodeLine{00626\ \ \ \ \ \textcolor{comment}{//\ \}}}
+\DoxyCodeLine{00627\ }
+\DoxyCodeLine{00628\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a32d7c5f32667a2ed93db83652748a126}{size}};\ i\ +\ 1\ <\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a4ad48150d3812a75a194a9f8b14f6cc7}{capacity}};\ i++)\ \{}
+\DoxyCodeLine{00629\ \ \ \ \ \ \ \ \ sprintf(curLine,\ \textcolor{stringliteral}{"{}*[\%zu]\ =\ \{info:\ \%i,\ next:\ \%i,\ prev:\ \%i\}\(\backslash\)n"{}},}
+\DoxyCodeLine{00630\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ i,\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[i].\doxymbox{\hyperlink{structListElem__t_a6f46b9f1a3fbd83bda61d3258b8fd28b}{info}},\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[i].\doxymbox{\hyperlink{structListElem__t_af50bdaf6d31d50420af94bf8970b9858}{next}},\ }
+\DoxyCodeLine{00631\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[i].\doxymbox{\hyperlink{structListElem__t_a780ed81ab54683b77faf1a8eb9228800}{prev}});}
+\DoxyCodeLine{00632\ \ \ \ \ }
+\DoxyCodeLine{00633\ \ \ \ \ \ \ \ \ AddLineCleanErrorStatus\ =\ \doxymbox{\hyperlink{List_8cpp_a161d34e83472a680c358facb2cdde9ea}{AddLineClean}}(buffer,\ \&bufferInd,\ curLine);}
+\DoxyCodeLine{00634\ }
+\DoxyCodeLine{00635\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(AddLineCleanErrorStatus\ ==\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(AddLineCleanErrorStatus),}
+\DoxyCodeLine{00636\ \ \ \ \ \ \ \ \ \ \ \ \ AddLineCleanErrorStatus);}
+\DoxyCodeLine{00637\ \ \ \ \ \}}
+\DoxyCodeLine{00638\ }
+\DoxyCodeLine{00639\ \ \ \ \ \textcolor{comment}{//\ if\ (isatty(fileno(stderr)))\ \{}}
+\DoxyCodeLine{00640\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ sprintf(curLine,\ "{}\%s"{},\ RESET);}}
+\DoxyCodeLine{00641\ \ \ \ \ }
+\DoxyCodeLine{00642\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ AddLineCleanErrorStatus\ =\ AddLineClean(buffer,\ \&bufferInd,\ curLine);}}
+\DoxyCodeLine{00643\ }
+\DoxyCodeLine{00644\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ ASSERT(AddLineCleanErrorStatus\ ==\ OK,\ GetErrorString(AddLineCleanErrorStatus),}}
+\DoxyCodeLine{00645\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ AddLineCleanErrorStatus);}}
+\DoxyCodeLine{00646\ \ \ \ \ \textcolor{comment}{//\ \}}}
+\DoxyCodeLine{00647\ }
+\DoxyCodeLine{00648\ \ \ \ \ sprintf(curLine,\ \textcolor{stringliteral}{"{}\}\(\backslash\)n"{}});}
+\DoxyCodeLine{00649\ }
+\DoxyCodeLine{00650\ \ \ \ \ AddLineCleanErrorStatus\ =\ \doxymbox{\hyperlink{List_8cpp_a161d34e83472a680c358facb2cdde9ea}{AddLineClean}}(buffer,\ \&bufferInd,\ curLine);}
+\DoxyCodeLine{00651\ }
+\DoxyCodeLine{00652\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(AddLineCleanErrorStatus\ ==\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(AddLineCleanErrorStatus),}
+\DoxyCodeLine{00653\ \ \ \ \ \ \ \ \ AddLineCleanErrorStatus);}
+\DoxyCodeLine{00654\ }
+\DoxyCodeLine{00655\ }
+\DoxyCodeLine{00656\ \ \ \ \ sprintf(curLine,\ \textcolor{stringliteral}{"{}(ListTextDump):\ Ending...\(\backslash\)n"{}});}
+\DoxyCodeLine{00657\ }
+\DoxyCodeLine{00658\ \ \ \ \ AddLineCleanErrorStatus\ =\ \doxymbox{\hyperlink{List_8cpp_a161d34e83472a680c358facb2cdde9ea}{AddLineClean}}(buffer,\ \&bufferInd,\ curLine);}
+\DoxyCodeLine{00659\ }
+\DoxyCodeLine{00660\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(AddLineCleanErrorStatus\ ==\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(AddLineCleanErrorStatus),}
+\DoxyCodeLine{00661\ \ \ \ \ \ \ \ \ AddLineCleanErrorStatus);}
+\DoxyCodeLine{00662\ }
+\DoxyCodeLine{00663\ \ \ \ \ *ptrBuffer\ \ \ \ \ =\ buffer;}
+\DoxyCodeLine{00664\ \ \ \ \ *ptrBufferSize\ =\ bufferInd;}
+\DoxyCodeLine{00665\ }
+\DoxyCodeLine{00666\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}};}
+\DoxyCodeLine{00667\ \}}
+
+\end{DoxyCode}
+
+
+References \doxymbox{\hyperlink{List_8cpp_a161d34e83472a680c358facb2cdde9ea}{Add\+Line\+Clean()}}, \doxymbox{\hyperlink{MyAssert_8h_source_l00094}{ASSERT}}, \doxymbox{\hyperlink{List_8cpp_source_l00060}{List\+\_\+t::\+capacity}}, \doxymbox{\hyperlink{List_8cpp_source_l00061}{List\+\_\+t::\+elems}}, \doxymbox{\hyperlink{MyAssert_8h_source_l00022}{Source\+Location::\+file}}, \doxymbox{\hyperlink{MyAssert_8h_source_l00023}{Source\+Location::\+function}}, \doxymbox{\hyperlink{List_8cpp_source_l00538}{Generate\+Txt\+File\+Dump()}}, \doxymbox{\hyperlink{MyError_8h_source_l00061}{Get\+Error\+String()}}, \doxymbox{\hyperlink{List_8cpp_source_l00062}{List\+\_\+t::\+head}}, \doxymbox{\hyperlink{List_8cpp_source_l00052}{List\+Elem\+\_\+t::\+info}}, \doxymbox{\hyperlink{List_8cpp_source_l00239}{List\+Verify()}}, \doxymbox{\hyperlink{List_8cpp_source_l00045}{Max\+Txt\+Line\+Size}}, \doxymbox{\hyperlink{MyAssert_8h_source_l00021}{Source\+Location::\+name}}, \doxymbox{\hyperlink{List_8cpp_source_l00053}{List\+Elem\+\_\+t::\+next}}, \doxymbox{\hyperlink{MyError_8h_source_l00010}{NOT\+\_\+\+ENOUGH\+\_\+\+MEMORY}}, \doxymbox{\hyperlink{MyError_8h_source_l00005}{OK}}, \doxymbox{\hyperlink{List_8cpp_source_l00054}{List\+Elem\+\_\+t::\+prev}}, \doxymbox{\hyperlink{List_8cpp_source_l00059}{List\+\_\+t::\+size}}, \doxymbox{\hyperlink{List_8cpp_source_l00063}{List\+\_\+t::\+tail}}, and \doxymbox{\hyperlink{List_8cpp_source_l00044}{Txt\+File\+Size}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_a417f1a5b9114c8ab62d17e5fd3a55828}{Generate\+Dot\+File()}}, \doxymbox{\hyperlink{List_8cpp_source_l00538}{Generate\+Txt\+File\+Dump()}}, and \doxymbox{\hyperlink{List_8cpp_source_l00294}{List\+Text\+Dump()}}.
+
+\Hypertarget{List_8cpp_a8504dec6697aaa82ab65287a2571a9da}\index{List.cpp@{List.cpp}!isValidListIndex@{isValidListIndex}}
+\index{isValidListIndex@{isValidListIndex}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{isValidListIndex()}{isValidListIndex()}}
+{\footnotesize\ttfamily \label{List_8cpp_a8504dec6697aaa82ab65287a2571a9da} 
+bool is\+Valid\+List\+Index (\begin{DoxyParamCaption}\item[{int}]{ind}{, }\item[{int}]{left}{, }\item[{int}]{right}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00848}{848}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00848\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00849\ \ \ \ \ \textcolor{keywordflow}{return}\ left\ <=\ ind\ \&\&\ ind\ <\ right;}
+\DoxyCodeLine{00850\ \}}
+
+\end{DoxyCode}
+
+
+References \doxymbox{\hyperlink{List_8cpp_source_l00848}{is\+Valid\+List\+Index()}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_a417f1a5b9114c8ab62d17e5fd3a55828}{Generate\+Dot\+File()}}, \doxymbox{\hyperlink{List_8cpp_source_l00848}{is\+Valid\+List\+Index()}}, \doxymbox{\hyperlink{List_8cpp_source_l00821}{List\+Delete()}}, \doxymbox{\hyperlink{List_8cpp_source_l00773}{List\+Insert()}}, and \doxymbox{\hyperlink{List_8cpp_source_l00239}{List\+Verify()}}.
+
+\Hypertarget{List_8cpp_a908f9d45d823ad37e067b5fae2e3b21d}\index{List.cpp@{List.cpp}!ListDelete@{ListDelete}}
+\index{ListDelete@{ListDelete}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{ListDelete()}{ListDelete()}}
+{\footnotesize\ttfamily \label{List_8cpp_a908f9d45d823ad37e067b5fae2e3b21d} 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} List\+Delete (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structList__t}{List\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{ptr\+List}{, }\item[{int}]{insert\+Index}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00821}{821}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00821\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00822\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrList\ !=\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}});}
+\DoxyCodeLine{00823\ }
+\DoxyCodeLine{00824\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(\doxymbox{\hyperlink{List_8cpp_a8504dec6697aaa82ab65287a2571a9da}{isValidListIndex}}(delIndex,\ 0,\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a32d7c5f32667a2ed93db83652748a126}{size}}),\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}});}
+\DoxyCodeLine{00825\ \ \ \ \ }
+\DoxyCodeLine{00826\ \ \ \ \ \textcolor{keywordtype}{int}\ prevInd\ =\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[delIndex].\doxymbox{\hyperlink{structListElem__t_a780ed81ab54683b77faf1a8eb9228800}{prev}};}
+\DoxyCodeLine{00827\ \ \ \ \ \textcolor{keywordtype}{int}\ nextInd\ =\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[delIndex].\doxymbox{\hyperlink{structListElem__t_af50bdaf6d31d50420af94bf8970b9858}{next}};}
+\DoxyCodeLine{00828\ \ \ \ \ }
+\DoxyCodeLine{00829\ \ \ \ \ \textcolor{keywordflow}{if}\ (prevInd\ !=\ -\/1)\ \{}
+\DoxyCodeLine{00830\ \ \ \ \ \ \ \ \ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[prevInd].\doxymbox{\hyperlink{structListElem__t_af50bdaf6d31d50420af94bf8970b9858}{next}}\ =\ nextInd;}
+\DoxyCodeLine{00831\ \ \ \ \ \}}
+\DoxyCodeLine{00832\ }
+\DoxyCodeLine{00833\ \ \ \ \ \textcolor{keywordflow}{if}\ (nextInd\ !=\ -\/1)\ \{}
+\DoxyCodeLine{00834\ \ \ \ \ \ \ \ \ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[nextInd].\doxymbox{\hyperlink{structListElem__t_a780ed81ab54683b77faf1a8eb9228800}{prev}}\ =\ prevInd;}
+\DoxyCodeLine{00835\ \ \ \ \ \}}
+\DoxyCodeLine{00836\ }
+\DoxyCodeLine{00837\ \ \ \ \ \textcolor{comment}{//\ ptrList-\/>elems[delIndex].info\ =\ POISON;}}
+\DoxyCodeLine{00838\ \ \ \ \ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[delIndex].\doxymbox{\hyperlink{structListElem__t_a780ed81ab54683b77faf1a8eb9228800}{prev}}\ =\ -\/1;}
+\DoxyCodeLine{00839\ \ \ \ \ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[delIndex].\doxymbox{\hyperlink{structListElem__t_af50bdaf6d31d50420af94bf8970b9858}{next}}\ =\ -\/1;}
+\DoxyCodeLine{00840\ }
+\DoxyCodeLine{00841\ \ \ \ \ ptrList-\/>\doxymbox{\hyperlink{structList__t_afe8f830b955d3c0986a318315ed7e26f}{head}}\ =\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[0].\doxymbox{\hyperlink{structListElem__t_af50bdaf6d31d50420af94bf8970b9858}{next}};}
+\DoxyCodeLine{00842\ \ \ \ \ ptrList-\/>\doxymbox{\hyperlink{structList__t_a4833bc1e7037ccfaecd04ee59a73021c}{tail}}\ =\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[0].\doxymbox{\hyperlink{structListElem__t_a780ed81ab54683b77faf1a8eb9228800}{prev}};}
+\DoxyCodeLine{00843\ }
+\DoxyCodeLine{00844\ }
+\DoxyCodeLine{00845\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}};}
+\DoxyCodeLine{00846\ \}}
+
+\end{DoxyCode}
+
+
+References \doxymbox{\hyperlink{MyAssert_8h_source_l00094}{ASSERT}}, \doxymbox{\hyperlink{List_8cpp_source_l00061}{List\+\_\+t::\+elems}}, \doxymbox{\hyperlink{MyError_8h_source_l00061}{Get\+Error\+String()}}, \doxymbox{\hyperlink{List_8cpp_source_l00062}{List\+\_\+t::\+head}}, \doxymbox{\hyperlink{List_8cpp_source_l00848}{is\+Valid\+List\+Index()}}, \doxymbox{\hyperlink{List_8cpp_source_l00821}{List\+Delete()}}, \doxymbox{\hyperlink{List_8cpp_source_l00053}{List\+Elem\+\_\+t::\+next}}, \doxymbox{\hyperlink{MyError_8h_source_l00005}{OK}}, \doxymbox{\hyperlink{MyError_8h_source_l00008}{OUT\+\_\+\+OF\+\_\+\+RANGE}}, \doxymbox{\hyperlink{List_8cpp_source_l00054}{List\+Elem\+\_\+t::\+prev}}, \doxymbox{\hyperlink{List_8cpp_source_l00059}{List\+\_\+t::\+size}}, and \doxymbox{\hyperlink{List_8cpp_source_l00063}{List\+\_\+t::\+tail}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_a417f1a5b9114c8ab62d17e5fd3a55828}{Generate\+Dot\+File()}}, and \doxymbox{\hyperlink{List_8cpp_source_l00821}{List\+Delete()}}.
+
+\Hypertarget{List_8cpp_a2ac3b3a872cb35e740d8ec0d76ac5192}\index{List.cpp@{List.cpp}!ListDestroy@{ListDestroy}}
+\index{ListDestroy@{ListDestroy}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{ListDestroy()}{ListDestroy()}}
+{\footnotesize\ttfamily \label{List_8cpp_a2ac3b3a872cb35e740d8ec0d76ac5192} 
+void List\+Destroy (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structList__t}{List\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{ptr\+List}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00232}{232}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00232\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00233\ \ \ \ \ free(ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}});}
+\DoxyCodeLine{00234\ \ \ \ \ ptrList-\/>\doxymbox{\hyperlink{structList__t_afe8f830b955d3c0986a318315ed7e26f}{head}}\ =\ -\/1;}
+\DoxyCodeLine{00235\ \ \ \ \ ptrList-\/>\doxymbox{\hyperlink{structList__t_a4833bc1e7037ccfaecd04ee59a73021c}{tail}}\ =\ -\/1;}
+\DoxyCodeLine{00236\ \ \ \ \ ptrList-\/>\doxymbox{\hyperlink{structList__t_a32d7c5f32667a2ed93db83652748a126}{size}}\ =\ -\/1;}
+\DoxyCodeLine{00237\ \}}
+
+\end{DoxyCode}
+
+
+References \doxymbox{\hyperlink{List_8cpp_source_l00061}{List\+\_\+t::\+elems}}, \doxymbox{\hyperlink{List_8cpp_source_l00062}{List\+\_\+t::\+head}}, \doxymbox{\hyperlink{List_8cpp_source_l00232}{List\+Destroy()}}, \doxymbox{\hyperlink{List_8cpp_source_l00059}{List\+\_\+t::\+size}}, and \doxymbox{\hyperlink{List_8cpp_source_l00063}{List\+\_\+t::\+tail}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_a417f1a5b9114c8ab62d17e5fd3a55828}{Generate\+Dot\+File()}}, and \doxymbox{\hyperlink{List_8cpp_source_l00232}{List\+Destroy()}}.
+
+\Hypertarget{List_8cpp_a0fdfb7239a7861db9bc276f1eb56b536}\index{List.cpp@{List.cpp}!ListHtmlDump@{ListHtmlDump}}
+\index{ListHtmlDump@{ListHtmlDump}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{ListHtmlDump()}{ListHtmlDump()}}
+{\footnotesize\ttfamily \label{List_8cpp_a0fdfb7239a7861db9bc276f1eb56b536} 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} List\+Html\+Dump (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structList__t}{List\+\_\+t}}}]{list}{, }\item[{\doxymbox{\hyperlink{structSourceLocation}{Source\+Location}}}]{source\+Location}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00734}{734}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00734\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00735\ \ \ \ \ \doxymbox{\hyperlink{List_8cpp_a6859e439dc35b30d3e90dee32f5f6156}{ListVizDump}}(\ list,\ sourceLocation);}
+\DoxyCodeLine{00736\ \ \ \ \ \doxymbox{\hyperlink{List_8cpp_ae7e09f09df103da9371d33ffa22b1d67}{ListTextDump}}(list,\ sourceLocation);}
+\DoxyCodeLine{00737\ }
+\DoxyCodeLine{00738\ \ \ \ \ \textcolor{keywordtype}{char}*\ buffer\ =\ NULL;}
+\DoxyCodeLine{00739\ }
+\DoxyCodeLine{00740\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ bufferSize\ =\ 0;}
+\DoxyCodeLine{00741\ }
+\DoxyCodeLine{00742\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\_STATUSES}}\ GenerateHtmlFileErrorStatus\ =\ \doxymbox{\hyperlink{List_8cpp_a2674ad6410ad54121020776700b8b109}{GenerateHtmlFile}}(\&list,\ \&buffer,\ \&bufferSize,\ \doxymbox{\hyperlink{List_8cpp_ad560682c07cd940258e4dae98d78bbf9}{DUMP\_CNT}},\ sourceLocation);}
+\DoxyCodeLine{00743\ }
+\DoxyCodeLine{00744\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(GenerateHtmlFileErrorStatus\ ==\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(GenerateHtmlFileErrorStatus),}
+\DoxyCodeLine{00745\ \ \ \ \ \ \ \ \ \ \ \ GenerateHtmlFileErrorStatus);}
+\DoxyCodeLine{00746\ \ \ \ \ }
+\DoxyCodeLine{00747\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\_STATUSES}}\ WriteBufferToFileErrorStatus\ =\ \doxymbox{\hyperlink{List_8cpp_ad11955f002dbcc0c30ed8f5121df8237}{WriteBufferToFile}}(\doxymbox{\hyperlink{List_8cpp_a564b02d54ec424579607eda7e5d85655}{HtmlFilename}},\ buffer,\ bufferSize);}
+\DoxyCodeLine{00748\ }
+\DoxyCodeLine{00749\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(WriteBufferToFileErrorStatus\ ==\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(WriteBufferToFileErrorStatus),\ }
+\DoxyCodeLine{00750\ \ \ \ \ \ \ \ \ \ \ \ WriteBufferToFileErrorStatus);}
+\DoxyCodeLine{00751\ }
+\DoxyCodeLine{00752\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}};}
+\DoxyCodeLine{00753\ \}}
+
+\end{DoxyCode}
+
+
+References \doxymbox{\hyperlink{MyAssert_8h_source_l00094}{ASSERT}}, \doxymbox{\hyperlink{List_8cpp_source_l00026}{DUMP\+\_\+\+CNT}}, \doxymbox{\hyperlink{List_8cpp_source_l00439}{Generate\+Html\+File()}}, \doxymbox{\hyperlink{MyError_8h_source_l00061}{Get\+Error\+String()}}, \doxymbox{\hyperlink{List_8cpp_source_l00038}{Html\+Filename}}, \doxymbox{\hyperlink{List_8cpp_source_l00734}{List\+Html\+Dump()}}, \doxymbox{\hyperlink{List_8cpp_source_l00294}{List\+Text\+Dump()}}, \doxymbox{\hyperlink{List_8cpp_source_l00669}{List\+Viz\+Dump()}}, \doxymbox{\hyperlink{MyError_8h_source_l00005}{OK}}, and \doxymbox{\hyperlink{List_8cpp_source_l00178}{Write\+Buffer\+To\+File()}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_a417f1a5b9114c8ab62d17e5fd3a55828}{Generate\+Dot\+File()}}, \doxymbox{\hyperlink{List_8cpp_source_l00734}{List\+Html\+Dump()}}, and \doxymbox{\hyperlink{List_8cpp_source_l00101}{main()}}.
+
+\Hypertarget{List_8cpp_a20a9c20114cdeae7f64dfb497a36591f}\index{List.cpp@{List.cpp}!ListInit@{ListInit}}
+\index{ListInit@{ListInit}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{ListInit()}{ListInit()}}
+{\footnotesize\ttfamily \label{List_8cpp_a20a9c20114cdeae7f64dfb497a36591f} 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} List\+Init (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structList__t}{List\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{ptr\+List}{, }\item[{size\+\_\+t}]{\+\_\+capacity}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00201}{201}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00201\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00202\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrList\ !=\ NULL,\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}});}
+\DoxyCodeLine{00203\ }
+\DoxyCodeLine{00204\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrList-\/>\doxymbox{\hyperlink{structList__t_a32d7c5f32667a2ed93db83652748a126}{size}}\ \ \ \ \ ==\ 0,\ \ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa774131b3e4dfe3f57ab35303e6ee061}{BAD\_CLEAR\_INIT}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa774131b3e4dfe3f57ab35303e6ee061}{BAD\_CLEAR\_INIT}});}
+\DoxyCodeLine{00205\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrList-\/>\doxymbox{\hyperlink{structList__t_a4ad48150d3812a75a194a9f8b14f6cc7}{capacity}}\ ==\ 0,\ \ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa774131b3e4dfe3f57ab35303e6ee061}{BAD\_CLEAR\_INIT}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa774131b3e4dfe3f57ab35303e6ee061}{BAD\_CLEAR\_INIT}});}
+\DoxyCodeLine{00206\ }
+\DoxyCodeLine{00207\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrList-\/>\doxymbox{\hyperlink{structList__t_afe8f830b955d3c0986a318315ed7e26f}{head}}\ ==\ 0,\ \ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa774131b3e4dfe3f57ab35303e6ee061}{BAD\_CLEAR\_INIT}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa774131b3e4dfe3f57ab35303e6ee061}{BAD\_CLEAR\_INIT}});}
+\DoxyCodeLine{00208\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrList-\/>\doxymbox{\hyperlink{structList__t_a4833bc1e7037ccfaecd04ee59a73021c}{tail}}\ ==\ 0,\ \ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa774131b3e4dfe3f57ab35303e6ee061}{BAD\_CLEAR\_INIT}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa774131b3e4dfe3f57ab35303e6ee061}{BAD\_CLEAR\_INIT}});}
+\DoxyCodeLine{00209\ }
+\DoxyCodeLine{00210\ \ \ \ \ ptrList-\/>\doxymbox{\hyperlink{structList__t_a4ad48150d3812a75a194a9f8b14f6cc7}{capacity}}\ \ =\ \_capacity;}
+\DoxyCodeLine{00211\ \ \ \ \ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}\ =\ (\doxymbox{\hyperlink{structListElem__t}{ListElem\_t}}*)calloc(ptrList-\/>\doxymbox{\hyperlink{structList__t_a4ad48150d3812a75a194a9f8b14f6cc7}{capacity}},\ \textcolor{keyword}{sizeof}(ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[0]));\ }
+\DoxyCodeLine{00212\ }
+\DoxyCodeLine{00213\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}\ !=\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da}{NOT\_ENOUGH\_MEMORY}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da}{NOT\_ENOUGH\_MEMORY}});}
+\DoxyCodeLine{00214\ }
+\DoxyCodeLine{00215\ \ \ \ \ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[0]\ =\ \{\};}
+\DoxyCodeLine{00216\ }
+\DoxyCodeLine{00217\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 1;\ i\ <\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a4ad48150d3812a75a194a9f8b14f6cc7}{capacity}};\ i++)\ \{}
+\DoxyCodeLine{00218\ \ \ \ \ \ \ \ \ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[i].\doxymbox{\hyperlink{structListElem__t_a6f46b9f1a3fbd83bda61d3258b8fd28b}{info}}\ \ =\ 0;}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[i].\doxymbox{\hyperlink{structListElem__t_a6238c997f463b9777ad6c00a4706669a}{index}}\ =\ i;}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[i].\doxymbox{\hyperlink{structListElem__t_a780ed81ab54683b77faf1a8eb9228800}{prev}}\ \ =\ -\/1;}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[i].\doxymbox{\hyperlink{structListElem__t_af50bdaf6d31d50420af94bf8970b9858}{next}}\ \ =\ -\/1;}
+\DoxyCodeLine{00222\ \ \ \ \ \}}
+\DoxyCodeLine{00223\ }
+\DoxyCodeLine{00224\ \ \ \ \ ptrList-\/>\doxymbox{\hyperlink{structList__t_a32d7c5f32667a2ed93db83652748a126}{size}}\ =\ 1;}
+\DoxyCodeLine{00225\ }
+\DoxyCodeLine{00226\ \ \ \ \ ptrList-\/>\doxymbox{\hyperlink{structList__t_afe8f830b955d3c0986a318315ed7e26f}{head}}\ =\ 0;}
+\DoxyCodeLine{00227\ \ \ \ \ ptrList-\/>\doxymbox{\hyperlink{structList__t_a4833bc1e7037ccfaecd04ee59a73021c}{tail}}\ =\ 0;}
+\DoxyCodeLine{00228\ }
+\DoxyCodeLine{00229\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}};}
+\DoxyCodeLine{00230\ \}}
+
+\end{DoxyCode}
+
+
+References \doxymbox{\hyperlink{MyAssert_8h_source_l00094}{ASSERT}}, \doxymbox{\hyperlink{MyError_8h_source_l00012}{BAD\+\_\+\+CLEAR\+\_\+\+INIT}}, \doxymbox{\hyperlink{List_8cpp_source_l00060}{List\+\_\+t::\+capacity}}, \doxymbox{\hyperlink{List_8cpp_source_l00061}{List\+\_\+t::\+elems}}, \doxymbox{\hyperlink{MyError_8h_source_l00061}{Get\+Error\+String()}}, \doxymbox{\hyperlink{List_8cpp_source_l00062}{List\+\_\+t::\+head}}, \doxymbox{\hyperlink{List_8cpp_source_l00055}{List\+Elem\+\_\+t::\+index}}, \doxymbox{\hyperlink{List_8cpp_source_l00052}{List\+Elem\+\_\+t::\+info}}, \doxymbox{\hyperlink{List_8cpp_source_l00201}{List\+Init()}}, \doxymbox{\hyperlink{List_8cpp_source_l00053}{List\+Elem\+\_\+t::\+next}}, \doxymbox{\hyperlink{MyError_8h_source_l00010}{NOT\+\_\+\+ENOUGH\+\_\+\+MEMORY}}, \doxymbox{\hyperlink{MyError_8h_source_l00005}{OK}}, \doxymbox{\hyperlink{MyError_8h_source_l00008}{OUT\+\_\+\+OF\+\_\+\+RANGE}}, \doxymbox{\hyperlink{List_8cpp_source_l00054}{List\+Elem\+\_\+t::\+prev}}, \doxymbox{\hyperlink{List_8cpp_source_l00059}{List\+\_\+t::\+size}}, and \doxymbox{\hyperlink{List_8cpp_source_l00063}{List\+\_\+t::\+tail}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_a417f1a5b9114c8ab62d17e5fd3a55828}{Generate\+Dot\+File()}}, \doxymbox{\hyperlink{List_8cpp_source_l00201}{List\+Init()}}, and \doxymbox{\hyperlink{List_8cpp_source_l00101}{main()}}.
+
+\Hypertarget{List_8cpp_aabb4f5874197fdccec971dcfee3237f9}\index{List.cpp@{List.cpp}!ListInsert@{ListInsert}}
+\index{ListInsert@{ListInsert}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{ListInsert()}{ListInsert()}}
+{\footnotesize\ttfamily \label{List_8cpp_aabb4f5874197fdccec971dcfee3237f9} 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} List\+Insert (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structList__t}{List\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{ptr\+List}{, }\item[{int}]{insert\+Index}{, }\item[{int}]{value}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00773}{773}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00773\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00774\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrList\ !=\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}});}
+\DoxyCodeLine{00775\ }
+\DoxyCodeLine{00776\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(\doxymbox{\hyperlink{List_8cpp_a8504dec6697aaa82ab65287a2571a9da}{isValidListIndex}}(insIndex,\ 0,\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a32d7c5f32667a2ed93db83652748a126}{size}}),\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}});}
+\DoxyCodeLine{00777\ }
+\DoxyCodeLine{00778\ \ \ \ \ \textcolor{keywordflow}{if}\ (ptrList-\/>\doxymbox{\hyperlink{structList__t_a32d7c5f32667a2ed93db83652748a126}{size}}\ ==\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a4ad48150d3812a75a194a9f8b14f6cc7}{capacity}})\ \{}
+\DoxyCodeLine{00779\ \ \ \ \ \ \ \ \ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}\ =\ (\doxymbox{\hyperlink{structListElem__t}{ListElem\_t}}*)\ realloc(ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}},\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a4ad48150d3812a75a194a9f8b14f6cc7}{capacity}}\ *\ 2\ *\ \textcolor{keyword}{sizeof}(ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[0]));}
+\DoxyCodeLine{00780\ }
+\DoxyCodeLine{00781\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}\ !=\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da}{NOT\_ENOUGH\_MEMORY}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da}{NOT\_ENOUGH\_MEMORY}});}
+\DoxyCodeLine{00782\ }
+\DoxyCodeLine{00783\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a32d7c5f32667a2ed93db83652748a126}{size}};\ i\ <\ ptrList-\/>capacity\ *\ 2;\ i++)\ \{}
+\DoxyCodeLine{00784\ \ \ \ \ \ \ \ \ \ \ \ \ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[i].\doxymbox{\hyperlink{structListElem__t_a6238c997f463b9777ad6c00a4706669a}{index}}\ =\ i;}
+\DoxyCodeLine{00785\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00786\ }
+\DoxyCodeLine{00787\ \ \ \ \ \ \ \ \ ptrList-\/>\doxymbox{\hyperlink{structList__t_a4ad48150d3812a75a194a9f8b14f6cc7}{capacity}}\ *=\ 2;}
+\DoxyCodeLine{00788\ \ \ \ \ \}}
+\DoxyCodeLine{00789\ }
+\DoxyCodeLine{00790\ \ \ \ \ \textcolor{keywordtype}{int}\ curFree\ =\ -\/1;}
+\DoxyCodeLine{00791\ }
+\DoxyCodeLine{00792\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a32d7c5f32667a2ed93db83652748a126}{size}};\ i++)\ \{}
+\DoxyCodeLine{00793\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[i].\doxymbox{\hyperlink{structListElem__t_af50bdaf6d31d50420af94bf8970b9858}{next}}\ ==\ -\/1\ \&\&\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[i].\doxymbox{\hyperlink{structListElem__t_a780ed81ab54683b77faf1a8eb9228800}{prev}}\ ==\ -\/1)\ \{}
+\DoxyCodeLine{00794\ \ \ \ \ \ \ \ \ \ \ \ \ curFree\ =\ i;}
+\DoxyCodeLine{00795\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{break};}
+\DoxyCodeLine{00796\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00797\ \ \ \ \ \}}
+\DoxyCodeLine{00798\ }
+\DoxyCodeLine{00799\ \ \ \ \ \textcolor{keywordflow}{if}\ (curFree\ ==\ -\/1)\ \{}
+\DoxyCodeLine{00800\ \ \ \ \ \ \ \ \ curFree\ =\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a32d7c5f32667a2ed93db83652748a126}{size}};}
+\DoxyCodeLine{00801\ \ \ \ \ \}}
+\DoxyCodeLine{00802\ }
+\DoxyCodeLine{00803\ \ \ \ \ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[curFree].\doxymbox{\hyperlink{structListElem__t_a6f46b9f1a3fbd83bda61d3258b8fd28b}{info}}\ =\ value;}
+\DoxyCodeLine{00804\ }
+\DoxyCodeLine{00805\ \ \ \ \ ptrList-\/>\doxymbox{\hyperlink{structList__t_a32d7c5f32667a2ed93db83652748a126}{size}}++;}
+\DoxyCodeLine{00806\ }
+\DoxyCodeLine{00807\ \ \ \ \ \textcolor{keywordtype}{int}\ nextInd\ =\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[insIndex].\doxymbox{\hyperlink{structListElem__t_af50bdaf6d31d50420af94bf8970b9858}{next}};}
+\DoxyCodeLine{00808\ }
+\DoxyCodeLine{00809\ \ \ \ \ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[curFree].\doxymbox{\hyperlink{structListElem__t_af50bdaf6d31d50420af94bf8970b9858}{next}}\ =\ nextInd;}
+\DoxyCodeLine{00810\ \ \ \ \ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[nextInd].\doxymbox{\hyperlink{structListElem__t_a780ed81ab54683b77faf1a8eb9228800}{prev}}\ =\ curFree;}
+\DoxyCodeLine{00811\ }
+\DoxyCodeLine{00812\ \ \ \ \ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[curFree].\doxymbox{\hyperlink{structListElem__t_a780ed81ab54683b77faf1a8eb9228800}{prev}}\ =\ insIndex;}
+\DoxyCodeLine{00813\ \ \ \ \ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[insIndex].\doxymbox{\hyperlink{structListElem__t_af50bdaf6d31d50420af94bf8970b9858}{next}}\ =\ curFree;}
+\DoxyCodeLine{00814\ }
+\DoxyCodeLine{00815\ \ \ \ \ ptrList-\/>\doxymbox{\hyperlink{structList__t_afe8f830b955d3c0986a318315ed7e26f}{head}}\ =\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[0].\doxymbox{\hyperlink{structListElem__t_af50bdaf6d31d50420af94bf8970b9858}{next}};}
+\DoxyCodeLine{00816\ \ \ \ \ ptrList-\/>\doxymbox{\hyperlink{structList__t_a4833bc1e7037ccfaecd04ee59a73021c}{tail}}\ =\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[0].\doxymbox{\hyperlink{structListElem__t_a780ed81ab54683b77faf1a8eb9228800}{prev}};}
+\DoxyCodeLine{00817\ }
+\DoxyCodeLine{00818\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}};}
+\DoxyCodeLine{00819\ \}}
+
+\end{DoxyCode}
+
+
+References \doxymbox{\hyperlink{MyAssert_8h_source_l00094}{ASSERT}}, \doxymbox{\hyperlink{List_8cpp_source_l00060}{List\+\_\+t::\+capacity}}, \doxymbox{\hyperlink{List_8cpp_source_l00061}{List\+\_\+t::\+elems}}, \doxymbox{\hyperlink{MyError_8h_source_l00061}{Get\+Error\+String()}}, \doxymbox{\hyperlink{List_8cpp_source_l00062}{List\+\_\+t::\+head}}, \doxymbox{\hyperlink{List_8cpp_source_l00055}{List\+Elem\+\_\+t::\+index}}, \doxymbox{\hyperlink{List_8cpp_source_l00052}{List\+Elem\+\_\+t::\+info}}, \doxymbox{\hyperlink{List_8cpp_source_l00848}{is\+Valid\+List\+Index()}}, \doxymbox{\hyperlink{List_8cpp_source_l00773}{List\+Insert()}}, \doxymbox{\hyperlink{List_8cpp_source_l00053}{List\+Elem\+\_\+t::\+next}}, \doxymbox{\hyperlink{MyError_8h_source_l00010}{NOT\+\_\+\+ENOUGH\+\_\+\+MEMORY}}, \doxymbox{\hyperlink{MyError_8h_source_l00005}{OK}}, \doxymbox{\hyperlink{MyError_8h_source_l00008}{OUT\+\_\+\+OF\+\_\+\+RANGE}}, \doxymbox{\hyperlink{List_8cpp_source_l00054}{List\+Elem\+\_\+t::\+prev}}, \doxymbox{\hyperlink{List_8cpp_source_l00059}{List\+\_\+t::\+size}}, and \doxymbox{\hyperlink{List_8cpp_source_l00063}{List\+\_\+t::\+tail}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_a417f1a5b9114c8ab62d17e5fd3a55828}{Generate\+Dot\+File()}}, \doxymbox{\hyperlink{List_8cpp_source_l00773}{List\+Insert()}}, and \doxymbox{\hyperlink{List_8cpp_source_l00101}{main()}}.
+
+\Hypertarget{List_8cpp_ae7e09f09df103da9371d33ffa22b1d67}\index{List.cpp@{List.cpp}!ListTextDump@{ListTextDump}}
+\index{ListTextDump@{ListTextDump}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{ListTextDump()}{ListTextDump()}}
+{\footnotesize\ttfamily \label{List_8cpp_ae7e09f09df103da9371d33ffa22b1d67} 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} List\+Text\+Dump (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structList__t}{List\+\_\+t}}}]{list}{, }\item[{\doxymbox{\hyperlink{structSourceLocation}{Source\+Location}}}]{source\+Location}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00294}{294}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00294\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00295\ \ \ \ \ \doxymbox{\hyperlink{List_8cpp_a1550a93699407e315a6e672afe25f99d}{ListVerify}}(\&list);}
+\DoxyCodeLine{00296\ }
+\DoxyCodeLine{00297\ \ \ \ \ \textcolor{keywordtype}{char}*\ buffer\ =\ NULL;}
+\DoxyCodeLine{00298\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ bufferSize\ =\ 0;}
+\DoxyCodeLine{00299\ }
+\DoxyCodeLine{00300\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\_STATUSES}}\ GenerateTxtFileDumpErrorStatus\ =\ \doxymbox{\hyperlink{List_8cpp_a8d0eff6f4f4f88769fcfcb5f79d2bb22}{GenerateTxtFileDump}}(\&list,\ \&buffer,\ \&bufferSize,\ sourceLocation);}
+\DoxyCodeLine{00301\ }
+\DoxyCodeLine{00302\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(GenerateTxtFileDumpErrorStatus\ ==\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(GenerateTxtFileDumpErrorStatus),}
+\DoxyCodeLine{00303\ \ \ \ \ \ \ \ \ \ \ \ GenerateTxtFileDumpErrorStatus);}
+\DoxyCodeLine{00304\ }
+\DoxyCodeLine{00305\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\_STATUSES}}\ UnlinkFileErrorStatus\ =\ \doxymbox{\hyperlink{List_8cpp_ab218a0c2a19b865f184c97ba6357e0cf}{UnlinkFile}}(\doxymbox{\hyperlink{List_8cpp_adfb0271ebf9d7e844233467fea601d51}{TxtFilename}});}
+\DoxyCodeLine{00306\ }
+\DoxyCodeLine{00307\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(UnlinkFileErrorStatus\ ==\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(UnlinkFileErrorStatus),\ UnlinkFileErrorStatus);}
+\DoxyCodeLine{00308\ }
+\DoxyCodeLine{00309\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\_STATUSES}}\ WriteBufferToFileErrorStatus\ =\ \doxymbox{\hyperlink{List_8cpp_ad11955f002dbcc0c30ed8f5121df8237}{WriteBufferToFile}}(\doxymbox{\hyperlink{List_8cpp_adfb0271ebf9d7e844233467fea601d51}{TxtFilename}},\ buffer,\ bufferSize);}
+\DoxyCodeLine{00310\ }
+\DoxyCodeLine{00311\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(WriteBufferToFileErrorStatus\ ==\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(WriteBufferToFileErrorStatus),}
+\DoxyCodeLine{00312\ \ \ \ \ \ \ \ \ \ \ \ WriteBufferToFileErrorStatus);}
+\DoxyCodeLine{00313\ \ \ \ \ }
+\DoxyCodeLine{00314\ \ \ \ \ \doxymbox{\hyperlink{List_8cpp_a1bdd7c1369b250215a080e8421d4ecf3}{ON\_DEBUG}}(\doxymbox{\hyperlink{List_8cpp_a1550a93699407e315a6e672afe25f99d}{ListVerify}}(\&list);)}
+\DoxyCodeLine{00315\ }
+\DoxyCodeLine{00316\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}};}
+\DoxyCodeLine{00317\ \}}
+
+\end{DoxyCode}
+
+
+References \doxymbox{\hyperlink{MyAssert_8h_source_l00094}{ASSERT}}, \doxymbox{\hyperlink{List_8cpp_source_l00538}{Generate\+Txt\+File\+Dump()}}, \doxymbox{\hyperlink{MyError_8h_source_l00061}{Get\+Error\+String()}}, \doxymbox{\hyperlink{List_8cpp_source_l00294}{List\+Text\+Dump()}}, \doxymbox{\hyperlink{List_8cpp_source_l00239}{List\+Verify()}}, \doxymbox{\hyperlink{MyError_8h_source_l00005}{OK}}, \doxymbox{\hyperlink{List_8cpp_source_l00007}{ON\+\_\+\+DEBUG}}, \doxymbox{\hyperlink{List_8cpp_source_l00043}{Txt\+Filename}}, \doxymbox{\hyperlink{List_8cpp_source_l00164}{Unlink\+File()}}, and \doxymbox{\hyperlink{List_8cpp_source_l00178}{Write\+Buffer\+To\+File()}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_a417f1a5b9114c8ab62d17e5fd3a55828}{Generate\+Dot\+File()}}, \doxymbox{\hyperlink{List_8cpp_source_l00734}{List\+Html\+Dump()}}, and \doxymbox{\hyperlink{List_8cpp_source_l00294}{List\+Text\+Dump()}}.
+
+\Hypertarget{List_8cpp_a1550a93699407e315a6e672afe25f99d}\index{List.cpp@{List.cpp}!ListVerify@{ListVerify}}
+\index{ListVerify@{ListVerify}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{ListVerify()}{ListVerify()}}
+{\footnotesize\ttfamily \label{List_8cpp_a1550a93699407e315a6e672afe25f99d} 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} List\+Verify (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structList__t}{List\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{ptr\+List}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00239}{239}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00240\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrList\ !=\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}});}
+\DoxyCodeLine{00241\ }
+\DoxyCodeLine{00242\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrList-\/>\doxymbox{\hyperlink{structList__t_a32d7c5f32667a2ed93db83652748a126}{size}}\ >\ 0,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daad5bc668f6eaf06f9b0c6e5b047262590}{BAD\_LIST\_SIZE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daad5bc668f6eaf06f9b0c6e5b047262590}{BAD\_LIST\_SIZE}});}
+\DoxyCodeLine{00243\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrList-\/>\doxymbox{\hyperlink{structList__t_a4ad48150d3812a75a194a9f8b14f6cc7}{capacity}}\ >\ 0,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daad5bc668f6eaf06f9b0c6e5b047262590}{BAD\_LIST\_SIZE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daad5bc668f6eaf06f9b0c6e5b047262590}{BAD\_LIST\_SIZE}});}
+\DoxyCodeLine{00244\ }
+\DoxyCodeLine{00245\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrList-\/>\doxymbox{\hyperlink{structList__t_a32d7c5f32667a2ed93db83652748a126}{size}}\ <=\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a4ad48150d3812a75a194a9f8b14f6cc7}{capacity}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa622c49d236b887dd9800acf392f26d9c}{LIST\_CAP\_SIZE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa622c49d236b887dd9800acf392f26d9c}{LIST\_CAP\_SIZE}});}
+\DoxyCodeLine{00246\ }
+\DoxyCodeLine{00247\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(\doxymbox{\hyperlink{List_8cpp_a8504dec6697aaa82ab65287a2571a9da}{isValidListIndex}}(ptrList-\/>\doxymbox{\hyperlink{structList__t_afe8f830b955d3c0986a318315ed7e26f}{head}},\ 0,\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a32d7c5f32667a2ed93db83652748a126}{size}}),\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3ab0032710d38b54854aaba62094dfca}{BAD\_LIST\_HEAD}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3ab0032710d38b54854aaba62094dfca}{BAD\_LIST\_HEAD}});}
+\DoxyCodeLine{00248\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(\doxymbox{\hyperlink{List_8cpp_a8504dec6697aaa82ab65287a2571a9da}{isValidListIndex}}(ptrList-\/>\doxymbox{\hyperlink{structList__t_a4833bc1e7037ccfaecd04ee59a73021c}{tail}},\ 0,\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a32d7c5f32667a2ed93db83652748a126}{size}})\ >\ 0,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2ae11512a515975908c3eb00e08bfdc0}{BAD\_LIST\_TAIL}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2ae11512a515975908c3eb00e08bfdc0}{BAD\_LIST\_TAIL}});}
+\DoxyCodeLine{00249\ }
+\DoxyCodeLine{00250\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}\ !=\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}});}
+\DoxyCodeLine{00251\ }
+\DoxyCodeLine{00252\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[0].\doxymbox{\hyperlink{structListElem__t_a6f46b9f1a3fbd83bda61d3258b8fd28b}{info}}\ ==\ 0,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daafcf12481844481a0a75ee320b58247d8}{BAD\_LIST\_ZERO\_ELEM}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daafcf12481844481a0a75ee320b58247d8}{BAD\_LIST\_ZERO\_ELEM}});}
+\DoxyCodeLine{00253\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[0].\doxymbox{\hyperlink{structListElem__t_a780ed81ab54683b77faf1a8eb9228800}{prev}}\ ==\ 0,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daafcf12481844481a0a75ee320b58247d8}{BAD\_LIST\_ZERO\_ELEM}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daafcf12481844481a0a75ee320b58247d8}{BAD\_LIST\_ZERO\_ELEM}});}
+\DoxyCodeLine{00254\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[0].\doxymbox{\hyperlink{structListElem__t_af50bdaf6d31d50420af94bf8970b9858}{next}}\ ==\ 0,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daafcf12481844481a0a75ee320b58247d8}{BAD\_LIST\_ZERO\_ELEM}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daafcf12481844481a0a75ee320b58247d8}{BAD\_LIST\_ZERO\_ELEM}});}
+\DoxyCodeLine{00255\ }
+\DoxyCodeLine{00256\ \ \ \ \ }
+\DoxyCodeLine{00257\ \ \ \ \ \textcolor{keywordtype}{bool}*\ visited\ =\ (\textcolor{keywordtype}{bool}*)calloc(ptrList-\/>\doxymbox{\hyperlink{structList__t_a32d7c5f32667a2ed93db83652748a126}{size}},\ \textcolor{keyword}{sizeof}(visited[0]));}
+\DoxyCodeLine{00258\ }
+\DoxyCodeLine{00259\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(visited\ !=\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da}{NOT\_ENOUGH\_MEMORY}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da}{NOT\_ENOUGH\_MEMORY}});}
+\DoxyCodeLine{00260\ }
+\DoxyCodeLine{00261\ \ \ \ \ \textcolor{keywordtype}{int}\ curInd\ =\ ptrList-\/>\doxymbox{\hyperlink{structList__t_afe8f830b955d3c0986a318315ed7e26f}{head}};}
+\DoxyCodeLine{00262\ }
+\DoxyCodeLine{00263\ \ \ \ \ \textcolor{keywordflow}{while}\ (curInd\ !=\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a4833bc1e7037ccfaecd04ee59a73021c}{tail}})\ \{}
+\DoxyCodeLine{00264\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(\doxymbox{\hyperlink{List_8cpp_a8504dec6697aaa82ab65287a2571a9da}{isValidListIndex}}(curInd,\ 0,\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a32d7c5f32667a2ed93db83652748a126}{size}}),\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}});}
+\DoxyCodeLine{00265\ }
+\DoxyCodeLine{00266\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{if}\ (visited[curInd])\ \{}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(\textcolor{keyword}{false},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa58ea37b2d13cd49c2072c5a946a58d5a}{LIST\_CYCLE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa58ea37b2d13cd49c2072c5a946a58d5a}{LIST\_CYCLE}});}
+\DoxyCodeLine{00268\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00269\ }
+\DoxyCodeLine{00270\ \ \ \ \ \ \ \ \ visited[curInd]\ =\ \textcolor{keyword}{true};}
+\DoxyCodeLine{00271\ }
+\DoxyCodeLine{00272\ \ \ \ \ \ \ \ \ curInd\ =\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a17cf0e3b8d1ce853c883f00c4f207754}{elems}}[curInd].\doxymbox{\hyperlink{structListElem__t_af50bdaf6d31d50420af94bf8970b9858}{next}};}
+\DoxyCodeLine{00273\ \ \ \ \ \}}
+\DoxyCodeLine{00274\ }
+\DoxyCodeLine{00275\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ ptrList-\/>\doxymbox{\hyperlink{structList__t_a32d7c5f32667a2ed93db83652748a126}{size}};\ i++)\ \{}
+\DoxyCodeLine{00276\ \ \ \ \ \ \ \ \ visited[i]\ =\ \textcolor{keyword}{false};}
+\DoxyCodeLine{00277\ \ \ \ \ \}}
+\DoxyCodeLine{00278\ }
+\DoxyCodeLine{00279\ \ \ \ \ \textcolor{comment}{//\ while\ (curInd\ !=\ ptrList-\/>\ head)\ \{}}
+\DoxyCodeLine{00280\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ ASSERT(isValidListIndex(curInd,\ 0,\ ptrList-\/>size),\ GetErrorString(OUT\_OF\_RANGE),\ OUT\_OF\_RANGE);}}
+\DoxyCodeLine{00281\ }
+\DoxyCodeLine{00282\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ if\ (visited[curInd])\ \{}}
+\DoxyCodeLine{00283\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ ASSERT(false,\ GetErrorString(LIST\_CYCLE),\ LIST\_CYCLE);}}
+\DoxyCodeLine{00284\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \}}}
+\DoxyCodeLine{00285\ }
+\DoxyCodeLine{00286\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ visited[curInd]\ =\ true;}}
+\DoxyCodeLine{00287\ }
+\DoxyCodeLine{00288\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ curInd\ =\ ptrList-\/>elems[curInd].prev;}}
+\DoxyCodeLine{00289\ \ \ \ \ \textcolor{comment}{//\ \}}}
+\DoxyCodeLine{00290\ }
+\DoxyCodeLine{00291\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}};}
+\DoxyCodeLine{00292\ \}}
+
+\end{DoxyCode}
+
+
+References \doxymbox{\hyperlink{MyAssert_8h_source_l00094}{ASSERT}}, \doxymbox{\hyperlink{MyError_8h_source_l00052}{BAD\+\_\+\+LIST\+\_\+\+HEAD}}, \doxymbox{\hyperlink{MyError_8h_source_l00050}{BAD\+\_\+\+LIST\+\_\+\+SIZE}}, \doxymbox{\hyperlink{MyError_8h_source_l00053}{BAD\+\_\+\+LIST\+\_\+\+TAIL}}, \doxymbox{\hyperlink{MyError_8h_source_l00054}{BAD\+\_\+\+LIST\+\_\+\+ZERO\+\_\+\+ELEM}}, \doxymbox{\hyperlink{List_8cpp_source_l00060}{List\+\_\+t::\+capacity}}, \doxymbox{\hyperlink{List_8cpp_source_l00061}{List\+\_\+t::\+elems}}, \doxymbox{\hyperlink{MyError_8h_source_l00061}{Get\+Error\+String()}}, \doxymbox{\hyperlink{List_8cpp_source_l00062}{List\+\_\+t::\+head}}, \doxymbox{\hyperlink{List_8cpp_source_l00052}{List\+Elem\+\_\+t::\+info}}, \doxymbox{\hyperlink{List_8cpp_source_l00848}{is\+Valid\+List\+Index()}}, \doxymbox{\hyperlink{MyError_8h_source_l00051}{LIST\+\_\+\+CAP\+\_\+\+SIZE}}, \doxymbox{\hyperlink{MyError_8h_source_l00055}{LIST\+\_\+\+CYCLE}}, \doxymbox{\hyperlink{List_8cpp_source_l00239}{List\+Verify()}}, \doxymbox{\hyperlink{List_8cpp_source_l00053}{List\+Elem\+\_\+t::\+next}}, \doxymbox{\hyperlink{MyError_8h_source_l00010}{NOT\+\_\+\+ENOUGH\+\_\+\+MEMORY}}, \doxymbox{\hyperlink{MyError_8h_source_l00005}{OK}}, \doxymbox{\hyperlink{MyError_8h_source_l00008}{OUT\+\_\+\+OF\+\_\+\+RANGE}}, \doxymbox{\hyperlink{List_8cpp_source_l00054}{List\+Elem\+\_\+t::\+prev}}, \doxymbox{\hyperlink{List_8cpp_source_l00059}{List\+\_\+t::\+size}}, and \doxymbox{\hyperlink{List_8cpp_source_l00063}{List\+\_\+t::\+tail}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_a417f1a5b9114c8ab62d17e5fd3a55828}{Generate\+Dot\+File()}}, \doxymbox{\hyperlink{List_8cpp_source_l00538}{Generate\+Txt\+File\+Dump()}}, \doxymbox{\hyperlink{List_8cpp_source_l00294}{List\+Text\+Dump()}}, \doxymbox{\hyperlink{List_8cpp_source_l00239}{List\+Verify()}}, and \doxymbox{\hyperlink{List_8cpp_source_l00669}{List\+Viz\+Dump()}}.
+
+\Hypertarget{List_8cpp_a6859e439dc35b30d3e90dee32f5f6156}\index{List.cpp@{List.cpp}!ListVizDump@{ListVizDump}}
+\index{ListVizDump@{ListVizDump}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{ListVizDump()}{ListVizDump()}}
+{\footnotesize\ttfamily \label{List_8cpp_a6859e439dc35b30d3e90dee32f5f6156} 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} List\+Viz\+Dump (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structList__t}{List\+\_\+t}}}]{list}{, }\item[{\doxymbox{\hyperlink{structSourceLocation}{Source\+Location}}}]{source\+Location}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00669}{669}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00669\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00670\ \ \ \ \ \doxymbox{\hyperlink{List_8cpp_a1550a93699407e315a6e672afe25f99d}{ListVerify}}(\&list);}
+\DoxyCodeLine{00671\ }
+\DoxyCodeLine{00672\ \ \ \ \ \textcolor{keywordtype}{char}*\ buffer\ =\ NULL;}
+\DoxyCodeLine{00673\ }
+\DoxyCodeLine{00674\ \ \ \ \ \textcolor{keywordtype}{int}\ bufferSize\ =\ 0;}
+\DoxyCodeLine{00675\ }
+\DoxyCodeLine{00676\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\_STATUSES}}\ GenerateDotFileErrorStatus\ =\ \doxymbox{\hyperlink{List_8cpp_a417f1a5b9114c8ab62d17e5fd3a55828}{GenerateDotFile}}(\&list,\ \&buffer,\ \&bufferSize);}
+\DoxyCodeLine{00677\ }
+\DoxyCodeLine{00678\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(GenerateDotFileErrorStatus\ ==\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(GenerateDotFileErrorStatus),}
+\DoxyCodeLine{00679\ \ \ \ \ \ \ \ \ \ \ \ GenerateDotFileErrorStatus);}
+\DoxyCodeLine{00680\ }
+\DoxyCodeLine{00681\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\_STATUSES}}\ UnlinkDotFileErrorStatus\ =\ \doxymbox{\hyperlink{List_8cpp_ab218a0c2a19b865f184c97ba6357e0cf}{UnlinkFile}}(\doxymbox{\hyperlink{List_8cpp_aa487ee14964fd569fb6fc4201f961fa1}{DotFilename}});}
+\DoxyCodeLine{00682\ }
+\DoxyCodeLine{00683\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(UnlinkDotFileErrorStatus\ ==\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(UnlinkDotFileErrorStatus),\ UnlinkDotFileErrorStatus);}
+\DoxyCodeLine{00684\ }
+\DoxyCodeLine{00685\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\_STATUSES}}\ WriteBufferToDotFileErrorStatus\ =\ \doxymbox{\hyperlink{List_8cpp_ad11955f002dbcc0c30ed8f5121df8237}{WriteBufferToFile}}(\doxymbox{\hyperlink{List_8cpp_aa487ee14964fd569fb6fc4201f961fa1}{DotFilename}},\ buffer,\ bufferSize);}
+\DoxyCodeLine{00686\ }
+\DoxyCodeLine{00687\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(WriteBufferToDotFileErrorStatus\ ==\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(WriteBufferToDotFileErrorStatus),}
+\DoxyCodeLine{00688\ \ \ \ \ \ \ \ \ \ \ \ WriteBufferToDotFileErrorStatus);}
+\DoxyCodeLine{00689\ }
+\DoxyCodeLine{00690\ \ \ \ \ \textcolor{keywordtype}{char}*\ dotCallLine\ =\ (\textcolor{keywordtype}{char}*)\ calloc(strlen(\doxymbox{\hyperlink{List_8cpp_a1aa1cc38e4ac74e47e619f7749ecec32}{DotSystemCallTemplate}})\ +\ \doxymbox{\hyperlink{List_8cpp_a76de2b299ceba83da7fb010e6d5ba11e}{MaxFilenameLen}},\ }
+\DoxyCodeLine{00691\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keyword}{sizeof}(dotCallLine[0]));}
+\DoxyCodeLine{00692\ \ \ \ \ }
+\DoxyCodeLine{00693\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(dotCallLine\ !=\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da}{NOT\_ENOUGH\_MEMORY}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da}{NOT\_ENOUGH\_MEMORY}});}
+\DoxyCodeLine{00694\ \ \ \ \ }
+\DoxyCodeLine{00695\ \ \ \ \ \textcolor{keywordtype}{int}\ dotCallLineInd\ =\ 0;}
+\DoxyCodeLine{00696\ }
+\DoxyCodeLine{00697\ \ \ \ \ strcpy(dotCallLine\ +\ dotCallLineInd,\ \doxymbox{\hyperlink{List_8cpp_a1aa1cc38e4ac74e47e619f7749ecec32}{DotSystemCallTemplate}});}
+\DoxyCodeLine{00698\ \ \ \ \ dotCallLineInd\ +=\ strlen(\doxymbox{\hyperlink{List_8cpp_a1aa1cc38e4ac74e47e619f7749ecec32}{DotSystemCallTemplate}});}
+\DoxyCodeLine{00699\ }
+\DoxyCodeLine{00700\ \ \ \ \ \textcolor{keywordtype}{char}*\ curDumpFilename\ =\ NULL;}
+\DoxyCodeLine{00701\ }
+\DoxyCodeLine{00702\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\_STATUSES}}\ GenerateDumpFilenameErrorStatus\ =\ \doxymbox{\hyperlink{List_8cpp_a4999d30cc75d83932171a581a9435aba}{GenerateDumpFilename}}(\&curDumpFilename);}
+\DoxyCodeLine{00703\ \ \ \ \ }
+\DoxyCodeLine{00704\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(GenerateDumpFilenameErrorStatus\ ==\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(GenerateDumpFilenameErrorStatus),\ }
+\DoxyCodeLine{00705\ \ \ \ \ \ \ \ \ \ \ \ GenerateDumpFilenameErrorStatus);}
+\DoxyCodeLine{00706\ \ \ \ \ }
+\DoxyCodeLine{00707\ \ \ \ \ \doxymbox{\hyperlink{List_8cpp_a1bdd7c1369b250215a080e8421d4ecf3}{ON\_DEBUG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}dump\ filename:\ <\%s>\(\backslash\)n"{}},\ curDumpFilename);)}
+\DoxyCodeLine{00708\ }
+\DoxyCodeLine{00709\ \ \ \ \ strcpy(dotCallLine\ +\ dotCallLineInd,\ curDumpFilename);}
+\DoxyCodeLine{00710\ \ \ \ \ dotCallLineInd\ +=\ strlen(curDumpFilename);}
+\DoxyCodeLine{00711\ }
+\DoxyCodeLine{00712\ \ \ \ \ \doxymbox{\hyperlink{List_8cpp_a1bdd7c1369b250215a080e8421d4ecf3}{ON\_DEBUG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}dotCallLineInd:\ <\%s>\(\backslash\)n"{}},\ dotCallLine);)}
+\DoxyCodeLine{00713\ }
+\DoxyCodeLine{00714\ \ \ \ \ \textcolor{keywordtype}{int}\ SystemCallErrorStatus\ =\ system(dotCallLine);}
+\DoxyCodeLine{00715\ }
+\DoxyCodeLine{00716\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(SystemCallErrorStatus\ ==\ 0,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa049aced892f12e8b73e3ba4a408dc1a8}{SYSTEM\_CALL\_ERROR}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa049aced892f12e8b73e3ba4a408dc1a8}{SYSTEM\_CALL\_ERROR}});}
+\DoxyCodeLine{00717\ }
+\DoxyCodeLine{00718\ \ \ \ \ \textcolor{comment}{//\ LOG(fprintf(stderr,\ "{}\(\backslash\)n-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\(\backslash\)n"{});)}}
+\DoxyCodeLine{00719\ \ \ \ \ \textcolor{comment}{//\ LOG(fprintf(stderr,\ "{}(ListTextDump):\ Starting...\(\backslash\)n"{});)}}
+\DoxyCodeLine{00720\ }
+\DoxyCodeLine{00721\ \ \ \ \ \textcolor{comment}{//\ LOG(fprintf(stderr,\ "{}List\_t\ <\%s>\ [\%p]\ \%s\ at\ \%s\ \{\(\backslash\)n"{},}}
+\DoxyCodeLine{00722\ \ \ \ \ \textcolor{comment}{//\ \ \ \ \ \ \ \ \ \ \ \ \ sourceLocation.name,\ \&list,\ sourceLocation.function,\ sourceLocation.file);)\ \ //\ \ TODO\ make\ STRINGIFY}}
+\DoxyCodeLine{00723\ }
+\DoxyCodeLine{00724\ \ \ \ \ \textcolor{comment}{//\ LOG(fprintf(stderr,\ "{}size\ \ \ \ \ =\ \%zu\(\backslash\)n"{},\ list.size);)}}
+\DoxyCodeLine{00725\ \ \ \ \ \textcolor{comment}{//\ LOG(fprintf(stderr,\ "{}capacity\ =\ \%zu\(\backslash\)n"{},\ list.capacity);)}}
+\DoxyCodeLine{00726\ }
+\DoxyCodeLine{00727\ \ \ \ \ \textcolor{comment}{//\ LOG(fprintf(stderr,\ "{}head\ =\ \%i\(\backslash\)n"{},\ \ list.head);)}}
+\DoxyCodeLine{00728\ \ \ \ \ \textcolor{comment}{//\ LOG(fprintf(stderr,\ "{}tail\ =\ \%i\(\backslash\)n"{},\ \ list.tail);)}}
+\DoxyCodeLine{00729\ \ \ \ \ }
+\DoxyCodeLine{00730\ }
+\DoxyCodeLine{00731\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}};}
+\DoxyCodeLine{00732\ \}}
+
+\end{DoxyCode}
+
+
+References \doxymbox{\hyperlink{MyAssert_8h_source_l00094}{ASSERT}}, \doxymbox{\hyperlink{List_8cpp_source_l00034}{Dot\+Filename}}, \doxymbox{\hyperlink{List_8cpp_source_l00049}{Dot\+System\+Call\+Template}}, \doxymbox{\hyperlink{List_8cpp_a417f1a5b9114c8ab62d17e5fd3a55828}{Generate\+Dot\+File()}}, \doxymbox{\hyperlink{List_8cpp_source_l00406}{Generate\+Dump\+Filename()}}, \doxymbox{\hyperlink{MyError_8h_source_l00061}{Get\+Error\+String()}}, \doxymbox{\hyperlink{List_8cpp_source_l00239}{List\+Verify()}}, \doxymbox{\hyperlink{List_8cpp_source_l00669}{List\+Viz\+Dump()}}, \doxymbox{\hyperlink{List_8cpp_source_l00028}{Max\+Filename\+Len}}, \doxymbox{\hyperlink{MyError_8h_source_l00010}{NOT\+\_\+\+ENOUGH\+\_\+\+MEMORY}}, \doxymbox{\hyperlink{MyError_8h_source_l00005}{OK}}, \doxymbox{\hyperlink{List_8cpp_source_l00007}{ON\+\_\+\+DEBUG}}, \doxymbox{\hyperlink{MyError_8h_source_l00056}{SYSTEM\+\_\+\+CALL\+\_\+\+ERROR}}, \doxymbox{\hyperlink{List_8cpp_source_l00164}{Unlink\+File()}}, and \doxymbox{\hyperlink{List_8cpp_source_l00178}{Write\+Buffer\+To\+File()}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_a417f1a5b9114c8ab62d17e5fd3a55828}{Generate\+Dot\+File()}}, \doxymbox{\hyperlink{List_8cpp_source_l00734}{List\+Html\+Dump()}}, and \doxymbox{\hyperlink{List_8cpp_source_l00669}{List\+Viz\+Dump()}}.
+
+\Hypertarget{List_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4}\index{List.cpp@{List.cpp}!main@{main}}
+\index{main@{main}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily \label{List_8cpp_ae66f6b31b5ad750f1fe042a706a4e3d4} 
+int main (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00101}{101}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00101\ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00102\ \ \ \ \ \doxymbox{\hyperlink{structList__t}{List\_t}}\ list\ =\ \{\};}
+\DoxyCodeLine{00103\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ listCapacity\ =\ 2;}
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \ \ \ \ \doxymbox{\hyperlink{List_8cpp_a20a9c20114cdeae7f64dfb497a36591f}{ListInit}}(\&list,\ listCapacity);}
+\DoxyCodeLine{00106\ }
+\DoxyCodeLine{00107\ \ \ \ \ \doxymbox{\hyperlink{List_8cpp_aabb4f5874197fdccec971dcfee3237f9}{ListInsert}}(\&list,\ 0,\ 100);}
+\DoxyCodeLine{00108\ \ \ \ \ \textcolor{comment}{//\ ListInsert(\&list,\ 0,\ 2);}}
+\DoxyCodeLine{00109\ \ \ \ \ \doxymbox{\hyperlink{List_8cpp_aabb4f5874197fdccec971dcfee3237f9}{ListInsert}}(\&list,\ 0,\ 150);}
+\DoxyCodeLine{00110\ }
+\DoxyCodeLine{00111\ \ \ \ \ \doxymbox{\hyperlink{structSourceLocation}{SourceLocation}}\ sourceLocation1\ =\ \{\};}
+\DoxyCodeLine{00112\ \ \ \ \ \doxymbox{\hyperlink{List_8cpp_aff44bdb7611a5f354b42b78f080e8112}{GET\_SOURCE\_LOCATION}}(sourceLocation1,\ list)}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ \ \ \ \ \doxymbox{\hyperlink{List_8cpp_a0fdfb7239a7861db9bc276f1eb56b536}{ListHtmlDump}}(list,\ sourceLocation1);}
+\DoxyCodeLine{00115\ }
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{comment}{//\ ListDelete(\&list,\ 2);}}
+\DoxyCodeLine{00117\ }
+\DoxyCodeLine{00118\ \ \ \ \ \textcolor{comment}{//\ SourceLocation\ sourceLocation2\ =\ \{\};}}
+\DoxyCodeLine{00119\ \ \ \ \ \textcolor{comment}{//\ GET\_SOURCE\_LOCATION(sourceLocation2,\ list)}}
+\DoxyCodeLine{00120\ }
+\DoxyCodeLine{00121\ \ \ \ \ \textcolor{comment}{//\ ListVizDump(list,\ sourceLocation2);}}
+\DoxyCodeLine{00122\ }
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{keywordflow}{return}\ 0;}
+\DoxyCodeLine{00125\ \}}
+
+\end{DoxyCode}
+
+
+References \doxymbox{\hyperlink{List_8cpp_source_l00012}{GET\+\_\+\+SOURCE\+\_\+\+LOCATION}}, \doxymbox{\hyperlink{List_8cpp_source_l00734}{List\+Html\+Dump()}}, \doxymbox{\hyperlink{List_8cpp_source_l00201}{List\+Init()}}, \doxymbox{\hyperlink{List_8cpp_source_l00773}{List\+Insert()}}, and \doxymbox{\hyperlink{List_8cpp_source_l00101}{main()}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_source_l00101}{main()}}.
+
+\Hypertarget{List_8cpp_a724f451794731a69e1d469668c6d48f1}\index{List.cpp@{List.cpp}!NumLen@{NumLen}}
+\index{NumLen@{NumLen}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{NumLen()}{NumLen()}}
+{\footnotesize\ttfamily \label{List_8cpp_a724f451794731a69e1d469668c6d48f1} 
+int Num\+Len (\begin{DoxyParamCaption}\item[{int}]{num}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00755}{755}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00755\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00756\ \ \ \ \ \textcolor{keywordflow}{if}\ (num\ ==\ 0)\ \{}
+\DoxyCodeLine{00757\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ 1;}
+\DoxyCodeLine{00758\ \ \ \ \ \}}
+\DoxyCodeLine{00759\ }
+\DoxyCodeLine{00760\ \ \ \ \ \textcolor{keywordtype}{int}\ res\ =\ 0;}
+\DoxyCodeLine{00761\ }
+\DoxyCodeLine{00762\ \ \ \ \ \textcolor{keywordflow}{if}\ (num\ <\ 0)\ \{}
+\DoxyCodeLine{00763\ \ \ \ \ \ \ \ \ res++;}
+\DoxyCodeLine{00764\ \ \ \ \ \ \ \ \ num\ *=\ -\/1;}
+\DoxyCodeLine{00765\ \ \ \ \ \}}
+\DoxyCodeLine{00766\ }
+\DoxyCodeLine{00767\ \ \ \ \ res\ +=\ log10(num)\ +\ 1;}
+\DoxyCodeLine{00768\ \ \ \ \ }
+\DoxyCodeLine{00769\ \ \ \ \ \doxymbox{\hyperlink{List_8cpp_a1bdd7c1369b250215a080e8421d4ecf3}{ON\_DEBUG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}(NumLen)\ \%i\ has\ len\ \%i\(\backslash\)n"{}},\ num,\ res\ );)}
+\DoxyCodeLine{00770\ \ \ \ \ \textcolor{keywordflow}{return}\ res;}
+\DoxyCodeLine{00771\ \}}
+
+\end{DoxyCode}
+
+
+References \doxymbox{\hyperlink{List_8cpp_source_l00755}{Num\+Len()}}, and \doxymbox{\hyperlink{List_8cpp_source_l00007}{ON\+\_\+\+DEBUG}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_source_l00319}{Generate\+Dot\+File()}}, \doxymbox{\hyperlink{List_8cpp_a417f1a5b9114c8ab62d17e5fd3a55828}{Generate\+Dot\+File()}}, and \doxymbox{\hyperlink{List_8cpp_source_l00755}{Num\+Len()}}.
+
+\Hypertarget{List_8cpp_ab218a0c2a19b865f184c97ba6357e0cf}\index{List.cpp@{List.cpp}!UnlinkFile@{UnlinkFile}}
+\index{UnlinkFile@{UnlinkFile}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{UnlinkFile()}{UnlinkFile()}}
+{\footnotesize\ttfamily \label{List_8cpp_ab218a0c2a19b865f184c97ba6357e0cf} 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} Unlink\+File (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{filename}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00164}{164}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00164\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00165\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(filename\ !=\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}});}
+\DoxyCodeLine{00166\ }
+\DoxyCodeLine{00167\ \ \ \ \ \textcolor{keywordtype}{int}\ fileDesc\ =\ open(filename,\ O\_WRONLY\ |\ O\_CREAT,\ S\_IRWXU);\ \textcolor{comment}{//\ \ unlink}}
+\DoxyCodeLine{00168\ }
+\DoxyCodeLine{00169\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(fileDesc\ >=\ 0,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa1544e711bac79f5a2bdfc5481e1f8fb3}{FILE\_ACCESS\_DENIED}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa1544e711bac79f5a2bdfc5481e1f8fb3}{FILE\_ACCESS\_DENIED}});}
+\DoxyCodeLine{00170\ \ \ \ \ }
+\DoxyCodeLine{00171\ \ \ \ \ ftruncate(fileDesc,\ 0);}
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00173\ \ \ \ \ close(fileDesc);}
+\DoxyCodeLine{00174\ }
+\DoxyCodeLine{00175\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}};}
+\DoxyCodeLine{00176\ \}}
+
+\end{DoxyCode}
+
+
+References \doxymbox{\hyperlink{MyAssert_8h_source_l00094}{ASSERT}}, \doxymbox{\hyperlink{MyError_8h_source_l00006}{FILE\+\_\+\+ACCESS\+\_\+\+DENIED}}, \doxymbox{\hyperlink{MyError_8h_source_l00061}{Get\+Error\+String()}}, \doxymbox{\hyperlink{MyError_8h_source_l00005}{OK}}, \doxymbox{\hyperlink{MyError_8h_source_l00008}{OUT\+\_\+\+OF\+\_\+\+RANGE}}, and \doxymbox{\hyperlink{List_8cpp_source_l00164}{Unlink\+File()}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_a417f1a5b9114c8ab62d17e5fd3a55828}{Generate\+Dot\+File()}}, \doxymbox{\hyperlink{List_8cpp_source_l00294}{List\+Text\+Dump()}}, \doxymbox{\hyperlink{List_8cpp_source_l00669}{List\+Viz\+Dump()}}, and \doxymbox{\hyperlink{List_8cpp_source_l00164}{Unlink\+File()}}.
+
+\Hypertarget{List_8cpp_ad11955f002dbcc0c30ed8f5121df8237}\index{List.cpp@{List.cpp}!WriteBufferToFile@{WriteBufferToFile}}
+\index{WriteBufferToFile@{WriteBufferToFile}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{WriteBufferToFile()}{WriteBufferToFile()}}
+{\footnotesize\ttfamily \label{List_8cpp_ad11955f002dbcc0c30ed8f5121df8237} 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} Write\+Buffer\+To\+File (\begin{DoxyParamCaption}\item[{const char \texorpdfstring{$\ast$}{*}}]{filename}{, }\item[{char \texorpdfstring{$\ast$}{*}}]{buffer}{, }\item[{size\+\_\+t}]{buffer\+Size}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00178}{178}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00178\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00179\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(filename\ !=\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}});}
+\DoxyCodeLine{00180\ \ \ \ \ }
+\DoxyCodeLine{00181\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(buffer\ \ \ !=\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}});}
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00183\ \ \ \ \ \textcolor{keywordtype}{int}\ fileDesc\ =\ open(filename,\ O\_CREAT\ |\ O\_WRONLY);\ \ \textcolor{comment}{//\ Дед,\ почему\ нельзя\ ставить\ просто\ w}}
+\DoxyCodeLine{00184\ }
+\DoxyCodeLine{00185\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(fileDesc\ >=\ 0,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa1544e711bac79f5a2bdfc5481e1f8fb3}{FILE\_ACCESS\_DENIED}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa1544e711bac79f5a2bdfc5481e1f8fb3}{FILE\_ACCESS\_DENIED}});}
+\DoxyCodeLine{00186\ }
+\DoxyCodeLine{00187\ \ \ \ \ \doxymbox{\hyperlink{List_8cpp_a1bdd7c1369b250215a080e8421d4ecf3}{ON\_DEBUG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}(WriteBufferToFile):\ bufferSize:\ \%i\(\backslash\)n"{}},\ bufferSize);)}
+\DoxyCodeLine{00188\ \ \ \ \ \doxymbox{\hyperlink{List_8cpp_a1bdd7c1369b250215a080e8421d4ecf3}{ON\_DEBUG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}(WriteBufferToFile):\ buffer:\(\backslash\)n"{}});)}
+\DoxyCodeLine{00189\ }
+\DoxyCodeLine{00190\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{int}\ i\ =\ 0;\ i\ <\ bufferSize;\ i++)\ \{}
+\DoxyCodeLine{00191\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{List_8cpp_a1bdd7c1369b250215a080e8421d4ecf3}{ON\_DEBUG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}<\%c>\ has\ number\ \%i\(\backslash\)n"{}},\ buffer[i],\ buffer[i]);)}
+\DoxyCodeLine{00192\ \ \ \ \ \}}
+\DoxyCodeLine{00193\ \ \ \ \ \textcolor{comment}{//\ const\ char*\ s\ =\ "{}MEOW\(\backslash\)n"{};}}
+\DoxyCodeLine{00194\ \ \ \ \ write(fileDesc,\ buffer,\ \textcolor{keyword}{sizeof}(buffer[0])\ *\ bufferSize);\ \ \textcolor{comment}{//\ \ Почему\ не\ пишет,\ коли\ в\ буфере\ все\ ок}}
+\DoxyCodeLine{00195\ \ \ \ \ }
+\DoxyCodeLine{00196\ \ \ \ \ close(fileDesc);}
+\DoxyCodeLine{00197\ }
+\DoxyCodeLine{00198\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}};}
+\DoxyCodeLine{00199\ \}}
+
+\end{DoxyCode}
+
+
+References \doxymbox{\hyperlink{MyAssert_8h_source_l00094}{ASSERT}}, \doxymbox{\hyperlink{MyError_8h_source_l00006}{FILE\+\_\+\+ACCESS\+\_\+\+DENIED}}, \doxymbox{\hyperlink{MyError_8h_source_l00061}{Get\+Error\+String()}}, \doxymbox{\hyperlink{MyError_8h_source_l00005}{OK}}, \doxymbox{\hyperlink{List_8cpp_source_l00007}{ON\+\_\+\+DEBUG}}, \doxymbox{\hyperlink{MyError_8h_source_l00008}{OUT\+\_\+\+OF\+\_\+\+RANGE}}, and \doxymbox{\hyperlink{List_8cpp_source_l00178}{Write\+Buffer\+To\+File()}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_a417f1a5b9114c8ab62d17e5fd3a55828}{Generate\+Dot\+File()}}, \doxymbox{\hyperlink{List_8cpp_source_l00734}{List\+Html\+Dump()}}, \doxymbox{\hyperlink{List_8cpp_source_l00294}{List\+Text\+Dump()}}, \doxymbox{\hyperlink{List_8cpp_source_l00669}{List\+Viz\+Dump()}}, and \doxymbox{\hyperlink{List_8cpp_source_l00178}{Write\+Buffer\+To\+File()}}.
+
+
+
+\label{List_8cpp_doc-var-members}
+\Hypertarget{List_8cpp_doc-var-members}
+\doxysubsection{Variable Documentation}
+\Hypertarget{List_8cpp_aa487ee14964fd569fb6fc4201f961fa1}\index{List.cpp@{List.cpp}!DotFilename@{DotFilename}}
+\index{DotFilename@{DotFilename}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{DotFilename}{DotFilename}}
+{\footnotesize\ttfamily \label{List_8cpp_aa487ee14964fd569fb6fc4201f961fa1} 
+const char\texorpdfstring{$\ast$}{*} Dot\+Filename = "{}dot.\+txt"{}}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00034}{34}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_source_l00669}{List\+Viz\+Dump()}}.
+
+\Hypertarget{List_8cpp_a2edf69ea07ed9ef502534e0460b4767b}\index{List.cpp@{List.cpp}!DotFileSize@{DotFileSize}}
+\index{DotFileSize@{DotFileSize}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{DotFileSize}{DotFileSize}}
+{\footnotesize\ttfamily \label{List_8cpp_a2edf69ea07ed9ef502534e0460b4767b} 
+const int Dot\+File\+Size = 10000}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00035}{35}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_source_l00319}{Generate\+Dot\+File()}}.
+
+\Hypertarget{List_8cpp_aa690c53038f0067f31cb5c6112a5c237}\index{List.cpp@{List.cpp}!DotFileTemplate@{DotFileTemplate}}
+\index{DotFileTemplate@{DotFileTemplate}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{DotFileTemplate}{DotFileTemplate}}
+{\footnotesize\ttfamily \label{List_8cpp_aa690c53038f0067f31cb5c6112a5c237} 
+const char\texorpdfstring{$\ast$}{*} Dot\+File\+Template = "{}digraph G\{\textbackslash{}n\textbackslash{}trankdir=LR;\textbackslash{}n\textbackslash{}tnode\+[color=\textbackslash{}"{}\+\#00ff00\textbackslash{}"{}, style=filled, fillcolor=\textbackslash{}"{}\+\#00ff88\textbackslash{}"{}, fontsize=14, shape=\textbackslash{}"{}Mrecord\textbackslash{}"{}]\+;\textbackslash{}n"{}}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00047}{47}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_source_l00319}{Generate\+Dot\+File()}}.
+
+\Hypertarget{List_8cpp_a1aa1cc38e4ac74e47e619f7749ecec32}\index{List.cpp@{List.cpp}!DotSystemCallTemplate@{DotSystemCallTemplate}}
+\index{DotSystemCallTemplate@{DotSystemCallTemplate}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{DotSystemCallTemplate}{DotSystemCallTemplate}}
+{\footnotesize\ttfamily \label{List_8cpp_a1aa1cc38e4ac74e47e619f7749ecec32} 
+const char\texorpdfstring{$\ast$}{*} Dot\+System\+Call\+Template = "{}dot dot.\+txt -\/Tpng -\/o "{}}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00049}{49}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_source_l00669}{List\+Viz\+Dump()}}.
+
+\Hypertarget{List_8cpp_ad560682c07cd940258e4dae98d78bbf9}\index{List.cpp@{List.cpp}!DUMP\_CNT@{DUMP\_CNT}}
+\index{DUMP\_CNT@{DUMP\_CNT}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{DUMP\_CNT}{DUMP\_CNT}}
+{\footnotesize\ttfamily \label{List_8cpp_ad560682c07cd940258e4dae98d78bbf9} 
+int DUMP\+\_\+\+CNT = 1}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00026}{26}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_a417f1a5b9114c8ab62d17e5fd3a55828}{Generate\+Dot\+File()}}, \doxymbox{\hyperlink{List_8cpp_source_l00406}{Generate\+Dump\+Filename()}}, \doxymbox{\hyperlink{List_8cpp_source_l00439}{Generate\+Html\+File()}}, and \doxymbox{\hyperlink{List_8cpp_source_l00734}{List\+Html\+Dump()}}.
+
+\Hypertarget{List_8cpp_a564b02d54ec424579607eda7e5d85655}\index{List.cpp@{List.cpp}!HtmlFilename@{HtmlFilename}}
+\index{HtmlFilename@{HtmlFilename}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{HtmlFilename}{HtmlFilename}}
+{\footnotesize\ttfamily \label{List_8cpp_a564b02d54ec424579607eda7e5d85655} 
+const char\texorpdfstring{$\ast$}{*} Html\+Filename = "{}Dump.\+html"{}}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00038}{38}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_source_l00734}{List\+Html\+Dump()}}.
+
+\Hypertarget{List_8cpp_a0ec10d738d69b281af0aa8153a2cafae}\index{List.cpp@{List.cpp}!HtmlFileSize@{HtmlFileSize}}
+\index{HtmlFileSize@{HtmlFileSize}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{HtmlFileSize}{HtmlFileSize}}
+{\footnotesize\ttfamily \label{List_8cpp_a0ec10d738d69b281af0aa8153a2cafae} 
+const int Html\+File\+Size = 10000}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00039}{39}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_source_l00439}{Generate\+Html\+File()}}.
+
+\Hypertarget{List_8cpp_ab756c4af8c2c752b53f2b2ad56e189f7}\index{List.cpp@{List.cpp}!MaxDotLineSize@{MaxDotLineSize}}
+\index{MaxDotLineSize@{MaxDotLineSize}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{MaxDotLineSize}{MaxDotLineSize}}
+{\footnotesize\ttfamily \label{List_8cpp_ab756c4af8c2c752b53f2b2ad56e189f7} 
+const int Max\+Dot\+Line\+Size = 100}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00036}{36}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_source_l00319}{Generate\+Dot\+File()}}.
+
+\Hypertarget{List_8cpp_a76de2b299ceba83da7fb010e6d5ba11e}\index{List.cpp@{List.cpp}!MaxFilenameLen@{MaxFilenameLen}}
+\index{MaxFilenameLen@{MaxFilenameLen}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{MaxFilenameLen}{MaxFilenameLen}}
+{\footnotesize\ttfamily \label{List_8cpp_a76de2b299ceba83da7fb010e6d5ba11e} 
+const int Max\+Filename\+Len = 30}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00028}{28}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_source_l00406}{Generate\+Dump\+Filename()}}, and \doxymbox{\hyperlink{List_8cpp_source_l00669}{List\+Viz\+Dump()}}.
+
+\Hypertarget{List_8cpp_a442017a3b16d76b221139c2c6a62624c}\index{List.cpp@{List.cpp}!MaxHtmlLineSize@{MaxHtmlLineSize}}
+\index{MaxHtmlLineSize@{MaxHtmlLineSize}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{MaxHtmlLineSize}{MaxHtmlLineSize}}
+{\footnotesize\ttfamily \label{List_8cpp_a442017a3b16d76b221139c2c6a62624c} 
+const int Max\+Html\+Line\+Size = 100}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00040}{40}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_source_l00439}{Generate\+Html\+File()}}.
+
+\Hypertarget{List_8cpp_a25393286bfbefd91a5def2f87ed2cb4c}\index{List.cpp@{List.cpp}!MaxNumberLineSize@{MaxNumberLineSize}}
+\index{MaxNumberLineSize@{MaxNumberLineSize}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{MaxNumberLineSize}{MaxNumberLineSize}}
+{\footnotesize\ttfamily \label{List_8cpp_a25393286bfbefd91a5def2f87ed2cb4c} 
+const int Max\+Number\+Line\+Size = 3}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00029}{29}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_source_l00406}{Generate\+Dump\+Filename()}}.
+
+\Hypertarget{List_8cpp_a74c8fc1ac326c74d6485781d0ac1e44b}\index{List.cpp@{List.cpp}!MaxTxtLineSize@{MaxTxtLineSize}}
+\index{MaxTxtLineSize@{MaxTxtLineSize}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{MaxTxtLineSize}{MaxTxtLineSize}}
+{\footnotesize\ttfamily \label{List_8cpp_a74c8fc1ac326c74d6485781d0ac1e44b} 
+const int Max\+Txt\+Line\+Size = 100}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00045}{45}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_source_l00538}{Generate\+Txt\+File\+Dump()}}.
+
+\Hypertarget{List_8cpp_adfb0271ebf9d7e844233467fea601d51}\index{List.cpp@{List.cpp}!TxtFilename@{TxtFilename}}
+\index{TxtFilename@{TxtFilename}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{TxtFilename}{TxtFilename}}
+{\footnotesize\ttfamily \label{List_8cpp_adfb0271ebf9d7e844233467fea601d51} 
+const char\texorpdfstring{$\ast$}{*} Txt\+Filename = "{}Dump.\+txt"{}}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00043}{43}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_source_l00439}{Generate\+Html\+File()}}, and \doxymbox{\hyperlink{List_8cpp_source_l00294}{List\+Text\+Dump()}}.
+
+\Hypertarget{List_8cpp_a011b629708d381df3824f22b6a61731a}\index{List.cpp@{List.cpp}!TxtFileSize@{TxtFileSize}}
+\index{TxtFileSize@{TxtFileSize}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{TxtFileSize}{TxtFileSize}}
+{\footnotesize\ttfamily \label{List_8cpp_a011b629708d381df3824f22b6a61731a} 
+const int Txt\+File\+Size = 10000}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00044}{44}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_source_l00538}{Generate\+Txt\+File\+Dump()}}.
+
+\Hypertarget{List_8cpp_a74b4e4947006b3f5f18534a51fbc9215}\index{List.cpp@{List.cpp}!VizDumpExtension@{VizDumpExtension}}
+\index{VizDumpExtension@{VizDumpExtension}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{VizDumpExtension}{VizDumpExtension}}
+{\footnotesize\ttfamily \label{List_8cpp_a74b4e4947006b3f5f18534a51fbc9215} 
+const char\texorpdfstring{$\ast$}{*} Viz\+Dump\+Extension = "{}.png"{}}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00032}{32}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_source_l00406}{Generate\+Dump\+Filename()}}, and \doxymbox{\hyperlink{List_8cpp_source_l00439}{Generate\+Html\+File()}}.
+
+\Hypertarget{List_8cpp_a7655d6ee1e81334b5cc1b7e3043e0d74}\index{List.cpp@{List.cpp}!VizDumpFilename@{VizDumpFilename}}
+\index{VizDumpFilename@{VizDumpFilename}!List.cpp@{List.cpp}}
+\doxysubsubsection{\texorpdfstring{VizDumpFilename}{VizDumpFilename}}
+{\footnotesize\ttfamily \label{List_8cpp_a7655d6ee1e81334b5cc1b7e3043e0d74} 
+const char\texorpdfstring{$\ast$}{*} Viz\+Dump\+Filename = "{}Dump"{}}
+
+
+
+Definition at line \doxymbox{\hyperlink{List_8cpp_source_l00031}{31}} of file \doxymbox{\hyperlink{List_8cpp_source}{List.\+cpp}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{List_8cpp_source_l00406}{Generate\+Dump\+Filename()}}, and \doxymbox{\hyperlink{List_8cpp_source_l00439}{Generate\+Html\+File()}}.
+
