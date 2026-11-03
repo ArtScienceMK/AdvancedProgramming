@@ -91,3 +91,6 @@ Note, there is no need in handling 4 edge cases now!
 If you will have any questions, suggestions and so on, just text me)
 
 Mail: 55555artem.kulakov@gmail.com
+
+
+Nah, just check
