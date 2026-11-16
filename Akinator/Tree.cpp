@@ -76,8 +76,9 @@ ERROR_STATUSES TreeSetInitialString(Tree* ptrTree, const char* value);
 ERROR_STATUSES TreeInsertInt    (Tree* ptrTree, int value);
 ERROR_STATUSES NodeInsertInt    (Node* ptrNode, int value);
 
-ERROR_STATUSES NodeCreate(       Node* ptrParent, bool isLeftSon, int value);
-ERROR_STATUSES NodeCreateString( Node* ptrParent, bool isLeftSon, const char* line);
+ERROR_STATUSES NodeCreate      (Node* ptrParent                  );
+ERROR_STATUSES NodeCreateInt   (Node* ptrParent,       int value );
+ERROR_STATUSES NodeCreateString(Node* ptrParent, const char* line);
 
 
 ERROR_STATUSES TreeVerify(   Tree* ptrTree);
@@ -89,7 +90,7 @@ ERROR_STATUSES RecNodeDump(  Node* ptrNode);
 
 ERROR_STATUSES TreePrint(           Tree* ptrTree);
 ERROR_STATUSES RecNodePrint(        Node* ptrNode);
-ERROR_STATUSES RecNodePrintToBuffer(Node* ptrNode, char* buffer, size_t* ptrBufferInd, char* curLine);
+ERROR_STATUSES RecNodePrintToLine(Node* ptrNode, char* curLine, size_t* ptrCurLineInd);
 
 ERROR_STATUSES TreeVizDump(     Tree* ptrTree);
 ERROR_STATUSES RecNodeVizDump(  Node* ptrNode, char* buffer, size_t* ptrBufferInd, char* curLine);
@@ -207,26 +208,17 @@ ERROR_STATUSES NodeInsertInt(Node* ptrNode, int value) {
     ASSERT(NodeVerifyErrorStatus == OK, GetErrorString(NodeVerifyErrorStatus),
            NodeVerifyErrorStatus);
 
-    Node* prevNode = NULL;
-
-    bool isLeftSon = false;
-
-    while (ptrNode != NULL) {
-        
-        prevNode = ptrNode;
-        
+    while (!(ptrNode->left == NULL && ptrNode->right == NULL)) {        
         if (value < ptrNode->data.value) {
             ptrNode = ptrNode->left;
-            isLeftSon = true;
         } else {
             ptrNode = ptrNode->right;
-            isLeftSon = false;
         }
     }
 
-    fprintf(stderr, "(NodeInsertInt): ptrNode: %p, prevNode: %p\n", ptrNode, prevNode);
+    fprintf(stderr, "(NodeInsertInt): ptrNode: %p\n", ptrNode);
 
-    ERROR_STATUSES NodeCreateErrorStatus = NodeCreate(prevNode, isLeftSon, value);
+    ERROR_STATUSES NodeCreateErrorStatus = NodeCreateInt(ptrNode, value);
 
     ASSERT(NodeCreateErrorStatus == OK, GetErrorString(NodeCreateErrorStatus),
             NodeCreateErrorStatus);
@@ -234,7 +226,31 @@ ERROR_STATUSES NodeInsertInt(Node* ptrNode, int value) {
     return OK;
 }
 
-ERROR_STATUSES NodeCreate(Node* ptrParent, bool isLeftSon, int value) {
+ERROR_STATUSES NodeCreate(Node* ptrParent) {
+
+    ERROR_STATUSES NodeVerifyErrorStatus = NodeVerify(ptrParent);
+
+    ASSERT(NodeVerifyErrorStatus == OK, GetErrorString(NodeVerifyErrorStatus),
+           NodeVerifyErrorStatus);
+
+    Node* ptrNode = (Node*)calloc(1, sizeof(*ptrNode));
+
+    ASSERT(ptrNode != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
+
+    ptrNode->parent     = ptrParent;
+
+    if (ptrParent->left == NULL) {
+        ptrParent->left = ptrNode;
+    } else {
+        ptrParent->right = ptrNode;
+    }
+
+    fprintf(stderr, "ptrNode: %p\n", ptrNode);
+
+    return OK;
+}
+
+ERROR_STATUSES NodeCreateInt(Node* ptrParent, int value) {
 
     ERROR_STATUSES NodeVerifyErrorStatus = NodeVerify(ptrParent);
 
@@ -248,7 +264,7 @@ ERROR_STATUSES NodeCreate(Node* ptrParent, bool isLeftSon, int value) {
     ptrNode->parent     = ptrParent;
     ptrNode->data.value = value;
 
-    if (isLeftSon) {
+    if (ptrParent->left == NULL) {
         ptrParent->left = ptrNode;
     } else {
         ptrParent->right = ptrNode;
@@ -259,7 +275,7 @@ ERROR_STATUSES NodeCreate(Node* ptrParent, bool isLeftSon, int value) {
     return OK;
 }
 
-ERROR_STATUSES NodeCreateString(Node* ptrParent, bool isLeftSon, const char* line) {
+ERROR_STATUSES NodeCreateString(Node* ptrParent,  const char* line) {
 
     ERROR_STATUSES NodeVerifyErrorStatus = NodeVerify(ptrParent);
 
@@ -273,7 +289,7 @@ ERROR_STATUSES NodeCreateString(Node* ptrParent, bool isLeftSon, const char* lin
     ptrNode->parent     = ptrParent;
     ptrNode->data.line  = strdup(line);
 
-    if (isLeftSon) {
+    if (ptrParent->left == NULL) {
         ptrParent->left = ptrNode;
     } else {
         ptrParent->right = ptrNode;
@@ -372,33 +388,56 @@ ERROR_STATUSES RecNodePrint(Node* ptrNode) {
     return OK;
 }
 
-ERROR_STATUSES RecNodePrintToBuffer(Node* ptrNode, char* buffer, size_t* ptrBufferInd, char* curLine) {
-    
-    if (ptrNode->parent->left == ptrNode) {
-        sprintf(curLine, "(L%s ", ptrNode->data.line);
-    }
-    else {
-        sprintf(curLine, "(R%s ", ptrNode->data.line);
-    }
-    
-    ERROR_STATUSES AddLineCleanErrorStatus = AddLineClean(buffer, ptrBufferInd, curLine);
+ERROR_STATUSES RecNodePrintToLine(Node* ptrNode, char* curLine, size_t* ptrCurLineInd) {
+    ASSERT(curLine       != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+    ASSERT(ptrCurLineInd != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
 
-    ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus),
-           AddLineCleanErrorStatus);
+    fprintf(stderr, "(RecNodePrintToLine): START ptrNode: %p, curLine: <%s>, curLineInd: %zu\n", 
+                      ptrNode, curLine, *ptrCurLineInd);
+
+    size_t curLineInd = *ptrCurLineInd;
+
+    sprintf(curLine + curLineInd, "(");
+    curLineInd++;
+
+    if (!ptrNode) {
+
+        sprintf(curLine + curLineInd, "nil)");
+        curLineInd += strlen("nil)");
+
+        *ptrCurLineInd = curLineInd;
+        
+        fprintf(stderr, "(RecNodePrintToLine): IS LEAF ptrNode: %p, curLine: <%s>, curLineInd: %zu\n", 
+                          ptrNode, curLine, *ptrCurLineInd);
+
+        return OK;
+    }
+
+    sprintf(curLine + curLineInd, "\"%s\" ", ptrNode->data.line);
+    curLineInd += 3 + strlen(ptrNode->data.line);
+
+    *ptrCurLineInd = curLineInd;
+
+    fprintf(stderr, "(RecNodePrintToLine): BEFORE CALL ptrNode: %p, curLine: <%s>, curLineInd: %zu\n", 
+                      ptrNode, curLine, *ptrCurLineInd);
 
     if (ptrNode->left != NULL) {
-        RecNodePrintToBuffer(ptrNode->left, buffer, ptrBufferInd, curLine);
+        RecNodePrintToLine(ptrNode->left, curLine, ptrCurLineInd);
     }
     if (ptrNode->right != NULL) {
-        RecNodePrintToBuffer(ptrNode->right, buffer, ptrBufferInd, curLine);
+        RecNodePrintToLine(ptrNode->right, curLine, ptrCurLineInd);
     }
 
-    sprintf(curLine, ")");
+    curLineInd = *ptrCurLineInd;
 
-    AddLineCleanErrorStatus = AddLineClean(buffer, ptrBufferInd, curLine);
+    sprintf(curLine + curLineInd, ")");
+    curLineInd++;
 
-    ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus),
-           AddLineCleanErrorStatus);
+    *ptrCurLineInd = curLineInd;
+
+    fprintf(stderr, "(RecNodePrintToLine): END ptrNode: %p, curLine: <%s>, curLineInd: %zu\n", 
+                      ptrNode, curLine, *ptrCurLineInd);
+
 
     return OK;
 }
@@ -471,7 +510,7 @@ ERROR_STATUSES RecNodeVizDump(Node* ptrNode, char* buffer, size_t* ptrBufferInd,
     if (ptrNode->left != NULL) {
         RecNodeVizDump(ptrNode->left, buffer, ptrBufferInd, curLine);
 
-        sprintf(curLine, "\t %zu->%zu[color=\"#3ba0ff\"];\n", ptrNode, ptrNode->left);
+        sprintf(curLine, "\t %zu->%zu[color=\"#3ba0ff\", label=\"нет\"];\n", ptrNode, ptrNode->left);
 
         AddLineCleanErrorStatus = AddLineClean(buffer, ptrBufferInd, curLine);
 
@@ -481,7 +520,7 @@ ERROR_STATUSES RecNodeVizDump(Node* ptrNode, char* buffer, size_t* ptrBufferInd,
     if (ptrNode->right != NULL) {
         RecNodeVizDump(ptrNode->right, buffer, ptrBufferInd, curLine);
 
-        sprintf(curLine, "\t %zu->%zu[color=\"#ff3b3b\"];\n", ptrNode, ptrNode->right);
+        sprintf(curLine, "\t %zu->%zu[color=\"#ff3b3b\", label=\"да\"];\n", ptrNode, ptrNode->right);
 
         AddLineCleanErrorStatus = AddLineClean(buffer, ptrBufferInd, curLine);
 
@@ -650,8 +689,6 @@ ERROR_STATUSES StartUserCycle() {
     ASSERT(TreeInitErrorStatus == OK, GetErrorString(TreeInitErrorStatus),
         TreeInitErrorStatus);
 
-    TreeSetInitialString(&tree, "neizvestnyi");
-
     ERROR_STATUSES LoadTreeErrorStatus = LoadTree(&tree);
 
     ASSERT(LoadTreeErrorStatus == OK, GetErrorString(LoadTreeErrorStatus), LoadTreeErrorStatus);
@@ -790,22 +827,27 @@ ERROR_STATUSES Guess(Tree* ptrTree) {
             return UNKNOWN_AKINATOR_ANSWER_OPTION;
         }
 
+        curNode->data.line = strdup(traitLine);
 
-        ERROR_STATUSES NodeCreateErrorStatus = NodeCreateString(curNode, 0, (const char*)inputLine);
-
+        ERROR_STATUSES NodeCreateErrorStatus = NodeCreateString(curNode, (const char*)otherLine);
+        
         ASSERT(NodeCreateErrorStatus == OK, GetErrorString(NodeCreateErrorStatus), NodeCreateErrorStatus);
 
-        NodeCreateErrorStatus = NodeCreateString(curNode, 1, (const char*)otherLine);
+        curNode->left->data.line = strdup(otherLine);
+        
+        NodeCreateErrorStatus = NodeCreateString(curNode, (const char*)inputLine);
 
             
         // if (isLeftSon) {
-        //     NodeCreateErrorStatus = NodeCreateString(prevNode->left, 0, (const char*)inputLine);
+        //     NodeCreateErrorStatus = NodeCreateString(prevNode->left, (const char*)inputLine);
         // } 
         // else {
-        //     NodeCreateErrorStatus = NodeCreateString(prevNode->right, 0, (const char*)inputLine);
+        //     NodeCreateErrorStatus = NodeCreateString(prevNode->right, (const char*)inputLine);
         // }
 
         ASSERT(NodeCreateErrorStatus == OK, GetErrorString(NodeCreateErrorStatus), NodeCreateErrorStatus);
+
+        curNode->right->data.line = inputLine;
 
         printf("Я запомнил!\n");
     }
@@ -856,7 +898,7 @@ ERROR_STATUSES LoadTree(Tree* ptrTree) {
 
     char* curLine = (char*)calloc(MaxObjectLineSize, sizeof(*curLine));
 
-    size_t bufferInd = 0;
+    size_t bufferInd = 1;  //  wanna skip first '(', because we are already in root
 
     Tree tree = {};
     TreeInit(&tree);
@@ -871,8 +913,6 @@ ERROR_STATUSES LoadTree(Tree* ptrTree) {
         ClearLine(curLine);
 
         ASSERT(curLine != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
-
-        bool isLeftSon = false;
         
         if (*(buffer + bufferInd) == ')') {
             fprintf(stderr, "(LoadTree): Added )\n");
@@ -882,31 +922,41 @@ ERROR_STATUSES LoadTree(Tree* ptrTree) {
             bufferInd++;
             continue;
         }
-        if (sscanf(buffer + bufferInd, "(L%s", curLine)) {
-            isLeftSon = true;
+
+        if (*(buffer + bufferInd) == '(') {
+            fprintf(stderr, "(LoadTree): going to new node!\n");
+
+            ERROR_STATUSES NodeCreateErrorStatus = NodeCreate(curNode);
+
+            ASSERT(NodeCreateErrorStatus == OK, GetErrorString(NodeCreateErrorStatus), NodeCreateErrorStatus);
+
+            nNodes++;
+
+            if (curNode->right == NULL) {
+                curNode = curNode->left;
+            } 
+            else {
+                curNode = curNode->right;
+            }
+
+            bufferInd++;
         }
-        else if (sscanf(buffer + bufferInd, "(R%s", curLine)) {
-            isLeftSon = false;
+
+        if (!sscanf(buffer + bufferInd, "\"%s\"", curLine)) {
+            if (sscanf(buffer + bufferInd, "%s)", curLine) && strcmp(curLine, "nul)") == 0) {
+                continue;
+            }
+            return UNKNOWN_STRING_LOAD_TREE;            
         } 
-        else {
-            return UNKNOWN_STRING_LOAD_TREE;
-        }
 
         fprintf(stderr, "(LoadTree): bufferInd before: %i, curLine: <%s>\n", bufferInd, curLine);
         
-        ERROR_STATUSES NodeCreateErrorStatus = NodeCreateString(curNode, isLeftSon, curLine);
+        *(curLine + strlen(curLine) - 1) = '\0';
 
-        ASSERT(NodeCreateErrorStatus == OK, GetErrorString(NodeCreateErrorStatus), NodeCreateErrorStatus);
+        curNode->data.line = strdup(curLine);
 
-        if (isLeftSon) {
-            curNode = curNode->left;
-        } 
-        else {
-            curNode = curNode->right;
-        }
-
-        nNodes++;
-
+        fprintf(stderr, "(LoadTree): curNode: %p, added line: <%s>\n", curNode, curNode->data.line);
+        
         bufferInd += 3 + strlen(curLine);
 
         fprintf(stderr, "(LoadTree): bufferInd after : %i\n", bufferInd);
@@ -974,20 +1024,27 @@ ERROR_STATUSES GenerateTreeFile(Tree* ptrTree, char** ptrBuffer, size_t* ptrBuff
    
     ASSERT(curLine != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
 
-    ERROR_STATUSES RecNodePrintToBufferErrorStatus = OK;
-    
-    if (ptrTree->root->left != NULL) {
-            RecNodePrintToBufferErrorStatus = RecNodePrintToBuffer(ptrTree->root->left, buffer, &bufferInd, curLine);    
+    size_t curLineInd = 0;
 
-        ASSERT(RecNodePrintToBufferErrorStatus == OK, GetErrorString(RecNodePrintToBufferErrorStatus), 
-           RecNodePrintToBufferErrorStatus);
-    }
-    if (ptrTree->root->right != NULL) {
-            RecNodePrintToBufferErrorStatus = RecNodePrintToBuffer(ptrTree->root->right, buffer, &bufferInd, curLine);    
+    ERROR_STATUSES RecNodePrintToLineErrorStatus = RecNodePrintToLine(ptrTree->root, curLine, &curLineInd);
 
-        ASSERT(RecNodePrintToBufferErrorStatus == OK, GetErrorString(RecNodePrintToBufferErrorStatus), 
-           RecNodePrintToBufferErrorStatus);
-    }
+    ASSERT(RecNodePrintToLineErrorStatus == OK, GetErrorString(RecNodePrintToLineErrorStatus), 
+           RecNodePrintToLineErrorStatus);
+
+    fprintf(stderr, "curLine after all recursive calls: <%s>\n", curLine);
+
+    // if (ptrTree->root->left != NULL) {
+        //     RecNodePrintToLineErrorStatus = RecNodePrintToLine(ptrTree->root->left, buffer, &bufferInd, curLine);    
+
+        // ASSERT(RecNodePrintToLineErrorStatus == OK, GetErrorString(RecNodePrintToLineErrorStatus), 
+        //    RecNodePrintToLineErrorStatus);
+    // }
+    // if (ptrTree->root->right != NULL) {
+    //         RecNodePrintToLineErrorStatus = RecNodePrintToLine(ptrTree->root->right, buffer, &bufferInd, curLine);    
+
+    //     ASSERT(RecNodePrintToLineErrorStatus == OK, GetErrorString(RecNodePrintToLineErrorStatus), 
+    //        RecNodePrintToLineErrorStatus);
+    // }
 
     ERROR_STATUSES AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
 
