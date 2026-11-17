@@ -76,10 +76,7 @@ ERROR_STATUSES TreeSetInitialString(Tree* ptrTree, const char* value);
 ERROR_STATUSES TreeInsertInt    (Tree* ptrTree, int value);
 ERROR_STATUSES NodeInsertInt    (Node* ptrNode, int value);
 
-ERROR_STATUSES NodeCreate      (Node* ptrParent                  );
-ERROR_STATUSES NodeCreateInt   (Node* ptrParent,       int value );
-ERROR_STATUSES NodeCreateString(Node* ptrParent, const char* line);
-
+ERROR_STATUSES NodeCreate      (Node* ptrParent, bool isLeftSon  );
 
 ERROR_STATUSES TreeVerify(   Tree* ptrTree);
 ERROR_STATUSES RecNodeVerify(Node* ptrNode);
@@ -116,7 +113,8 @@ ERROR_STATUSES LoadTree(        Tree* ptrTree);
 ERROR_STATUSES ReadFile(const char* filename, char** ptrBuffer, size_t* ptrBufferSize);
 ERROR_STATUSES GetFileSize(int fileDesc, size_t* ptrFileSize);
 
-ERROR_STATUSES RusToTrans(const char* from, char** to);
+ERROR_STATUSES CropLastChar(char* curLine, size_t* ptrCurLineInd);
+ERROR_STATUSES GetVizLen(   char* curLine, size_t* res);
 
 int main() {    
     StartUserCycle();
@@ -208,17 +206,27 @@ ERROR_STATUSES NodeInsertInt(Node* ptrNode, int value) {
     ASSERT(NodeVerifyErrorStatus == OK, GetErrorString(NodeVerifyErrorStatus),
            NodeVerifyErrorStatus);
 
+    bool isLeftSon = false;
+    
     while (!(ptrNode->left == NULL && ptrNode->right == NULL)) {        
         if (value < ptrNode->data.value) {
+            isLeftSon = true;
             ptrNode = ptrNode->left;
         } else {
+            isLeftSon = false;
             ptrNode = ptrNode->right;
         }
     }
 
     fprintf(stderr, "(NodeInsertInt): ptrNode: %p\n", ptrNode);
 
-    ERROR_STATUSES NodeCreateErrorStatus = NodeCreateInt(ptrNode, value);
+    ERROR_STATUSES NodeCreateErrorStatus = NodeCreate(ptrNode, isLeftSon);
+
+    if (isLeftSon) {
+        ptrNode->left->data.value = value;
+    } else {
+        ptrNode->right->data.value = value;
+    }
 
     ASSERT(NodeCreateErrorStatus == OK, GetErrorString(NodeCreateErrorStatus),
             NodeCreateErrorStatus);
@@ -226,7 +234,7 @@ ERROR_STATUSES NodeInsertInt(Node* ptrNode, int value) {
     return OK;
 }
 
-ERROR_STATUSES NodeCreate(Node* ptrParent) {
+ERROR_STATUSES NodeCreate(Node* ptrParent, bool isLeftSon) {
 
     ERROR_STATUSES NodeVerifyErrorStatus = NodeVerify(ptrParent);
 
@@ -239,63 +247,14 @@ ERROR_STATUSES NodeCreate(Node* ptrParent) {
 
     ptrNode->parent     = ptrParent;
 
-    if (ptrParent->left == NULL) {
+    if (isLeftSon) {
         ptrParent->left = ptrNode;
     } else {
         ptrParent->right = ptrNode;
     }
 
-    fprintf(stderr, "ptrNode: %p\n", ptrNode);
-
-    return OK;
-}
-
-ERROR_STATUSES NodeCreateInt(Node* ptrParent, int value) {
-
-    ERROR_STATUSES NodeVerifyErrorStatus = NodeVerify(ptrParent);
-
-    ASSERT(NodeVerifyErrorStatus == OK, GetErrorString(NodeVerifyErrorStatus),
-           NodeVerifyErrorStatus);
-
-    Node* ptrNode = (Node*)calloc(1, sizeof(*ptrNode));
-
-    ASSERT(ptrNode != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
-
-    ptrNode->parent     = ptrParent;
-    ptrNode->data.value = value;
-
-    if (ptrParent->left == NULL) {
-        ptrParent->left = ptrNode;
-    } else {
-        ptrParent->right = ptrNode;
-    }
-
-    fprintf(stderr, "ptrNode: %p\n", ptrNode);
-
-    return OK;
-}
-
-ERROR_STATUSES NodeCreateString(Node* ptrParent,  const char* line) {
-
-    ERROR_STATUSES NodeVerifyErrorStatus = NodeVerify(ptrParent);
-
-    ASSERT(NodeVerifyErrorStatus == OK, GetErrorString(NodeVerifyErrorStatus),
-           NodeVerifyErrorStatus);
-
-    Node* ptrNode = (Node*)calloc(1, sizeof(*ptrNode));
-
-    ASSERT(ptrNode != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
-
-    ptrNode->parent     = ptrParent;
-    ptrNode->data.line  = strdup(line);
-
-    if (ptrParent->left == NULL) {
-        ptrParent->left = ptrNode;
-    } else {
-        ptrParent->right = ptrNode;
-    }
-
-    fprintf(stderr, "ptrNode: %p\n", ptrNode);
+    fprintf(stderr, "(NodeCreate): added ptrNode: %p, has parent: %p\n", ptrNode, ptrParent);
+    fprintf(stderr, "(NodeCreate): isLeftSon: %i\n", isLeftSon);
 
     return OK;
 }
@@ -697,32 +656,63 @@ ERROR_STATUSES StartUserCycle() {
 
     ASSERT(inputLine != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
 
+    size_t inputLineSize = MaxObjectLineSize;
+    size_t inputLineInd  = 0;
+
     for (int i = 0; i < nQueries; i++) {
         printf("Что ты желаешь сделать?\n");
-        printf("[У]гадать объект, [П]осмотреть базу данных, [В]ыйти\n");
+        printf("[у]гадать объект, [п]осмотреть базу данных, [в]ыйти\n");
 
         ClearLine(inputLine);
+        inputLineInd = 0;
 
-        if (!scanf("%s", inputLine)) {
+        if ((inputLineInd = getline(&inputLine, &inputLineSize, stdin)) == -1) {
             printf("Введена неверная опция... Самоуничтожение...\n");
             return AKINATOR_MENU_INPUT_ERROR;
         } 
 
-        if (strcmp(inputLine, "У") == 0) {
+        CropLastChar(inputLine, &inputLineInd);
+
+        fprintf(stderr, "string after cropping: <%s>\n", inputLine);
+
+        if (strcmp(inputLine, "у") == 0) {
             Guess(&tree);            
         }
-        else if (strcmp(inputLine, "П") == 0) {
-            TreeVizDump(&tree);            
-        }
-        else if (strcmp(inputLine, "В") == 0) {
-            printf("Сохранить базу данных?\n");
-
+        else if (strcmp(inputLine, "п") == 0) {
+            printf("г[рафический] или т[екстовый] дамп?\n");
+            
             ClearLine(inputLine);
-
-            if (!scanf("%s", inputLine)) {
+            inputLineInd = 0;
+            
+            if ((inputLineInd = getline(&inputLine, &inputLineSize, stdin)) == -1) {
                 printf("Введена неверная опция... Самоуничтожение...\n");
                 return AKINATOR_MENU_INPUT_ERROR;
             }
+
+            CropLastChar(inputLine, &inputLineInd);
+
+            if (strcmp(inputLine, "г") == 0) {
+                TreeVizDump(&tree);            
+            } 
+            else if (strcmp(inputLine, "т") == 0) {
+                TreeDump(&tree);
+            } 
+            else {
+                return AKINATOR_MENU_INPUT_ERROR;
+            }
+        }
+        else if (strcmp(inputLine, "в") == 0) {
+            printf("Сохранить базу данных?\n");
+
+            ClearLine(inputLine);
+            inputLineInd = 0;
+
+            if ((inputLineInd = getline(&inputLine, &inputLineSize, stdin)) == -1) {
+                printf("Введена неверная опция... Самоуничтожение...\n");
+                return AKINATOR_MENU_INPUT_ERROR;
+            }
+
+            CropLastChar(inputLine, &inputLineInd);
 
             if (strcmp(inputLine, "да") == 0) {
                 ERROR_STATUSES SaveTreeErrorStatus = SaveTree(&tree);
@@ -764,26 +754,42 @@ ERROR_STATUSES Guess(Tree* ptrTree) {
 
     ASSERT(inputLine != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
     
-    bool isLeftSon = false;
+    size_t inputLineSize = 0;
+    size_t inputLineInd  = 0;
 
     while (!(curNode->left == NULL && curNode->right == NULL)) {
+
+        fprintf(stderr, "(Guess): curNode: %p\n", curNode);
 
         printf("%s?\n", curNode->data.line);
 
         ClearLine(inputLine);
+        inputLineInd = 0;
 
-        if (!scanf("%s", inputLine)) {
+        if ((inputLineInd = getline(&inputLine, &inputLineSize, stdin)) == -1) {
             printf("Не смог считать ответ на вопрос! Самоуничтожение...\n");
             return AKINATOR_QUESTION_INPUT_ERROR;
         }
 
+        CropLastChar(inputLine, &inputLineInd);
+
         if (strcmp(inputLine, "да") == 0) {
-            isLeftSon = false;
+            if (curNode->right == NULL) {
+                break;
+            }
+
             curNode = curNode->right;
+            
+            fprintf(stderr, "(Guess): going to: %p\n", curNode);
         } 
         else if (strcmp(inputLine, "нет") == 0) {
-            isLeftSon = true;
+            if (curNode->left == NULL) {
+                break;
+            }
+
             curNode = curNode->left;
+
+            fprintf(stderr, "(Guess): going to: %p\n", curNode);
         }
         else {
             printf("Некорректный ответ на вопрос! Самоуничтожение...\n");
@@ -791,14 +797,19 @@ ERROR_STATUSES Guess(Tree* ptrTree) {
         }
     }
 
+    // Т.к. мы можем попасть в NULL, а у неё нельзя по parent обратиться
+
     printf("Это %s?\n", curNode->data.line);
 
     ClearLine(inputLine);
+    inputLineInd = 0;
 
-    if (!scanf("%s", inputLine)) {
+    if ((inputLineInd = getline(&inputLine, &inputLineSize, stdin)) == -1) {
         printf("Не смог считать ответ на вопрос! Самоуничтожение...\n");
         return AKINATOR_QUESTION_INPUT_ERROR;
     }
+
+    CropLastChar(inputLine, &inputLineInd);
 
     if (strcmp(inputLine, "да") == 0) {
         printf("Я был прав! Теперь я повелитель Триштатья!\n");
@@ -808,11 +819,14 @@ ERROR_STATUSES Guess(Tree* ptrTree) {
         printf("Не может быть! Помоги мне стать умнее: скажи, что это было?\n");
         
         ClearLine(inputLine);
+        inputLineInd = 0;
 
-        if (!scanf("%s", inputLine)) {
+        if ((inputLineInd = getline(&inputLine, &inputLineSize, stdin)) == -1) {
             printf("Некорректный ввод... Самоуничтожение...\n");
             return UNKNOWN_AKINATOR_ANSWER_OPTION;
         }
+
+        CropLastChar(inputLine, &inputLineInd);
 
         printf("А чем %s отличается от %s? %s ...", inputLine, curNode->data.line, inputLine);
 
@@ -820,30 +834,26 @@ ERROR_STATUSES Guess(Tree* ptrTree) {
 
         ASSERT(traitLine != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
 
+        size_t traitLineInd = 0;
+
         char* otherLine = strdup(curNode->data.line);
 
-        if (!scanf("%s", traitLine)) {
+        if ((traitLineInd = getline(&traitLine, &traitLineInd, stdin)) == -1) {
             printf("Некорректный ввод... Самоуничтожение...\n");
             return UNKNOWN_AKINATOR_ANSWER_OPTION;
         }
 
+        CropLastChar(traitLine, &traitLineInd);
+
         curNode->data.line = strdup(traitLine);
 
-        ERROR_STATUSES NodeCreateErrorStatus = NodeCreateString(curNode, (const char*)otherLine);
+        ERROR_STATUSES NodeCreateErrorStatus = NodeCreate(curNode, 1);
         
         ASSERT(NodeCreateErrorStatus == OK, GetErrorString(NodeCreateErrorStatus), NodeCreateErrorStatus);
 
         curNode->left->data.line = strdup(otherLine);
         
-        NodeCreateErrorStatus = NodeCreateString(curNode, (const char*)inputLine);
-
-            
-        // if (isLeftSon) {
-        //     NodeCreateErrorStatus = NodeCreateString(prevNode->left, (const char*)inputLine);
-        // } 
-        // else {
-        //     NodeCreateErrorStatus = NodeCreateString(prevNode->right, (const char*)inputLine);
-        // }
+        NodeCreateErrorStatus = NodeCreate(curNode, 0);
 
         ASSERT(NodeCreateErrorStatus == OK, GetErrorString(NodeCreateErrorStatus), NodeCreateErrorStatus);
 
@@ -898,6 +908,8 @@ ERROR_STATUSES LoadTree(Tree* ptrTree) {
 
     char* curLine = (char*)calloc(MaxObjectLineSize, sizeof(*curLine));
 
+    ASSERT(curLine != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
+
     size_t bufferInd = 1;  //  wanna skip first '(', because we are already in root
 
     Tree tree = {};
@@ -911,8 +923,6 @@ ERROR_STATUSES LoadTree(Tree* ptrTree) {
 
     for (; bufferInd < bufferSize && *(buffer + bufferInd) != '\0'; ) {
         ClearLine(curLine);
-
-        ASSERT(curLine != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
         
         if (*(buffer + bufferInd) == ')') {
             fprintf(stderr, "(LoadTree): Added )\n");
@@ -925,25 +935,42 @@ ERROR_STATUSES LoadTree(Tree* ptrTree) {
 
         if (*(buffer + bufferInd) == '(') {
             fprintf(stderr, "(LoadTree): going to new node!\n");
+            fprintf(stderr, "(LoadTree): curNode: %p, left: %p, right: %p!\n", 
+                           curNode, curNode->left, curNode->right);
 
-            ERROR_STATUSES NodeCreateErrorStatus = NodeCreate(curNode);
+            
+            bool isLeftSon = false;
+
+            if (curNode->left == NULL) {
+                isLeftSon = true;
+            } 
+            else {
+                isLeftSon = false;
+            }
+
+            ERROR_STATUSES NodeCreateErrorStatus = NodeCreate(curNode, isLeftSon);
 
             ASSERT(NodeCreateErrorStatus == OK, GetErrorString(NodeCreateErrorStatus), NodeCreateErrorStatus);
 
             nNodes++;
 
-            if (curNode->right == NULL) {
+            bufferInd++;
+
+            if (isLeftSon) {
                 curNode = curNode->left;
-            } 
-            else {
+            } else {
                 curNode = curNode->right;
             }
-
-            bufferInd++;
         }
 
-        if (!sscanf(buffer + bufferInd, "\"%s\"", curLine)) {
-            if (sscanf(buffer + bufferInd, "%s)", curLine) && strcmp(curLine, "nul)") == 0) {
+        if (!sscanf(buffer + bufferInd, "\"%[^\"]\"", curLine)) {
+            fprintf(stderr, "(LoadTree): buffer: <%s>\n", buffer + bufferInd);
+
+            if (sscanf(buffer + bufferInd, "%[^)]", curLine) && strcmp(curLine, "nil") == 0) {
+                fprintf(stderr, "(LoadTree): curLine: <%s>\n", curLine);
+                fprintf(stderr, "(LoadTree): (nil) found!\n");
+                
+                bufferInd += 3;
                 continue;
             }
             return UNKNOWN_STRING_LOAD_TREE;            
@@ -951,7 +978,7 @@ ERROR_STATUSES LoadTree(Tree* ptrTree) {
 
         fprintf(stderr, "(LoadTree): bufferInd before: %i, curLine: <%s>\n", bufferInd, curLine);
         
-        *(curLine + strlen(curLine) - 1) = '\0';
+        // *(curLine + strlen(curLine) - 1) =1 '\0';
 
         curNode->data.line = strdup(curLine);
 
@@ -1052,6 +1079,40 @@ ERROR_STATUSES GenerateTreeFile(Tree* ptrTree, char** ptrBuffer, size_t* ptrBuff
 
     *ptrBuffer     = buffer;
     *ptrBufferSize = bufferInd;
+
+    return OK;
+}
+
+ERROR_STATUSES CropLastChar(char* curLine, size_t* ptrCurLineInd) {
+    ASSERT(curLine       != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+    ASSERT(ptrCurLineInd != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+
+    fprintf(stderr, "(CropLastChar): BEFORE curLine: <%s>, ind: %zu\n", curLine, *ptrCurLineInd);
+
+    curLine[*ptrCurLineInd - 1] = '\0';
+    *ptrCurLineInd = *ptrCurLineInd - 1;
+
+    fprintf(stderr, "(CropLastChar): AFTER curLine: <%s>, ind: %zu\n", curLine, *ptrCurLineInd);
+    
+    return OK;
+}
+
+ERROR_STATUSES GetVizLen(   char* curLine, size_t* ptrRes) {
+    ASSERT(curLine != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+    ASSERT(ptrRes  != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+
+    size_t res = 0;
+
+    char* ch = curLine;
+
+    for (; *ch != '\0'; ch++) {
+        res++;
+        if ((*ch) & 0x80) {
+            ch++;  // skip one byte, if cyrillic
+        }
+    }
+
+    *ptrRes = res;
 
     return OK;
 }
