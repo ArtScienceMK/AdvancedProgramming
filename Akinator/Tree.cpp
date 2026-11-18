@@ -47,8 +47,10 @@ const char* TreeSaveFilename = "dataSave.trq";
 
 const int TreeFileSize       = 20000;
 const int MaxTreeLineSize    = 200;
+
 const int MaxObjectLineSize  = 30;
 const int MaxDefLineSize     = 600;
+const int MaxTraitsCnt      = 50;
 
 const char* DotFileTemplate = "digraph G{\n\trankdir=TB;\n\tnode[color=\"#000000\", style=filled, fillcolor=\"#00ff88\", fontsize=14, shape=\"Mrecord\"];\n";
 
@@ -111,9 +113,13 @@ ERROR_STATUSES WriteBufferToFile(const char* filename, char* buffer, size_t buff
 ERROR_STATUSES StartUserCycle();
 ERROR_STATUSES Guess(         Tree* tree);
 ERROR_STATUSES GiveDefinition(Tree* tree);
+ERROR_STATUSES Compare(       Tree* tree);
 
-ERROR_STATUSES GetDefinition(Node* root,          char* inputLine, char* definitionLine);
+ERROR_STATUSES GetDefinition(Node* root,          char* inputLine, char* definitionLine, size_t* ptrDefinitionLineSize);
 ERROR_STATUSES RecDefinition(Node* curNode, const char* toFind,    Stack_t* ptrStack, bool* found);
+
+ERROR_STATUSES GetCompare(  char** common, char** diff1, char** diff2, size_t* ptrCommonInd, size_t* ptrDiff1Ind, size_t* ptrDiff2Ind, 
+                            Tree* ptrTree, char* object1Line, char* object2Line);
 
 ERROR_STATUSES GenerateTreeFile(Tree* ptrTree, char** ptrBuffer, size_t* ptrBufferSize);
 ERROR_STATUSES SaveTree(        Tree* ptrTree);
@@ -670,7 +676,7 @@ ERROR_STATUSES StartUserCycle() {
 
     for (int i = 0; i < nQueries; i++) {
         printf("Что ты желаешь сделать?\n");
-        printf("[у]гадать объект, [п]осмотреть базу данных, [в]ыйти, [д]ать определение\n");
+        printf("[у]гадать объект, [п]осмотреть базу данных, [в]ыйти\n [д]ать определение, [с]равнить\n");
 
         ClearLine(inputLine);
         inputLineInd = 0;
@@ -744,6 +750,9 @@ ERROR_STATUSES StartUserCycle() {
         }
         else if (strcmp(inputLine, "д") == 0) {
             GiveDefinition(&tree);
+        }
+        else if (strcmp(inputLine, "с") == 0) {
+            Compare(&tree);
         }
         else {
             printf("Введена неизвестная опция... Последнее предупреждение...\n");
@@ -1159,7 +1168,9 @@ ERROR_STATUSES GiveDefinition(Tree* ptrTree) {
 
     ASSERT(definitionLine != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
     
-    ERROR_STATUSES GetDefinitionErrorStatus = GetDefinition(ptrTree->root, inputLine, definitionLine);
+    size_t definitionLineSize = 0;
+
+    ERROR_STATUSES GetDefinitionErrorStatus = GetDefinition(ptrTree->root, inputLine, definitionLine, &definitionLineSize);
 
     ASSERT(GetDefinitionErrorStatus == OK, GetErrorString(GetDefinitionErrorStatus),
            GetDefinitionErrorStatus);
@@ -1174,7 +1185,7 @@ ERROR_STATUSES GiveDefinition(Tree* ptrTree) {
     return OK;
 }
 
-ERROR_STATUSES GetDefinition(Node* root, char* inputLine, char* definitionLine) {
+ERROR_STATUSES GetDefinition(Node* root, char* inputLine, char* definitionLine, size_t* ptrDefinitionLineSize) {
     ASSERT(root           != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
     ASSERT(inputLine      != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
     ASSERT(definitionLine != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
@@ -1255,6 +1266,8 @@ ERROR_STATUSES GetDefinition(Node* root, char* inputLine, char* definitionLine) 
                 definitionLine);
 
     }
+
+    *ptrDefinitionLineSize = definitionLineInd;
 
     return OK;
 }
@@ -1476,7 +1489,259 @@ const char* GetErrorString(ERROR_STATUSES errorStatus) {
         case UNKNOWN_STRING_LOAD_TREE:
             return "Got an unknown string when loading tree!\n";
 
+        case AKINATOR_COMPARE_ERROR:
+            return "An error happened when comparing in akinator!\n";
+
         default:
             return "Unknown error status!\n";
     }
+}
+
+ERROR_STATUSES Compare(Tree* ptrTree) {
+    ERROR_STATUSES TreeVerifyErrorStatus = TreeVerify(ptrTree);
+
+    ASSERT(TreeVerifyErrorStatus == OK, GetErrorString(TreeVerifyErrorStatus),
+           TreeVerifyErrorStatus);
+
+    Node* curNode  = ptrTree->root;
+
+    char* object1Line = (char*)calloc(MaxUnicodeLineSize, sizeof(*object1Line));
+
+    ASSERT(object1Line != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
+    
+    size_t object1LineSize = MaxObjectLineSize;
+    size_t object1LineInd  = 0;
+
+    printf("Введи название первого объекта для сравнения:");
+
+    if ((object1LineInd = getline(&object1Line, &object1LineSize, stdin)) == -1) {
+        printf("Введено некорректное название...\n");
+        printf("Самоуничтожение...\n");
+        return AKINATOR_OBJECT_INPUT_ERROR;
+    }
+
+    CropLastChar(object1Line, &object1LineInd);
+
+    char* object2Line = (char*)calloc(MaxUnicodeLineSize, sizeof(*object2Line));
+
+    ASSERT(object2Line != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
+
+    size_t object2LineSize = MaxObjectLineSize;
+    size_t object2LineInd  = 0;
+
+    printf("Введи название второго объекта для сравнения:");
+
+    if ((object2LineInd = getline(&object2Line, &object2LineSize, stdin)) == -1) {
+        printf("Введено некорректное название...\n");
+        printf("Самоуничтожение...\n");
+        return AKINATOR_OBJECT_INPUT_ERROR;
+    }
+
+    CropLastChar(object2Line, &object2LineInd);
+
+    char** common = NULL, **diff1 = NULL, **diff2 = NULL;
+
+    common = (char**)calloc(MaxTraitsCnt, sizeof(*common));
+
+    ASSERT(common != NULL, GetErrorString(NOT_ENOUGH_MEMORY), 
+           NOT_ENOUGH_MEMORY);
+
+    size_t commonInd = 0;
+
+    diff1 = (char**)calloc(MaxTraitsCnt, sizeof(*diff1));
+
+    ASSERT(diff1 != NULL, GetErrorString(NOT_ENOUGH_MEMORY), 
+           NOT_ENOUGH_MEMORY);
+
+    size_t diff1Ind = 0;
+
+    diff2 = (char**)calloc(MaxTraitsCnt, sizeof(*diff2));
+
+    ASSERT(diff2 != NULL, GetErrorString(NOT_ENOUGH_MEMORY), 
+           NOT_ENOUGH_MEMORY);
+
+    size_t diff2Ind = 0;
+    
+
+    ERROR_STATUSES GetCompareErrorStatus = GetCompare(common, diff1, diff2, &commonInd, &diff1Ind, &diff2Ind, ptrTree, object1Line, object2Line);
+
+    ASSERT(GetCompareErrorStatus == OK, GetErrorString(GetCompareErrorStatus), GetCompareErrorStatus);
+
+    // fprintf(stderr, "common: %p, ind: %zu\n", common, commonInd);
+
+    // for (size_t i = 0; i < commonInd; i++) {
+    //     fprintf(stderr, "common[%zu]: <%s>\n", i, common[i]);
+    // }
+
+    // printf("%s и %s схожи в том, что");
+
+    // for (size_t i = 0; i < commonInd; i++) {
+    //     printf("%s", common[i]);
+    // }
+
+    // printf("\n");
+    
+    // for (; def1LineInd < def1LineSize; def1LineInd++) {
+    //     ClearLine(cur1Line);
+        
+    //     cur1LineInd = 0;
+
+    //     if (!(cur1LineInd += sscanf(def1Line + def1LineInd, "%s", cur1Line + cur1LineInd))) {
+    //         fprintf(stderr, "(Compare): cannot read from first line. def1Line: <%s>, def1LineInd: %zu\n",
+    //                          def1Line + def1LineInd, def1LineInd);
+    //         return AKINATOR_COMPARE_ERROR;
+    //     }
+
+    //     if (strcmp(cur1Line, "не") == 0) {
+    //         if (!(cur1LineInd += sscanf(def1Line + def1LineInd, "%s", cur1Line + cur1LineInd))) {
+    //             fprintf(stderr, "(Compare): cannot read from first line. def1Line: <%s>, def1LineInd: %zu\n",
+    //                              def1Line + def1LineInd, def1LineInd);
+    //             return AKINATOR_COMPARE_ERROR;
+    //         }
+    //     }
+
+    //     *(diff1 + diff1Ind) = strdup(cur1Line);
+    //     diff1Ind++;
+    // }
+
+    // for (; def2LineInd < def2LineSize; def2LineInd++) {
+
+    // }
+
+    return OK;
+}
+
+ERROR_STATUSES GetCompare(char** common, char** diff1, char** diff2, size_t* ptrCommonInd, size_t* ptrDiff1Ind, size_t* ptrDiff2Ind,
+                          Tree* ptrTree, char* object1Line, char* object2Line) {
+
+    size_t commonInd = *ptrCommonInd;
+    size_t diff1Ind = *ptrDiff1Ind;
+    size_t diff2Ind = *ptrDiff2Ind;
+
+    char* def1Line = (char*)calloc(MaxDefLineSize, sizeof(*def1Line));
+    
+    ASSERT(def1Line != NULL, GetErrorString(NOT_ENOUGH_MEMORY),
+           NOT_ENOUGH_MEMORY);
+
+    size_t def1LineInd = 0, def1LineSize = 0;
+
+    char* def2Line = (char*)calloc(MaxDefLineSize, sizeof(*def2Line));
+    
+    ASSERT(def2Line != NULL, GetErrorString(NOT_ENOUGH_MEMORY),
+           NOT_ENOUGH_MEMORY);
+
+    size_t def2LineInd = 0, def2LineSize = 0;
+
+    ERROR_STATUSES GetDefinitionErrorStatus = GetDefinition(ptrTree->root, object1Line, def1Line, &def1LineSize);
+
+    ASSERT(GetDefinitionErrorStatus == OK, GetErrorString(GetDefinitionErrorStatus),
+           GetDefinitionErrorStatus);
+
+    GetDefinitionErrorStatus = GetDefinition(ptrTree->root, object2Line, def2Line, &def2LineSize);
+
+    ASSERT(GetDefinitionErrorStatus == OK, GetErrorString(GetDefinitionErrorStatus),
+           GetDefinitionErrorStatus);
+
+    char* cur1Line = (char*) calloc(MaxObjectLineSize, sizeof(*cur1Line));
+
+    ASSERT(cur1Line != NULL, GetErrorString(NOT_ENOUGH_MEMORY),
+           NOT_ENOUGH_MEMORY);
+
+    size_t cur1LineInd = 0;
+
+    char* cur2Line = (char*) calloc(MaxObjectLineSize, sizeof(*cur2Line));
+
+    ASSERT(cur2Line != NULL, GetErrorString(NOT_ENOUGH_MEMORY),
+           NOT_ENOUGH_MEMORY);
+
+    size_t cur2LineInd = 0;
+
+    for (; def1LineInd < def1LineSize && def2LineInd < def2LineSize; def1LineInd++, def2LineInd++) {
+        ClearLine(cur1Line);
+        ClearLine(cur2Line);
+        
+        cur1LineInd = 0;
+        cur2LineInd = 0;
+
+        if (!sscanf(def1Line + def1LineInd, "%s", cur1Line + cur1LineInd)) {
+            fprintf(stderr, "(Compare): cannot read from first line. def1Line: <%s>, def1LineInd: %zu\n",
+                             def1Line + def1LineInd, def1LineInd);
+            return AKINATOR_COMPARE_ERROR;
+        }
+        
+        cur1LineInd = strlen(cur1Line);
+
+        def1LineInd += cur1LineInd;
+
+        if (!sscanf(def2Line + def2LineInd, "%s", cur2Line + cur2LineInd)) {
+            fprintf(stderr, "(Compare): cannot read from second line. def2Line: <%s>, def2LineInd: %zu\n",
+                             def2Line + def2LineInd, def2LineInd);
+            return AKINATOR_COMPARE_ERROR;
+        }
+
+        cur2LineInd = strlen(cur2Line);
+
+        def2LineInd += cur2LineInd;
+
+
+        fprintf(stderr, "(GetCompare): def1LineInd: %zu, def2LineInd: %zu\n", def1LineInd, def2LineInd);
+
+        fprintf(stderr, "(GetCompare): cur1LineInd: %zu, cur2LineInd: %zu\n", cur1LineInd, cur2LineInd);
+
+        fprintf(stderr, "(GetCompare): cur1Line: <%s>, cur2Line: <%s>\n", cur1Line, cur2Line);
+
+        if (strcmp(cur1Line, "не") == 0) {
+            cur1Line[cur1LineInd++] = ' ';
+            def1LineInd++;
+
+            if (!sscanf(def1Line + def1LineInd, "%s", cur1Line + cur1LineInd)) {
+                fprintf(stderr, "(Compare): cannot read from first line. def1Line: <%s>, def1LineInd: %zu\n",
+                                 def1Line + def1LineInd, def1LineInd);
+                return AKINATOR_COMPARE_ERROR;
+            }
+            def1LineInd += strlen(cur1Line) - cur1LineInd;
+        }
+
+        cur1LineInd = strlen(cur1Line);
+
+        if (strcmp(cur2Line, "не") == 0) {
+            cur2Line[cur2LineInd++] = ' ';
+            def2LineInd++;
+
+            if (!sscanf(def2Line + def2LineInd, "%s", cur2Line + cur2LineInd)) {
+                fprintf(stderr, "(Compare): cannot read from second line. def2Line: <%s>, def2LineInd: %zu\n",
+                                 def2Line + def2LineInd, def2LineInd);
+               return AKINATOR_COMPARE_ERROR;
+            }
+            def2LineInd += strlen(cur2Line) - cur2LineInd; 
+        }
+
+        cur2LineInd = strlen(cur2Line);
+
+        fprintf(stderr, "(GetCompare): def1LineInd: %zu, def2LineInd: %zu\n", def1LineInd, def2LineInd);
+
+        fprintf(stderr, "(GetCompare): cur1LineInd: %zu, cur2LineInd: %zu\n", cur1LineInd, cur2LineInd);
+
+        fprintf(stderr, "(GetCompare): cur1Line: <%s>, cur2Line: <%s>\n", cur1Line, cur2Line);
+
+
+        if (strcmp(cur1Line, cur2Line) == 0) {
+            *(common + commonInd) = strdup(cur1Line);
+            commonInd++;
+        } 
+        else {
+            *(diff1 + diff1Ind) = strdup(cur1Line);
+            diff1Ind++;
+
+            *(diff2 + diff2Ind) = strdup(cur2Line);
+            diff2Ind++;
+        }
+
+    }
+
+    *ptrCommonInd = commonInd;
+    *ptrDiff1Ind  = diff1Ind;
+    *ptrDiff2Ind  = diff2Ind;
+
+    return OK;
 }

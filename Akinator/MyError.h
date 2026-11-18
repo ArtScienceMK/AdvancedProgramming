@@ -64,7 +64,8 @@ enum ERROR_STATUSES {
     AKINATOR_QUESTION_INPUT_ERROR        = 59,
     UNKNOWN_AKINATOR_ANSWER_OPTION       = 60,
     AKINATOR_OBJECT_INPUT_ERROR          = 61,
-    UNKNOWN_STRING_LOAD_TREE             = 62
+    UNKNOWN_STRING_LOAD_TREE             = 62,
+    AKINATOR_COMPARE_ERROR               = 63,
 };
 
 const char* GetErrorString(ERROR_STATUSES errorStatus);
