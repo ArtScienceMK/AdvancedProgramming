@@ -1109,12 +1109,12 @@ ERROR_STATUSES CropLastChar(char* curLine, size_t* ptrCurLineInd) {
     ASSERT(curLine       != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
     ASSERT(ptrCurLineInd != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
 
-    fprintf(stderr, "(CropLastChar): BEFORE curLine: <%s>, ind: %zu\n", curLine, *ptrCurLineInd);
+    // fprintf(stderr, "(CropLastChar): BEFORE curLine: <%s>, ind: %zu\n", curLine, *ptrCurLineInd);
 
     curLine[*ptrCurLineInd - 1] = '\0';
     *ptrCurLineInd = *ptrCurLineInd - 1;
 
-    fprintf(stderr, "(CropLastChar): AFTER curLine: <%s>, ind: %zu\n", curLine, *ptrCurLineInd);
+    // fprintf(stderr, "(CropLastChar): AFTER curLine: <%s>, ind: %zu\n", curLine, *ptrCurLineInd);
     
     return OK;
 }
@@ -1257,7 +1257,7 @@ ERROR_STATUSES GetDefinition(Node* root, char* inputLine, char* definitionLine, 
         ASSERT(AddLineErrorStatus == OK, GetErrorString(AddLineErrorStatus),
                AddLineErrorStatus);
 
-        AddLineErrorStatus = AddLine(definitionLine, &definitionLineInd, " ");
+        AddLineErrorStatus = AddLine(definitionLine, &definitionLineInd, ", ");
 
         ASSERT(AddLineErrorStatus == OK, GetErrorString(AddLineErrorStatus),
                AddLineErrorStatus);
@@ -1503,8 +1503,6 @@ ERROR_STATUSES Compare(Tree* ptrTree) {
     ASSERT(TreeVerifyErrorStatus == OK, GetErrorString(TreeVerifyErrorStatus),
            TreeVerifyErrorStatus);
 
-    Node* curNode  = ptrTree->root;
-
     char* object1Line = (char*)calloc(MaxUnicodeLineSize, sizeof(*object1Line));
 
     ASSERT(object1Line != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
@@ -1576,7 +1574,7 @@ ERROR_STATUSES Compare(Tree* ptrTree) {
     printf("%s и %s схожи в том, что ", object1Line, object2Line);
 
     for (size_t i = 0; i < commonInd; i++) {
-        printf("%s ", common[i]);
+        printf("%s, ", common[i]);
     }
 
     printf("\n");
@@ -1584,7 +1582,7 @@ ERROR_STATUSES Compare(Tree* ptrTree) {
     printf("%s отличается от %s тем, что ", object1Line, object2Line);
 
     for (size_t i = 0; i < diff1Ind; i++) {
-        printf("%s ", diff1[i]);
+        printf("%s, ", diff1[i]);
     }
 
     printf("\n");
@@ -1592,7 +1590,7 @@ ERROR_STATUSES Compare(Tree* ptrTree) {
     printf("А %s отличается от %s тем, что ", object2Line, object1Line);
 
     for (size_t i = 0; i < diff2Ind; i++) {
-        printf("%s ", diff2[i]);
+        printf("%s, ", diff2[i]);
     }
 
     printf("\n");
