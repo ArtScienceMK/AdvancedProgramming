@@ -738,7 +738,7 @@ ERROR_STATUSES StartUserCycle() {
                 printf("Дерево успешно сохранено!\n");
             }
             else if (strcmp(inputLine, "нет") == 0) {
-                printf("Дерево удалено!\n");
+                printf("Дерево не было сохранено!\n");
             }
             else {
                 printf("Некорректный ответ на вопрос! Самоуничтожение...\n");
@@ -1573,13 +1573,29 @@ ERROR_STATUSES Compare(Tree* ptrTree) {
     //     fprintf(stderr, "common[%zu]: <%s>\n", i, common[i]);
     // }
 
-    // printf("%s и %s схожи в том, что");
+    printf("%s и %s схожи в том, что ", object1Line, object2Line);
 
-    // for (size_t i = 0; i < commonInd; i++) {
-    //     printf("%s", common[i]);
-    // }
+    for (size_t i = 0; i < commonInd; i++) {
+        printf("%s ", common[i]);
+    }
 
-    // printf("\n");
+    printf("\n");
+
+    printf("%s отличается от %s тем, что ", object1Line, object2Line);
+
+    for (size_t i = 0; i < diff1Ind; i++) {
+        printf("%s ", diff1[i]);
+    }
+
+    printf("\n");
+
+    printf("А %s отличается от %s тем, что ", object2Line, object1Line);
+
+    for (size_t i = 0; i < diff2Ind; i++) {
+        printf("%s ", diff2[i]);
+    }
+
+    printf("\n");
     
     // for (; def1LineInd < def1LineSize; def1LineInd++) {
     //     ClearLine(cur1Line);
@@ -1618,126 +1634,171 @@ ERROR_STATUSES GetCompare(char** common, char** diff1, char** diff2, size_t* ptr
     size_t diff1Ind = *ptrDiff1Ind;
     size_t diff2Ind = *ptrDiff2Ind;
 
-    char* def1Line = (char*)calloc(MaxDefLineSize, sizeof(*def1Line));
+    Stack_t stack1 = {}, stack2 = {};
     
-    ASSERT(def1Line != NULL, GetErrorString(NOT_ENOUGH_MEMORY),
-           NOT_ENOUGH_MEMORY);
+    SourceLocation sourceLocation1 = {};
+    GET_SOURCE_LOCATION(sourceLocation1, stack1);
 
-    size_t def1LineInd = 0, def1LineSize = 0;
+    ERROR_STATUSES StackInitErrorStatus = StackInit(&stack1, (size_t)30, sourceLocation1);
 
-    char* def2Line = (char*)calloc(MaxDefLineSize, sizeof(*def2Line));
-    
-    ASSERT(def2Line != NULL, GetErrorString(NOT_ENOUGH_MEMORY),
-           NOT_ENOUGH_MEMORY);
+    ASSERT(StackInitErrorStatus == OK, GetErrorString(StackInitErrorStatus),
+           StackInitErrorStatus);
 
-    size_t def2LineInd = 0, def2LineSize = 0;
+    SourceLocation sourceLocation2 = {};
+    GET_SOURCE_LOCATION(sourceLocation2, stack2);
 
-    ERROR_STATUSES GetDefinitionErrorStatus = GetDefinition(ptrTree->root, object1Line, def1Line, &def1LineSize);
 
-    ASSERT(GetDefinitionErrorStatus == OK, GetErrorString(GetDefinitionErrorStatus),
-           GetDefinitionErrorStatus);
+    StackInitErrorStatus = StackInit(&stack2, (size_t)30, sourceLocation2);
 
-    GetDefinitionErrorStatus = GetDefinition(ptrTree->root, object2Line, def2Line, &def2LineSize);
+    ASSERT(StackInitErrorStatus == OK, GetErrorString(StackInitErrorStatus),
+           StackInitErrorStatus);
 
-    ASSERT(GetDefinitionErrorStatus == OK, GetErrorString(GetDefinitionErrorStatus),
-           GetDefinitionErrorStatus);
+    bool found = false;
 
-    char* cur1Line = (char*) calloc(MaxObjectLineSize, sizeof(*cur1Line));
+    ERROR_STATUSES RecDefinitionErrorStatus = RecDefinition(ptrTree->root, object1Line, &stack1, &found);
 
-    ASSERT(cur1Line != NULL, GetErrorString(NOT_ENOUGH_MEMORY),
-           NOT_ENOUGH_MEMORY);
+    ASSERT(RecDefinitionErrorStatus == OK, GetErrorString(RecDefinitionErrorStatus),
+           RecDefinitionErrorStatus);
 
-    size_t cur1LineInd = 0;
+    found = false;
 
-    char* cur2Line = (char*) calloc(MaxObjectLineSize, sizeof(*cur2Line));
+    RecDefinitionErrorStatus = RecDefinition(ptrTree->root, object2Line, &stack2, &found);
 
-    ASSERT(cur2Line != NULL, GetErrorString(NOT_ENOUGH_MEMORY),
-           NOT_ENOUGH_MEMORY);
+    ASSERT(RecDefinitionErrorStatus == OK, GetErrorString(RecDefinitionErrorStatus),
+           RecDefinitionErrorStatus);
 
-    size_t cur2LineInd = 0;
+    while (stack1.size > 1 && stack2.size > 1) {
+        StackElement_t popValue1 = 0;
 
-    for (; def1LineInd < def1LineSize && def2LineInd < def2LineSize; def1LineInd++, def2LineInd++) {
-        ClearLine(cur1Line);
-        ClearLine(cur2Line);
+        ERROR_STATUSES StackPopErrorStatus = StackPop(&stack1, &popValue1);
+
+        ASSERT(StackPopErrorStatus == OK, GetErrorString(StackPopErrorStatus),
+               StackPopErrorStatus);
+
+        Node* curNode1 = (Node*)popValue1;    
+
+        fprintf(stderr, "(GetCompare): popped curNode: %p, has line: <%s>\n", 
+                curNode1, curNode1->data.line);
+
+        StackElement_t childPopValue1 = 0;
+
+        StackPopErrorStatus = StackPop(&stack1, &childPopValue1);
+
+        ASSERT(StackPopErrorStatus == OK, GetErrorString(StackPopErrorStatus),
+               StackPopErrorStatus);
+
+        Node* childNode1 = (Node*)childPopValue1;    
+
+        fprintf(stderr, "(GetCompare): popped childNode: %p, has line: <%s>\n", 
+                childNode1, childNode1->data.line);
+            
+        ERROR_STATUSES StackPushErrorStatus = StackPush(&stack1, (size_t)(childNode1));
+
+        ASSERT(StackPushErrorStatus == OK, GetErrorString(StackPushErrorStatus),
+               StackPushErrorStatus);
         
-        cur1LineInd = 0;
-        cur2LineInd = 0;
-
-        if (!sscanf(def1Line + def1LineInd, "%s", cur1Line + cur1LineInd)) {
-            fprintf(stderr, "(Compare): cannot read from first line. def1Line: <%s>, def1LineInd: %zu\n",
-                             def1Line + def1LineInd, def1LineInd);
-            return AKINATOR_COMPARE_ERROR;
-        }
+        StackElement_t popValue2 = 0;
         
-        cur1LineInd = strlen(cur1Line);
+        StackPopErrorStatus = StackPop(&stack2, &popValue2);
 
-        def1LineInd += cur1LineInd;
+        ASSERT(StackPopErrorStatus == OK, GetErrorString(StackPopErrorStatus),
+               StackPopErrorStatus);
 
-        if (!sscanf(def2Line + def2LineInd, "%s", cur2Line + cur2LineInd)) {
-            fprintf(stderr, "(Compare): cannot read from second line. def2Line: <%s>, def2LineInd: %zu\n",
-                             def2Line + def2LineInd, def2LineInd);
-            return AKINATOR_COMPARE_ERROR;
-        }
+        Node* curNode2 = (Node*)popValue2;    
 
-        cur2LineInd = strlen(cur2Line);
+        fprintf(stderr, "(GetDefinition): popped curNode: %p, has line: <%s>\n", 
+                curNode2, curNode2->data.line);
 
-        def2LineInd += cur2LineInd;
+        StackElement_t childPopValue2 = 0;
+
+        StackPopErrorStatus = StackPop(&stack2, &childPopValue2);
+
+        ASSERT(StackPopErrorStatus == OK, GetErrorString(StackPopErrorStatus),
+               StackPopErrorStatus);
+
+        Node* childNode2 = (Node*)childPopValue2;    
+
+        fprintf(stderr, "(GetCompare): popped childNode: %p, has line: <%s>\n", 
+                childNode2, childNode2->data.line);
+            
+        StackPushErrorStatus = StackPush(&stack2, (size_t)(childNode2));
+
+        ASSERT(StackPushErrorStatus == OK, GetErrorString(StackPushErrorStatus),
+               StackPushErrorStatus);
+
+        ERROR_STATUSES AddLineErrorStatus = OK;
 
 
-        fprintf(stderr, "(GetCompare): def1LineInd: %zu, def2LineInd: %zu\n", def1LineInd, def2LineInd);
+        if (curNode1 == curNode2 && childNode1 == childNode2) {
+            common[commonInd] = (char*)calloc(MaxObjectLineSize, sizeof(*common[commonInd]));
 
-        fprintf(stderr, "(GetCompare): cur1LineInd: %zu, cur2LineInd: %zu\n", cur1LineInd, cur2LineInd);
+            ASSERT(common[commonInd] != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
 
-        fprintf(stderr, "(GetCompare): cur1Line: <%s>, cur2Line: <%s>\n", cur1Line, cur2Line);
+            size_t curCommonLineInd = 0;
 
-        if (strcmp(cur1Line, "не") == 0) {
-            cur1Line[cur1LineInd++] = ' ';
-            def1LineInd++;
+            if (childNode1 == curNode1->left) {
+                fprintf(stderr, "(GetCompare): this statement is not true!\n");
+                
+                AddLineErrorStatus = AddLine(common[commonInd], &curCommonLineInd, "не ");
 
-            if (!sscanf(def1Line + def1LineInd, "%s", cur1Line + cur1LineInd)) {
-                fprintf(stderr, "(Compare): cannot read from first line. def1Line: <%s>, def1LineInd: %zu\n",
-                                 def1Line + def1LineInd, def1LineInd);
-                return AKINATOR_COMPARE_ERROR;
+                ASSERT(AddLineErrorStatus == OK, GetErrorString(AddLineErrorStatus),
+                       AddLineErrorStatus);
             }
-            def1LineInd += strlen(cur1Line) - cur1LineInd;
-        }
 
-        cur1LineInd = strlen(cur1Line);
+            AddLineErrorStatus = AddLine(common[commonInd], &curCommonLineInd, curNode1->data.line);
 
-        if (strcmp(cur2Line, "не") == 0) {
-            cur2Line[cur2LineInd++] = ' ';
-            def2LineInd++;
+            ASSERT(AddLineErrorStatus == OK, GetErrorString(AddLineErrorStatus),
+                   AddLineErrorStatus);
 
-            if (!sscanf(def2Line + def2LineInd, "%s", cur2Line + cur2LineInd)) {
-                fprintf(stderr, "(Compare): cannot read from second line. def2Line: <%s>, def2LineInd: %zu\n",
-                                 def2Line + def2LineInd, def2LineInd);
-               return AKINATOR_COMPARE_ERROR;
-            }
-            def2LineInd += strlen(cur2Line) - cur2LineInd; 
-        }
-
-        cur2LineInd = strlen(cur2Line);
-
-        fprintf(stderr, "(GetCompare): def1LineInd: %zu, def2LineInd: %zu\n", def1LineInd, def2LineInd);
-
-        fprintf(stderr, "(GetCompare): cur1LineInd: %zu, cur2LineInd: %zu\n", cur1LineInd, cur2LineInd);
-
-        fprintf(stderr, "(GetCompare): cur1Line: <%s>, cur2Line: <%s>\n", cur1Line, cur2Line);
-
-
-        if (strcmp(cur1Line, cur2Line) == 0) {
-            *(common + commonInd) = strdup(cur1Line);
             commonInd++;
-        } 
-        else {
-            *(diff1 + diff1Ind) = strdup(cur1Line);
-            diff1Ind++;
 
-            *(diff2 + diff2Ind) = strdup(cur2Line);
+        } else {
+            diff1[diff1Ind] = (char*)calloc(MaxObjectLineSize, sizeof(*diff1[diff1Ind]));
+
+            ASSERT(diff1[diff1Ind] != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
+
+            size_t curDiff1LineInd = 0;
+
+
+            diff2[diff2Ind] = (char*)calloc(MaxObjectLineSize, sizeof(*diff2[diff2Ind]));
+
+            ASSERT(diff2[diff2Ind] != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
+
+            size_t curDiff2LineInd = 0;
+
+
+            if (childNode1 == curNode1->left) {
+                fprintf(stderr, "(GetCompare): this statement is not true!\n");
+                 AddLineErrorStatus = AddLine(diff1[diff1Ind], &curDiff1LineInd, "не ");
+
+                ASSERT(AddLineErrorStatus == OK, GetErrorString(AddLineErrorStatus),
+                AddLineErrorStatus);
+            }
+
+            if (childNode2 == curNode2->left) {
+                fprintf(stderr, "(GetCompare): this statement is not true!\n");
+                 AddLineErrorStatus = AddLine(diff2[diff2Ind], &curDiff2LineInd, "не ");
+
+                ASSERT(AddLineErrorStatus == OK, GetErrorString(AddLineErrorStatus),
+                AddLineErrorStatus);
+            }
+
+            AddLineErrorStatus = AddLine(diff1[diff1Ind], &curDiff1LineInd, curNode1->data.line);
+
+            ASSERT(AddLineErrorStatus == OK, GetErrorString(AddLineErrorStatus),
+                   AddLineErrorStatus);
+
+            AddLineErrorStatus = AddLine(diff2[diff2Ind], &curDiff2LineInd, curNode2->data.line);
+
+            ASSERT(AddLineErrorStatus == OK, GetErrorString(AddLineErrorStatus),
+                   AddLineErrorStatus);
+            
+            diff1Ind++;
             diff2Ind++;
         }
-
     }
+
+    
 
     *ptrCommonInd = commonInd;
     *ptrDiff1Ind  = diff1Ind;
