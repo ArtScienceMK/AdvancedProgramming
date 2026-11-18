@@ -1,0 +1,303 @@
+\doxysection{My\+Stack.\+cpp}
+\hypertarget{MyStack_8cpp_source}{}\label{MyStack_8cpp_source}\doxymbox{\hyperlink{MyStack_8cpp}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00001}00001\ \textcolor{preprocessor}{\#ifdef\ STACK\_DEBUG}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00002}00002\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00003}00003\ \textcolor{preprocessor}{\#define\ ON\_DEBUG(...)\ \ \_\_VA\_ARGS\_\_}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00004}00004\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00005}00005\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00006}00006\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00007}\doxymbox{\hyperlink{MyStack_8cpp_a1bdd7c1369b250215a080e8421d4ecf3}{00007}}\ \textcolor{preprocessor}{\#define\ ON\_DEBUG(...)}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00008}00008\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00009}00009\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00010}00010\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00011}00011\ \textcolor{preprocessor}{\#ifdef\ CANARY\_DEBUG}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00012}00012\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00013}00013\ \textcolor{preprocessor}{\#define\ ON\_CANARY(...)\ \_\_VA\_ARGS\_\_}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00014}00014\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00015}00015\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00016}00016\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00017}\doxymbox{\hyperlink{MyStack_8cpp_a906c955aa71199f4d029c68d6c2ca958}{00017}}\ \textcolor{preprocessor}{\#define\ ON\_CANARY(...)}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00018}00018\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00019}00019\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00020}00020\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00021}00021\ \textcolor{preprocessor}{\#ifdef\ HASH\_DEBUG}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00022}00022\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00023}00023\ \textcolor{preprocessor}{\#define\ ON\_HASH(...)\ \ \ \_\_VA\_ARGS\_\_}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00024}00024\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00025}00025\ \textcolor{preprocessor}{\#else}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00026}00026\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00027}\doxymbox{\hyperlink{MyStack_8cpp_a2a6650e6569e7a5c40895e1da0a682d9}{00027}}\ \textcolor{preprocessor}{\#define\ ON\_HASH(...)}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00028}00028\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00029}00029\ \textcolor{preprocessor}{\#endif}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00030}00030\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00031}\doxymbox{\hyperlink{MyStack_8cpp_a6df1d22fb5f09eccc23b9f399670cfd7}{00031}}\ \textcolor{preprocessor}{\#define\ STRINGIFY(\ x\ )\ (\#\ x)}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00032}\doxymbox{\hyperlink{MyStack_8cpp_aff44bdb7611a5f354b42b78f080e8112}{00032}}\ \textcolor{preprocessor}{\#define\ GET\_SOURCE\_LOCATION(sourceLocation,\ varName)\(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00033}00033\ \textcolor{preprocessor}{\ \ \ \ sourceLocation.file\ =\ strdup(\_\_FILE\_\_);\(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00034}00034\ \textcolor{preprocessor}{\ \ \ \ sourceLocation.function\ =\ strdup(\_\_FUNCTION\_\_);\(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00035}00035\ \textcolor{preprocessor}{\ \ \ \ sourceLocation.line\ =\ \_\_LINE\_\_;\(\backslash\)}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00036}00036\ \textcolor{preprocessor}{\ \ \ \ sourceLocation.name\ =\ strdup(STRINGIFY(varName));}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00037}00037\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00038}00038\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00039}00039\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00040}00040\ \textcolor{preprocessor}{\#include\ <math.h>}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00041}00041\ \textcolor{preprocessor}{\#include\ <string.h>}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00042}00042\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00043}\doxymbox{\hyperlink{MyStack_8cpp_ad805fd920eacf5f2f1e7a9809f086604}{00043}}\ \textcolor{keyword}{typedef}\ \textcolor{keywordtype}{size\_t}\ \doxymbox{\hyperlink{MyStack_8cpp_ad805fd920eacf5f2f1e7a9809f086604}{StackElement\_t}};}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00044}00044\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00045}\doxymbox{\hyperlink{MyStack_8cpp_ae90f47e5461a7f2df8983005401e6064}{00045}}\ \textcolor{preprocessor}{\#define\ POISON\ NAN}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00046}\doxymbox{\hyperlink{MyStack_8cpp_a3f66c64c3c72034ee0c901bd685bb179}{00046}}\ \textcolor{preprocessor}{\#define\ CANARY\ ((StackElement\_t)\ 0xEDA)}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00047}00047\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00048}\doxymbox{\hyperlink{MyStack_8cpp_a1cd15547aa7a518489d755671d9e3b6f}{00048}}\ \textcolor{keyword}{const}\ \textcolor{keywordtype}{double}\ \doxymbox{\hyperlink{MyStack_8cpp_a1cd15547aa7a518489d755671d9e3b6f}{Eps}}\ =\ 1e-\/3;}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00049}00049\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00050}00050\ \textcolor{preprocessor}{\#include\ "{}\doxymbox{\hyperlink{MyAssert_8h}{MyAssert.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00051}00051\ \textcolor{preprocessor}{\#include\ "{}\doxymbox{\hyperlink{MyError_8h}{MyError.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00052}00052\ \textcolor{preprocessor}{\#include\ "{}\doxymbox{\hyperlink{MyStack_8h}{MyStack.h}}"{}}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00053}00053\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00054}00054\ \textcolor{preprocessor}{\#include\ <stdio.h>}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00055}00055\ \textcolor{preprocessor}{\#include\ <unistd.h>}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00056}00056\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00057}\doxymbox{\hyperlink{MyStack_8cpp_a36a5af0dfe9e5bd77b87d87b31bb4927}{00057}}\ \textcolor{keywordtype}{void}\ \doxymbox{\hyperlink{MyStack_8cpp_a36a5af0dfe9e5bd77b87d87b31bb4927}{SpoilCanary}}(\doxymbox{\hyperlink{structStack__t}{Stack\_t}}*\ ptrStack);}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00058}00058\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00059}00059\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \doxymbox{\hyperlink{MyStack_8cpp_a3e1580b8d88a5b604f91323b1f58c9b3}{GetHash}}(\doxymbox{\hyperlink{structStack__t}{Stack\_t}}*\ ptrStack);}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00060}00060\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00061}00061\ \textcolor{comment}{//\ int\ main()\ \{}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00062}00062\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00063}00063\ \textcolor{comment}{//\ \ \ \ \ HashesSample();}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00064}00064\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00065}00065\ \textcolor{comment}{//\ \ \ \ \ return\ 0;}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00066}00066\ \textcolor{comment}{//\ \}}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00067}00067\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00068}00068\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00069}\doxymbox{\hyperlink{MyStack_8cpp_aaabf505841abf624a72ec03389ee5020}{00069}}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\_STATUSES}}\ \doxymbox{\hyperlink{MyStack_8cpp_aaabf505841abf624a72ec03389ee5020}{StackInit}}(\doxymbox{\hyperlink{structStack__t}{Stack\_t}}*\ ptrStack,\ \textcolor{keywordtype}{size\_t}\ \_capacity\ \doxymbox{\hyperlink{MyStack_8cpp_a1bdd7c1369b250215a080e8421d4ecf3}{ON\_DEBUG}}(,\ \doxymbox{\hyperlink{structSourceLocation}{SourceLocation}}\ sourceLocation))\ \{}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00070}00070\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00071}00071\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}(StackInit):\ want\ to\ init\ \%s\(\backslash\)n\ Called\ from\ \%s:\%i\ \%s()\(\backslash\)n"{}},\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00072}00072\ \ \ \ \ \ \ \ \ sourceLocation.\doxymbox{\hyperlink{structSourceLocation_a2da792b833f8df18ed7ba28fca670630}{name}},\ sourceLocation.\doxymbox{\hyperlink{structSourceLocation_abe1a3fee04b49b1ea16c433d345d9e3d}{file}},\ sourceLocation.\doxymbox{\hyperlink{structSourceLocation_a0841da7b3abbe7aca24bb57f071e1042}{line}},\ sourceLocation.\doxymbox{\hyperlink{structSourceLocation_a5d88cd40250b64307d4b2acf8e79aa99}{function}});)\ \ \ \ \textcolor{comment}{//\ \ Дед,\ что\ писать\ в\ name??}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00073}00073\ \ \ \ \ \textcolor{comment}{//\ \ \ Как\ сделать\ line\ ctr+click\ able??\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00074}00074\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00075}00075\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack\ !=\ NULL,\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}});}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00076}00076\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00077}00077\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}\ ==\ NULL,\ \ \ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa774131b3e4dfe3f57ab35303e6ee061}{BAD\_CLEAR\_INIT}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa774131b3e4dfe3f57ab35303e6ee061}{BAD\_CLEAR\_INIT}});}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00078}00078\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a2d76cc62e9674f12196f4d66c9c8d449}{size}}\ ==\ 0,\ \ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa774131b3e4dfe3f57ab35303e6ee061}{BAD\_CLEAR\_INIT}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa774131b3e4dfe3f57ab35303e6ee061}{BAD\_CLEAR\_INIT}});}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00079}00079\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00080}00080\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_ad998fec906a4d5f999bf4ee7876da7eb}{capacity}}\ ==\ 0,\ \ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa774131b3e4dfe3f57ab35303e6ee061}{BAD\_CLEAR\_INIT}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa774131b3e4dfe3f57ab35303e6ee061}{BAD\_CLEAR\_INIT}});}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00081}00081\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a95b09342bb15c75fd1d28fe09b98c769}{status}}\ ==\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa774131b3e4dfe3f57ab35303e6ee061}{BAD\_CLEAR\_INIT}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa774131b3e4dfe3f57ab35303e6ee061}{BAD\_CLEAR\_INIT}});}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00082}00082\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a290cd0e4238ec7fb664a66d9d96a8c82}{hash}}\ ==\ 0,\ \ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa774131b3e4dfe3f57ab35303e6ee061}{BAD\_CLEAR\_INIT}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa774131b3e4dfe3f57ab35303e6ee061}{BAD\_CLEAR\_INIT}});\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00083}00083\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00084}00084\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00085}00085\ \ \ \ \ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_ad998fec906a4d5f999bf4ee7876da7eb}{capacity}}\ =\ \_capacity\ +\ 2;\ \textcolor{comment}{//\ stack\ initializes\ with\ size\ =\ 0}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00086}00086\ \ \ \ \ ptrStack-\/>\ data\ =\ (\doxymbox{\hyperlink{MyStack_8cpp_ad805fd920eacf5f2f1e7a9809f086604}{StackElement\_t}}*)calloc(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_ad998fec906a4d5f999bf4ee7876da7eb}{capacity}},\ \textcolor{keyword}{sizeof}(\doxymbox{\hyperlink{MyStack_8cpp_ad805fd920eacf5f2f1e7a9809f086604}{StackElement\_t}}));\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00087}00087\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00088}00088\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}\ !=\ NULL,\ \ \ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da}{NOT\_ENOUGH\_MEMORY}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da}{NOT\_ENOUGH\_MEMORY}});}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00089}00089\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00090}00090\ \ \ \ \ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}[0]\ =\ \doxymbox{\hyperlink{MyStack_8cpp_a3f66c64c3c72034ee0c901bd685bb179}{CANARY}};}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00091}00091\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00092}00092\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 1;\ i\ <\ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_ad998fec906a4d5f999bf4ee7876da7eb}{capacity}}\ -\/\ 1;\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00093}00093\ \ \ \ \ \ \ \ \ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}[i]\ =\ \doxymbox{\hyperlink{MyStack_8cpp_ae90f47e5461a7f2df8983005401e6064}{POISON}};}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00094}00094\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00095}00095\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00096}00096\ \ \ \ \ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}[ptrStack-\/>\doxymbox{\hyperlink{structStack__t_ad998fec906a4d5f999bf4ee7876da7eb}{capacity}}\ -\/\ 1]\ =\ \doxymbox{\hyperlink{MyStack_8cpp_a3f66c64c3c72034ee0c901bd685bb179}{CANARY}};}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00097}00097\ \ \ \ \ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a95b09342bb15c75fd1d28fe09b98c769}{status}}\ =\ \textcolor{stringliteral}{"{}Initialized\(\backslash\)n"{}};\ \ \textcolor{comment}{//\ \ Здесь\ strdup\ не\ нужен}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00098}00098\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00099}00099\ \ \ \ \ \doxymbox{\hyperlink{MyStack_8cpp_a2a6650e6569e7a5c40895e1da0a682d9}{ON\_HASH}}(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a290cd0e4238ec7fb664a66d9d96a8c82}{hash}}\ =\ \doxymbox{\hyperlink{MyStack_8cpp_a3e1580b8d88a5b604f91323b1f58c9b3}{GetHash}}(ptrStack));}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00100}00100\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00101}00101\ \ \ \ \ \doxymbox{\hyperlink{MyStack_8cpp_a2a6650e6569e7a5c40895e1da0a682d9}{ON\_HASH}}(\doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}HASH\ IN\ INIT\ FUNC:\ \%llu\(\backslash\)n"{}},\ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a290cd0e4238ec7fb664a66d9d96a8c82}{hash}});))}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00102}00102\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00103}00103\ \ \ \ \ \doxymbox{\hyperlink{MyStack_8cpp_a1bdd7c1369b250215a080e8421d4ecf3}{ON\_DEBUG}}(\doxymbox{\hyperlink{MyStack_8cpp_ab6b6aaa8436bc1c9848552ae3e603fcd}{StackVerify}}(ptrStack));\ \ \ \ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00104}00104\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00105}00105\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}};}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00106}00106\ \}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00107}00107\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00108}\doxymbox{\hyperlink{MyStack_8cpp_a5491a8b10af3cbd595109f5069ec5dd1}{00108}}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\_STATUSES}}\ \doxymbox{\hyperlink{MyStack_8cpp_a5491a8b10af3cbd595109f5069ec5dd1}{StackDestroy}}(\doxymbox{\hyperlink{structStack__t}{Stack\_t}}*\ ptrStack)\ \{}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00109}00109\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00110}00110\ \ \ \ \ \doxymbox{\hyperlink{MyStack_8cpp_a1bdd7c1369b250215a080e8421d4ecf3}{ON\_DEBUG}}(\doxymbox{\hyperlink{MyStack_8cpp_ab6b6aaa8436bc1c9848552ae3e603fcd}{StackVerify}}(ptrStack));}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00111}00111\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00112}00112\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack\ !=\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}});}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00113}00113\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00114}00114\ \ \ \ \ free(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}});\ \ \textcolor{comment}{//\ TODO\ make\ a\ wrapper\ to\ put\ a\ poison\ to\ freed\ memory}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00115}00115\ \ \ \ \ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_ad998fec906a4d5f999bf4ee7876da7eb}{capacity}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00116}00116\ \ \ \ \ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a2d76cc62e9674f12196f4d66c9c8d449}{size}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00117}00117\ \ \ \ \ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a95b09342bb15c75fd1d28fe09b98c769}{status}}\ =\ \textcolor{stringliteral}{"{}Destroyed\(\backslash\)n"{}};}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00118}00118\ \ \ \ \ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a290cd0e4238ec7fb664a66d9d96a8c82}{hash}}\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00119}00119\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00120}00120\ \ \ \ \ ptrStack\ =\ NULL;}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00121}00121\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00122}00122\ \ \ \ \ \textcolor{comment}{//\ ON\_DEBUG(StackVerify(ptrStack));}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00123}00123\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00124}00124\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}};}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00125}00125\ \}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00126}00126\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00127}\doxymbox{\hyperlink{MyStack_8cpp_a3de270f413264e89d9bfac04575fdb81}{00127}}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\_STATUSES}}\ \doxymbox{\hyperlink{MyStack_8cpp_a3de270f413264e89d9bfac04575fdb81}{StackPush}}(\doxymbox{\hyperlink{structStack__t}{Stack\_t}}*\ ptrStack,\ \doxymbox{\hyperlink{MyStack_8cpp_ad805fd920eacf5f2f1e7a9809f086604}{StackElement\_t}}\ pushValue)\ \{}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00128}00128\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00129}00129\ \ \ \ \ \doxymbox{\hyperlink{MyStack_8cpp_a1bdd7c1369b250215a080e8421d4ecf3}{ON\_DEBUG}}(\doxymbox{\hyperlink{MyStack_8cpp_ab6b6aaa8436bc1c9848552ae3e603fcd}{StackVerify}}(ptrStack));}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00130}00130\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00131}00131\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack\ !=\ NULL,\ \ \ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}});}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00132}00132\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00133}00133\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}\ !=\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}});}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00134}00134\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00135}00135\ \ \ \ \ \textcolor{keywordflow}{if}\ (ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a2d76cc62e9674f12196f4d66c9c8d449}{size}}\ +\ 1\ ==\ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_ad998fec906a4d5f999bf4ee7876da7eb}{capacity}}\ -\/\ 1)\ \{}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00136}00136\ \ \ \ \ \ \ \ \ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}\ =\ (\doxymbox{\hyperlink{MyStack_8cpp_ad805fd920eacf5f2f1e7a9809f086604}{StackElement\_t}}*)realloc(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}},\ \textcolor{keyword}{sizeof}(\doxymbox{\hyperlink{MyStack_8cpp_ad805fd920eacf5f2f1e7a9809f086604}{StackElement\_t}})\ *\ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_ad998fec906a4d5f999bf4ee7876da7eb}{capacity}}\ *\ 2);}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00137}00137\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00138}00138\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}\ !=\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da}{NOT\_ENOUGH\_MEMORY}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da}{NOT\_ENOUGH\_MEMORY}});}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00139}00139\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00140}00140\ \ \ \ \ \ \ \ \ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_ad998fec906a4d5f999bf4ee7876da7eb}{capacity}}\ *=\ 2;}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00141}00141\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00142}00142\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00143}00143\ \ \ \ \ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}[ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a2d76cc62e9674f12196f4d66c9c8d449}{size}}\ +\ 1]\ =\ pushValue;}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00144}00144\ \ \ \ \ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a2d76cc62e9674f12196f4d66c9c8d449}{size}}++;\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00145}00145\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00146}00146\ \ \ \ \ \doxymbox{\hyperlink{MyStack_8cpp_a2a6650e6569e7a5c40895e1da0a682d9}{ON\_HASH}}(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a290cd0e4238ec7fb664a66d9d96a8c82}{hash}}\ =\ \doxymbox{\hyperlink{MyStack_8cpp_a3e1580b8d88a5b604f91323b1f58c9b3}{GetHash}}(ptrStack);)}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00147}00147\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00148}00148\ \ \ \ \ \doxymbox{\hyperlink{MyStack_8cpp_a1bdd7c1369b250215a080e8421d4ecf3}{ON\_DEBUG}}(\doxymbox{\hyperlink{MyStack_8cpp_ab6b6aaa8436bc1c9848552ae3e603fcd}{StackVerify}}(ptrStack));}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00149}00149\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00150}00150\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}};}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00151}00151\ \}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00152}00152\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00153}\doxymbox{\hyperlink{MyStack_8cpp_aac1781d10570f7e1f393acd2ad758d11}{00153}}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\_STATUSES}}\ \doxymbox{\hyperlink{MyStack_8cpp_aac1781d10570f7e1f393acd2ad758d11}{StackPop}}(\doxymbox{\hyperlink{structStack__t}{Stack\_t}}*\ ptrStack,\ \doxymbox{\hyperlink{MyStack_8cpp_ad805fd920eacf5f2f1e7a9809f086604}{StackElement\_t}}*\ ptrValue)\ \{}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00154}00154\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00155}00155\ \ \ \ \ \doxymbox{\hyperlink{MyStack_8cpp_a1bdd7c1369b250215a080e8421d4ecf3}{ON\_DEBUG}}(\doxymbox{\hyperlink{MyStack_8cpp_ab6b6aaa8436bc1c9848552ae3e603fcd}{StackVerify}}(ptrStack));}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00156}00156\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00157}00157\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack\ !=\ NULL,\ \ \ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}});}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00158}00158\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00159}00159\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}\ !=\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}});}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00160}00160\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00161}00161\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a2d76cc62e9674f12196f4d66c9c8d449}{size}}\ >\ 0,\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa056762ace6c5a12f12ad918ca1bdf19d}{EMPTY\_STACK}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa056762ace6c5a12f12ad918ca1bdf19d}{EMPTY\_STACK}});}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00162}00162\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00163}00163\ \ \ \ \ *ptrValue\ =\ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}[ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a2d76cc62e9674f12196f4d66c9c8d449}{size}}];}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00164}00164\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00165}00165\ \ \ \ \ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}[ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a2d76cc62e9674f12196f4d66c9c8d449}{size}}]\ =\ \doxymbox{\hyperlink{MyStack_8cpp_ae90f47e5461a7f2df8983005401e6064}{POISON}};}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00166}00166\ \ \ \ \ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a2d76cc62e9674f12196f4d66c9c8d449}{size}}-\/-\/;}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00167}00167\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00168}00168\ \ \ \ \ \doxymbox{\hyperlink{MyStack_8cpp_a2a6650e6569e7a5c40895e1da0a682d9}{ON\_HASH}}(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a290cd0e4238ec7fb664a66d9d96a8c82}{hash}}\ =\ \doxymbox{\hyperlink{MyStack_8cpp_a3e1580b8d88a5b604f91323b1f58c9b3}{GetHash}}(ptrStack);)}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00169}00169\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00170}00170\ \ \ \ \ \doxymbox{\hyperlink{MyStack_8cpp_a1bdd7c1369b250215a080e8421d4ecf3}{ON\_DEBUG}}(\doxymbox{\hyperlink{MyStack_8cpp_ab6b6aaa8436bc1c9848552ae3e603fcd}{StackVerify}}(ptrStack));}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00171}00171\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00172}00172\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}};}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00173}00173\ \}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00174}00174\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00175}\doxymbox{\hyperlink{MyStack_8cpp_ab6b6aaa8436bc1c9848552ae3e603fcd}{00175}}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\_STATUSES}}\ \doxymbox{\hyperlink{MyStack_8cpp_ab6b6aaa8436bc1c9848552ae3e603fcd}{StackVerify}}(\doxymbox{\hyperlink{structStack__t}{Stack\_t}}*\ ptrStack)\ \{}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00176}00176\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00177}00177\ \ \ \ \ \textcolor{comment}{//\ LOG(fprintf(stderr,\ "{}(StackVerify)\ starting...\(\backslash\)n"{});)}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00178}00178\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00179}00179\ \ \ \ \ \doxymbox{\hyperlink{MyStack_8cpp_afb8a6364930fc209a45150430c97b93f}{StackVerifyWithoutHash}}(ptrStack);}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00180}00180\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00181}00181\ \ \ \ \ \doxymbox{\hyperlink{MyStack_8cpp_a2a6650e6569e7a5c40895e1da0a682d9}{ON\_HASH}}(\doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a290cd0e4238ec7fb664a66d9d96a8c82}{hash}}\ ==\ \doxymbox{\hyperlink{MyStack_8cpp_a3e1580b8d88a5b604f91323b1f58c9b3}{GetHash}}(ptrStack),\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa0c871c9aee660e139823e56d6558d27}{HASHES\_DIFFER}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa0c871c9aee660e139823e56d6558d27}{HASHES\_DIFFER}});)}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00182}00182\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00183}00183\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}};}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00184}00184\ \}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00185}00185\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00186}\doxymbox{\hyperlink{MyStack_8cpp_afb8a6364930fc209a45150430c97b93f}{00186}}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\_STATUSES}}\ \doxymbox{\hyperlink{MyStack_8cpp_afb8a6364930fc209a45150430c97b93f}{StackVerifyWithoutHash}}(\doxymbox{\hyperlink{structStack__t}{Stack\_t}}*\ ptrStack)\ \{}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00187}00187\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00188}00188\ \ \ \ \ \textcolor{comment}{//\ LOG(fprintf(stderr,\ "{}(StackVerify)\ starting...\(\backslash\)n"{});)}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00189}00189\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00190}00190\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack\ !=\ NULL,\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}});}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00191}00191\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00192}00192\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}\ \ \ !=\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}});}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00193}00193\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a95b09342bb15c75fd1d28fe09b98c769}{status}}\ !=\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}});}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00194}00194\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00195}00195\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_ad998fec906a4d5f999bf4ee7876da7eb}{capacity}}\ >=\ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a2d76cc62e9674f12196f4d66c9c8d449}{size}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa427278ac62c20f91f0f97146da3c4385}{STACK\_CAP\_SIZE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa427278ac62c20f91f0f97146da3c4385}{STACK\_CAP\_SIZE}});}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00196}00196\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00197}00197\ \ \ \ \ \doxymbox{\hyperlink{MyStack_8cpp_a906c955aa71199f4d029c68d6c2ca958}{ON\_CANARY}}(\doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}[0]\ ==\ \doxymbox{\hyperlink{MyStack_8cpp_a3f66c64c3c72034ee0c901bd685bb179}{CANARY}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa0500c7558b55e10d263a3dc3abd32bfc}{BAD\_CANARY}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa0500c7558b55e10d263a3dc3abd32bfc}{BAD\_CANARY}});)}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00198}00198\ \ \ \ \ \doxymbox{\hyperlink{MyStack_8cpp_a906c955aa71199f4d029c68d6c2ca958}{ON\_CANARY}}(\doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}[ptrStack-\/>\doxymbox{\hyperlink{structStack__t_ad998fec906a4d5f999bf4ee7876da7eb}{capacity}}\ -\/\ 1]\ ==\ \doxymbox{\hyperlink{MyStack_8cpp_a3f66c64c3c72034ee0c901bd685bb179}{CANARY}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa0500c7558b55e10d263a3dc3abd32bfc}{BAD\_CANARY}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa0500c7558b55e10d263a3dc3abd32bfc}{BAD\_CANARY}});)}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00199}00199\ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00200}00200\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}};}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00201}00201\ \}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00202}00202\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00203}\doxymbox{\hyperlink{MyStack_8cpp_a97c4a9df7ae2cdcbd13b82e74ea1c337}{00203}}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\_STATUSES}}\ \doxymbox{\hyperlink{MyStack_8cpp_a97c4a9df7ae2cdcbd13b82e74ea1c337}{StackDump}}(\doxymbox{\hyperlink{structStack__t}{Stack\_t}}\ stack,\ \doxymbox{\hyperlink{structSourceLocation}{SourceLocation}}\ sourceLocation)\ \{}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00204}00204\ \ \ \ \ \doxymbox{\hyperlink{MyStack_8cpp_a1bdd7c1369b250215a080e8421d4ecf3}{ON\_DEBUG}}(\doxymbox{\hyperlink{MyStack_8cpp_ab6b6aaa8436bc1c9848552ae3e603fcd}{StackVerify}}(\&stack));}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00205}00205\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00206}00206\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}\(\backslash\)n-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\(\backslash\)n"{}});)}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00207}00207\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}(StackDump):\ Starting...\(\backslash\)n"{}});)}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00208}00208\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00209}00209\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}Stack\_t\ <\%s>\ [\%p]\ \%s\ at\ \%s\ \{\(\backslash\)n"{}},}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00210}00210\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sourceLocation.\doxymbox{\hyperlink{structSourceLocation_a2da792b833f8df18ed7ba28fca670630}{name}},\ \&stack,\ sourceLocation.\doxymbox{\hyperlink{structSourceLocation_a5d88cd40250b64307d4b2acf8e79aa99}{function}},\ sourceLocation.\doxymbox{\hyperlink{structSourceLocation_abe1a3fee04b49b1ea16c433d345d9e3d}{file}});)\ \ \textcolor{comment}{//\ \ TODO\ make\ STRINGIFY}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00211}00211\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00212}00212\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}capacity\ =\ \%zu\(\backslash\)n"{}},\ stack.\doxymbox{\hyperlink{structStack__t_ad998fec906a4d5f999bf4ee7876da7eb}{capacity}});)}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00213}00213\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}\ \ \ \ size\ =\ \%zu\(\backslash\)n"{}},\ stack.\doxymbox{\hyperlink{structStack__t_a2d76cc62e9674f12196f4d66c9c8d449}{size}});)}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00214}00214\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}\ \ \ \ hash\ =\ \%llu\(\backslash\)n"{}},\ stack.\doxymbox{\hyperlink{structStack__t_a290cd0e4238ec7fb664a66d9d96a8c82}{hash}});)}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00215}00215\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00216}00216\ \ \ \ \ \textcolor{keywordflow}{if}\ (isatty(fileno(stderr)))\ \{}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00217}00217\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}\%s"{}},\ \doxymbox{\hyperlink{MyAssert_8h_ac5b6e19bf06822021f35602c59658de3}{ORANGE}});)}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00218}00218\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00219}00219\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00220}00220\ \ \ \ \ \textcolor{keywordflow}{if}\ (stack.\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}[0]\ !=\ \doxymbox{\hyperlink{MyStack_8cpp_a3f66c64c3c72034ee0c901bd685bb179}{CANARY}})\ \{}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00221}00221\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}*[0]\ =\ \%lf\ (BAD\ CANARY)\ should\ be\ \%lf\(\backslash\)n"{}},\ stack.\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}[0],\ \doxymbox{\hyperlink{MyStack_8cpp_a3f66c64c3c72034ee0c901bd685bb179}{CANARY}});)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00222}00222\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00223}00223\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}*[0]\ =\ \%lf\ (CANARY)\(\backslash\)n"{}},\ stack.\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}[0]);)}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00224}00224\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00225}00225\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00226}00226\ \ \ \ \ \textcolor{keywordflow}{if}\ (isatty(fileno(stderr)))\ \{}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00227}00227\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}\%s"{}},\ \doxymbox{\hyperlink{MyAssert_8h_acfbc006ea433ad708fdee3e82996e721}{GREEN}});)}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00228}00228\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00229}00229\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00230}00230\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 1;\ i\ <=\ stack.\doxymbox{\hyperlink{structStack__t_a2d76cc62e9674f12196f4d66c9c8d449}{size}};\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00231}00231\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}*[\%zu]\ =\ \%lf\(\backslash\)n"{}},\ i,\ stack.\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}[i]);)}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00232}00232\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00233}00233\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00234}00234\ \ \ \ \ \textcolor{keywordflow}{if}\ (isatty(fileno(stderr)))\ \{}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00235}00235\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}\%s"{}},\ \doxymbox{\hyperlink{MyAssert_8h_a8d23feea868a983c8c2b661e1e16972f}{RED}});)}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00236}00236\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00237}00237\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00238}00238\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ stack.\doxymbox{\hyperlink{structStack__t_a2d76cc62e9674f12196f4d66c9c8d449}{size}}\ +\ 1;\ i\ +\ 1\ <\ stack.\doxymbox{\hyperlink{structStack__t_ad998fec906a4d5f999bf4ee7876da7eb}{capacity}};\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00239}00239\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}[\%zu]\ =\ \%lf\ (POISON)\(\backslash\)n"{}},\ i,\ stack.\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}[i]);)}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00240}00240\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00241}00241\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00242}00242\ \ \ \ \ \textcolor{keywordflow}{if}\ (isatty(fileno(stderr)))\ \{}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00243}00243\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}\%s"{}},\ \doxymbox{\hyperlink{MyAssert_8h_ac5b6e19bf06822021f35602c59658de3}{ORANGE}});)}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00244}00244\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00245}00245\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00246}00246\ \ \ \ \ \textcolor{keywordflow}{if}\ (stack.\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}[stack.\doxymbox{\hyperlink{structStack__t_ad998fec906a4d5f999bf4ee7876da7eb}{capacity}}\ -\/\ 1]\ !=\ \doxymbox{\hyperlink{MyStack_8cpp_a3f66c64c3c72034ee0c901bd685bb179}{CANARY}})\ \{}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00247}00247\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}*[\%zu]\ =\ \%lf\ (BAD\ CANARY)\ should\ be\ \%lf\(\backslash\)n"{}},}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00248}00248\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ stack.\doxymbox{\hyperlink{structStack__t_ad998fec906a4d5f999bf4ee7876da7eb}{capacity}}\ -\/\ 1,\ stack.\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}[stack.\doxymbox{\hyperlink{structStack__t_ad998fec906a4d5f999bf4ee7876da7eb}{capacity}}\ -\/\ 1],\ \doxymbox{\hyperlink{MyStack_8cpp_a3f66c64c3c72034ee0c901bd685bb179}{CANARY}});)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00249}00249\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00250}00250\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}*[\%zu]\ =\ \%lf\ (CANARY)\(\backslash\)n"{}},}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00251}00251\ \ \ \ \ \ \ \ \ \ \ \ \ stack.\doxymbox{\hyperlink{structStack__t_ad998fec906a4d5f999bf4ee7876da7eb}{capacity}}\ -\/\ 1,\ stack.\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}[stack.\doxymbox{\hyperlink{structStack__t_ad998fec906a4d5f999bf4ee7876da7eb}{capacity}}\ -\/\ 1]);)}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00252}00252\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00253}00253\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00254}00254\ \ \ \ \ \textcolor{keywordflow}{if}\ (isatty(fileno(stderr)))\ \{}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00255}00255\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}\%s"{}},\ \doxymbox{\hyperlink{MyAssert_8h_ab702106cf3b3e96750b6845ded4e0299}{RESET}});)}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00256}00256\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00257}00257\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00258}00258\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}\}\(\backslash\)n"{}});)}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00259}00259\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00260}00260\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}(StackDump):\ Ending...\(\backslash\)n"{}});)}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00261}00261\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00262}00262\ \ \ \ \ \doxymbox{\hyperlink{MyStack_8cpp_a1bdd7c1369b250215a080e8421d4ecf3}{ON\_DEBUG}}(\doxymbox{\hyperlink{MyStack_8cpp_ab6b6aaa8436bc1c9848552ae3e603fcd}{StackVerify}}(\&stack));}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00263}00263\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00264}00264\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}};}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00265}00265\ \}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00266}00266\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00267}\doxymbox{\hyperlink{MyStack_8cpp_a3e1580b8d88a5b604f91323b1f58c9b3}{00267}}\ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ \doxymbox{\hyperlink{MyStack_8cpp_a3e1580b8d88a5b604f91323b1f58c9b3}{GetHash}}(\doxymbox{\hyperlink{structStack__t}{Stack\_t}}*\ ptrStack)\ \{}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00268}00268\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00269}00269\ \ \ \ \ \doxymbox{\hyperlink{MyStack_8cpp_afb8a6364930fc209a45150430c97b93f}{StackVerifyWithoutHash}}(ptrStack);}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00270}00270\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00271}00271\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ hashMod\ =\ 1e9\ +\ 7,\ hashPow\ =\ 239;}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00272}00272\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ hashValue\ =\ 0;}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00273}00273\ \ \ \ \ hashValue\ +=\ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_ad998fec906a4d5f999bf4ee7876da7eb}{capacity}};}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00274}00274\ \ \ \ \ hashValue\ *=\ hashPow;}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00275}00275\ \ \ \ \ hashValue\ \%=\ hashMod;}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00276}00276\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00277}00277\ \ \ \ \ hashValue\ +=\ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a2d76cc62e9674f12196f4d66c9c8d449}{size}};}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00278}00278\ \ \ \ \ hashValue\ *=\ hashPow;}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00279}00279\ \ \ \ \ hashValue\ \%=\ hashMod;}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00280}00280\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00281}00281\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_ad998fec906a4d5f999bf4ee7876da7eb}{capacity}};\ i++)\ \{}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00282}00282\ \ \ \ \ \ \ \ \ hashValue\ +=\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ long)ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}[i];}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00283}00283\ \ \ \ \ \ \ \ \ hashValue\ *=\ hashPow;}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00284}00284\ \ \ \ \ \ \ \ \ hashValue\ \%=\ hashMod;}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00285}00285\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00286}00286\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00287}00287\ \ \ \ \ \textcolor{keywordtype}{char}*\ statusString\ =\ (\textcolor{keywordtype}{char}*)ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a95b09342bb15c75fd1d28fe09b98c769}{status}};}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00288}00288\ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ *statusString\ !=\ \textcolor{charliteral}{'\(\backslash\)0'};\ statusString++)\ \{}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00289}00289\ \ \ \ \ \ \ \ \ hashValue\ +=\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ long)*statusString;}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00290}00290\ \ \ \ \ \ \ \ \ hashValue\ *=\ hashPow;}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00291}00291\ \ \ \ \ \ \ \ \ hashValue\ \%=\ hashMod;}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00292}00292\ \ \ \ \ \}}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00293}00293\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00294}00294\ \ \ \ \ \doxymbox{\hyperlink{MyStack_8cpp_afb8a6364930fc209a45150430c97b93f}{StackVerifyWithoutHash}}(ptrStack);}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00295}00295\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00296}00296\ \ \ \ \ \textcolor{keywordflow}{return}\ hashValue;}
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00297}00297\ }
+\DoxyCodeLine{\Hypertarget{MyStack_8cpp_source_l00298}00298\ \}}
+
+\end{DoxyCode}

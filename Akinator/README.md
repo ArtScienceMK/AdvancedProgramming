@@ -21,6 +21,7 @@
 * Colorful & intuitive dump file (choice between text and visual dump is available)
 * Giving a definition to any (known) object!
 * Comparing two objects!
+* Saving (or not) base, you improved by guessing unknown words!
 
 ## Feature list 
 

@@ -24,9 +24,9 @@
 */
 var NAVTREE =
 [
-  [ "Doubly linked list", "index.html", [
+  [ "Akinator", "index.html", [
     [ "README", "md_README.html", [
-      [ "Doubly linked list", "md_README.html#autotoc_md0", [
+      [ "Akinator", "md_README.html#autotoc_md0", [
         [ "Table of contents", "md_README.html#autotoc_md1", null ],
         [ "About", "md_README.html#autotoc_md2", null ],
         [ "Feature list", "md_README.html#autotoc_md3", null ],
@@ -52,6 +52,7 @@ var NAVTREE =
         [ "All", "globals.html", null ],
         [ "Functions", "globals_func.html", null ],
         [ "Variables", "globals_vars.html", null ],
+        [ "Typedefs", "globals_type.html", null ],
         [ "Enumerations", "globals_enum.html", null ],
         [ "Enumerator", "globals_eval.html", null ],
         [ "Macros", "globals_defs.html", null ]
@@ -62,7 +63,7 @@ var NAVTREE =
 
 var NAVTREEINDEX =
 [
-"List_8cpp.html"
+"MyAssert_8h.html"
 ];
 
 const SYNCONMSG = 'click to disable panel synchronization';

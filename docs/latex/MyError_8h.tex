@@ -1,0 +1,782 @@
+\doxysection{My\+Error.\+h File Reference}
+\hypertarget{MyError_8h}{}\label{MyError_8h}\index{MyError.h@{MyError.h}}
+\doxysubsubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} \{ \newline
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}} = 0
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa1544e711bac79f5a2bdfc5481e1f8fb3}{FILE\+\_\+\+ACCESS\+\_\+\+DENIED}} = 1
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa8d6d1bfbff8ad5a22852a94319e30082}{FILE\+\_\+\+FSTAT\+\_\+\+ERROR}} = 2
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\+\_\+\+OF\+\_\+\+RANGE}} = 3
+, \newline
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa34c3c260bc15620cb011dd0bb7719a33}{CMP\+\_\+\+ERROR}} = 4
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da}{NOT\+\_\+\+ENOUGH\+\_\+\+MEMORY}} = 5
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daac87c10c2ba4f23caa21a4ad29dc37715}{PUSH\+\_\+\+NOT\+\_\+\+EQUAL\+\_\+\+POP}} = 6
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa774131b3e4dfe3f57ab35303e6ee061}{BAD\+\_\+\+CLEAR\+\_\+\+INIT}} = 7
+, \newline
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2db4a162c365135849093698aaa2996b}{STACK\+\_\+\+DESTROY\+\_\+\+ERROR}} = 8
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa056762ace6c5a12f12ad918ca1bdf19d}{EMPTY\+\_\+\+STACK}} = 9
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa427278ac62c20f91f0f97146da3c4385}{STACK\+\_\+\+CAP\+\_\+\+SIZE}} = 10
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa0500c7558b55e10d263a3dc3abd32bfc}{BAD\+\_\+\+CANARY}} = 11
+, \newline
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa0c871c9aee660e139823e56d6558d27}{HASHES\+\_\+\+DIFFER}} = 12
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daac21e3807ef3e8771a7f26527ceb5d948}{EXECUTION\+\_\+\+ERROR}} = 13
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daae6aea40c86645dc00f8f0be7761671bc}{READ\+\_\+\+FILE\+\_\+\+ERROR}} = 14
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa5a15297265c3da9032feaa3ec7c24e08}{WRITE\+\_\+\+BUFFER\+\_\+\+TO\+\_\+\+FILE\+\_\+\+ERROR}} = 15
+, \newline
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa5f104ee2136be4c218ce3ba4ffe9f6b5}{UNLINK\+\_\+\+FILE\+\_\+\+ERROR}} = 16
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa1f87bd94ef68b0b0fc3523a24b7efdd4}{WRITE\+\_\+\+SEP\+\_\+\+TO\+\_\+\+FILE\+\_\+\+ERROR}} = 17
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa4b9f98f8f71f49dcce324329f5b4dc59}{UNKNOWN\+\_\+\+OPCODE}} = 18
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daae76285072aeaaaa31e9fbf6f646e14f1}{ZERO\+\_\+\+DIVISION\+\_\+\+ERROR}} = 19
+, \newline
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa339d2845a7db50b08020f25a0d2c0a70}{OPCODE\+\_\+\+INPUT\+\_\+\+ERROR}} = 20
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa10cb6b2ecb094e5494d4ac55e5f92e19}{ARGS\+\_\+\+INPUT\+\_\+\+ERROR}} = 21
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa9a91eaaf4a5ed06d57799a48b40719fa}{ASSEMBLE\+\_\+\+ERROR}} = 22
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa01c7fafc79bc05030c5056882aeecfee}{STRCMP\+\_\+\+ERROR}} = 23
+, \newline
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa9aa51a1d40945b1fd064ed14f6604589}{ASSEMBLE\+\_\+\+VERIFICATION\+\_\+\+ERROR}} = 24
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daac58a56346e1d28a908a39eb145e45cf1}{INT\+\_\+\+TO\+\_\+\+STRING\+\_\+\+ERROR}} = 25
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa5332d8897e888e1e2a04a4df9f3e889c}{DISASSEMBLE\+\_\+\+ERROR}} = 26
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa1c4cd4163a43a23f1f5913fb106170e4}{READING\+\_\+\+OPCODE\+\_\+\+DISASSEMBLE\+\_\+\+ERROR}} = 27
+, \newline
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa4dc7b1d70ce487ea184358d5bb07f580}{WRITE\+\_\+\+INDEX\+\_\+\+TO\+\_\+\+FILE\+\_\+\+ERROR}} = 28
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa7230793dd2108689282aa6bd5c80778c}{READING\+\_\+\+COMMAND\+\_\+\+ASSEMBLE\+\_\+\+ERROR}} = 29
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaba47ecc70755dc7e496b84850a3c87c1}{UNKNOWN\+\_\+\+REGISTER\+\_\+\+NAME}} = 30
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa513cc521f275ef09d81219bfc13f4014}{GET\+\_\+\+ARGUMENT\+\_\+\+TYPE\+\_\+\+ERROR}} = 31
+, \newline
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa5b0979c6e8ae3a1681edbbe05502288a}{IS\+\_\+\+VALID\+\_\+\+REGISTER\+\_\+\+NAME\+\_\+\+ERROR}} = 32
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa427870d768de527a409fc7063ee3f24}{NO\+\_\+\+ARGUMENT\+\_\+\+TYPE\+\_\+\+ERROR}} = 33
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3385bd2f9288c7c77dee6f49fae96ac8}{UNKNOWN\+\_\+\+ARGUMENT\+\_\+\+TYPE}} = 34
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaff7d477b5536f7260c380ee3ecd88c17}{JUMP\+\_\+\+ADDRESS\+\_\+\+IS\+\_\+\+OUT\+\_\+\+OF\+\_\+\+RANGE}} = 35
+, \newline
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa72775ef48bcf9918084e5bf12e7ea847}{NOT\+\_\+\+INITIALIZED\+\_\+\+JUMP\+\_\+\+ADDRESS}} = 36
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa12ec50339c380c9a9b5063d27805dd3a}{HALT\+\_\+\+EXIT}} = 37
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daac6965613e253f079fca333e02e5c9e9e}{IS\+\_\+\+VALID\+\_\+\+REGISTER\+\_\+\+NAME\+\_\+\+STRING\+\_\+\+ERROR}} = 38
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa91b298f65bbab1047e039f661f9ca591}{READ\+\_\+\+LABEL\+\_\+\+ERROR}} = 39
+, \newline
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daad4f02fa9e9ff8f5b848fbcb98b90e879}{LABEL\+\_\+\+REDEFINITION}} = 40
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daab4fca29457d120f231cb3374fbd5add8}{UNKNOWN\+\_\+\+LABEL}} = 41
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa8c207c4ea16831f7f74a33ed4ac82d7c}{NOT\+\_\+\+INITIALIZED\+\_\+\+LABEL}} = 42
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa953bf18fc531e72f24340e9315e4a8f2}{READING\+\_\+\+MEMORY\+\_\+\+INDEX\+\_\+\+ERROR}} = 43
+, \newline
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa53ef4bb8eda89adbd984c84830e00561}{BAD\+\_\+\+MEMORY\+\_\+\+ADDRESS}} = 44
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daad5bc668f6eaf06f9b0c6e5b047262590}{BAD\+\_\+\+LIST\+\_\+\+SIZE}} = 45
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa622c49d236b887dd9800acf392f26d9c}{LIST\+\_\+\+CAP\+\_\+\+SIZE}} = 46
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3ab0032710d38b54854aaba62094dfca}{BAD\+\_\+\+LIST\+\_\+\+HEAD}} = 47
+, \newline
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2ae11512a515975908c3eb00e08bfdc0}{BAD\+\_\+\+LIST\+\_\+\+TAIL}} = 48
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daafcf12481844481a0a75ee320b58247d8}{BAD\+\_\+\+LIST\+\_\+\+ZERO\+\_\+\+ELEM}} = 49
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa58ea37b2d13cd49c2072c5a946a58d5a}{LIST\+\_\+\+CYCLE}} = 50
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa049aced892f12e8b73e3ba4a408dc1a8}{SYSTEM\+\_\+\+CALL\+\_\+\+ERROR}} = 51
+, \newline
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa7c1d5f3f91822584c55a25b84075d989}{NO\+\_\+\+EDGE\+\_\+\+ERROR}} = 52
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa55016827e92ed15ec00ab44ad7cc0201}{UNKNOWN\+\_\+\+NODE\+\_\+\+STATUS}} = 53
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa418de923efbb7fa8d8061987ff9b1778}{NOT\+\_\+\+USED\+\_\+\+NODE}} = 54
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daab62734d783965837b6995a536b5e7499}{NODE\+\_\+\+INSERT\+\_\+\+INT\+\_\+\+ERROR}} = 55
+, \newline
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa8b798ce2adcd54af9cb8594982f0ba3a}{TREE\+\_\+\+BAD\+\_\+\+SIZE}} = 56
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daafbab2b4270ab932fca54b273a35a5e05}{UNKNOWN\+\_\+\+AKINATOR\+\_\+\+MENU\+\_\+\+OPTION}} = 57
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa8387e24276e3053d59cc8f1a9c9cc810}{AKINATOR\+\_\+\+MENU\+\_\+\+INPUT\+\_\+\+ERROR}} = 58
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaef85ea1444cb8a44b9cc390b792f27d9}{AKINATOR\+\_\+\+QUESTION\+\_\+\+INPUT\+\_\+\+ERROR}} = 59
+, \newline
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daace5a9b1a20a635c215b10305b50041ec}{UNKNOWN\+\_\+\+AKINATOR\+\_\+\+ANSWER\+\_\+\+OPTION}} = 60
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daadbd3360d0e8592bbb0645132b0687580}{AKINATOR\+\_\+\+OBJECT\+\_\+\+INPUT\+\_\+\+ERROR}} = 61
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa9f2cedbb3f981a17a8c14ac6c62340d6}{UNKNOWN\+\_\+\+STRING\+\_\+\+LOAD\+\_\+\+TREE}} = 62
+, \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2aa1778aca8beac8448cf2d819416d70}{AKINATOR\+\_\+\+COMPARE\+\_\+\+ERROR}} = 63
+ \}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+const char \texorpdfstring{$\ast$}{*} \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{Get\+Error\+String}} (\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} error\+Status)
+\end{DoxyCompactItemize}
+
+
+\label{MyError_8h_doc-enum-members}
+\Hypertarget{MyError_8h_doc-enum-members}
+\doxysubsection{Enumeration Type Documentation}
+\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348da}\index{MyError.h@{MyError.h}!ERROR\_STATUSES@{ERROR\_STATUSES}}
+\index{ERROR\_STATUSES@{ERROR\_STATUSES}!MyError.h@{MyError.h}}
+\doxysubsubsection{\texorpdfstring{ERROR\_STATUSES}{ERROR\_STATUSES}}
+{\footnotesize\ttfamily \label{MyError_8h_aa31a82488e1f3eb535fa0643033348da} 
+enum \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}}}
+
+\begin{DoxyEnumFields}[2]{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{OK@{OK}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!OK@{OK}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59} 
+OK&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{FILE\_ACCESS\_DENIED@{FILE\_ACCESS\_DENIED}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!FILE\_ACCESS\_DENIED@{FILE\_ACCESS\_DENIED}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa1544e711bac79f5a2bdfc5481e1f8fb3}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa1544e711bac79f5a2bdfc5481e1f8fb3} 
+FILE\+\_\+\+ACCESS\+\_\+\+DENIED&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{FILE\_FSTAT\_ERROR@{FILE\_FSTAT\_ERROR}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!FILE\_FSTAT\_ERROR@{FILE\_FSTAT\_ERROR}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa8d6d1bfbff8ad5a22852a94319e30082}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa8d6d1bfbff8ad5a22852a94319e30082} 
+FILE\+\_\+\+FSTAT\+\_\+\+ERROR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{OUT\_OF\_RANGE@{OUT\_OF\_RANGE}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!OUT\_OF\_RANGE@{OUT\_OF\_RANGE}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709} 
+OUT\+\_\+\+OF\+\_\+\+RANGE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{CMP\_ERROR@{CMP\_ERROR}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!CMP\_ERROR@{CMP\_ERROR}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa34c3c260bc15620cb011dd0bb7719a33}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa34c3c260bc15620cb011dd0bb7719a33} 
+CMP\+\_\+\+ERROR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{NOT\_ENOUGH\_MEMORY@{NOT\_ENOUGH\_MEMORY}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!NOT\_ENOUGH\_MEMORY@{NOT\_ENOUGH\_MEMORY}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da} 
+NOT\+\_\+\+ENOUGH\+\_\+\+MEMORY&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{PUSH\_NOT\_EQUAL\_POP@{PUSH\_NOT\_EQUAL\_POP}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!PUSH\_NOT\_EQUAL\_POP@{PUSH\_NOT\_EQUAL\_POP}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daac87c10c2ba4f23caa21a4ad29dc37715}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daac87c10c2ba4f23caa21a4ad29dc37715} 
+PUSH\+\_\+\+NOT\+\_\+\+EQUAL\+\_\+\+POP&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{BAD\_CLEAR\_INIT@{BAD\_CLEAR\_INIT}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!BAD\_CLEAR\_INIT@{BAD\_CLEAR\_INIT}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa774131b3e4dfe3f57ab35303e6ee061}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa774131b3e4dfe3f57ab35303e6ee061} 
+BAD\+\_\+\+CLEAR\+\_\+\+INIT&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{STACK\_DESTROY\_ERROR@{STACK\_DESTROY\_ERROR}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!STACK\_DESTROY\_ERROR@{STACK\_DESTROY\_ERROR}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2db4a162c365135849093698aaa2996b}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2db4a162c365135849093698aaa2996b} 
+STACK\+\_\+\+DESTROY\+\_\+\+ERROR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EMPTY\_STACK@{EMPTY\_STACK}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!EMPTY\_STACK@{EMPTY\_STACK}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa056762ace6c5a12f12ad918ca1bdf19d}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa056762ace6c5a12f12ad918ca1bdf19d} 
+EMPTY\+\_\+\+STACK&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{STACK\_CAP\_SIZE@{STACK\_CAP\_SIZE}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!STACK\_CAP\_SIZE@{STACK\_CAP\_SIZE}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa427278ac62c20f91f0f97146da3c4385}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa427278ac62c20f91f0f97146da3c4385} 
+STACK\+\_\+\+CAP\+\_\+\+SIZE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{BAD\_CANARY@{BAD\_CANARY}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!BAD\_CANARY@{BAD\_CANARY}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa0500c7558b55e10d263a3dc3abd32bfc}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa0500c7558b55e10d263a3dc3abd32bfc} 
+BAD\+\_\+\+CANARY&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{HASHES\_DIFFER@{HASHES\_DIFFER}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!HASHES\_DIFFER@{HASHES\_DIFFER}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa0c871c9aee660e139823e56d6558d27}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa0c871c9aee660e139823e56d6558d27} 
+HASHES\+\_\+\+DIFFER&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{EXECUTION\_ERROR@{EXECUTION\_ERROR}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!EXECUTION\_ERROR@{EXECUTION\_ERROR}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daac21e3807ef3e8771a7f26527ceb5d948}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daac21e3807ef3e8771a7f26527ceb5d948} 
+EXECUTION\+\_\+\+ERROR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{READ\_FILE\_ERROR@{READ\_FILE\_ERROR}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!READ\_FILE\_ERROR@{READ\_FILE\_ERROR}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daae6aea40c86645dc00f8f0be7761671bc}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daae6aea40c86645dc00f8f0be7761671bc} 
+READ\+\_\+\+FILE\+\_\+\+ERROR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WRITE\_BUFFER\_TO\_FILE\_ERROR@{WRITE\_BUFFER\_TO\_FILE\_ERROR}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!WRITE\_BUFFER\_TO\_FILE\_ERROR@{WRITE\_BUFFER\_TO\_FILE\_ERROR}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa5a15297265c3da9032feaa3ec7c24e08}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa5a15297265c3da9032feaa3ec7c24e08} 
+WRITE\+\_\+\+BUFFER\+\_\+\+TO\+\_\+\+FILE\+\_\+\+ERROR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{UNLINK\_FILE\_ERROR@{UNLINK\_FILE\_ERROR}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!UNLINK\_FILE\_ERROR@{UNLINK\_FILE\_ERROR}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa5f104ee2136be4c218ce3ba4ffe9f6b5}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa5f104ee2136be4c218ce3ba4ffe9f6b5} 
+UNLINK\+\_\+\+FILE\+\_\+\+ERROR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WRITE\_SEP\_TO\_FILE\_ERROR@{WRITE\_SEP\_TO\_FILE\_ERROR}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!WRITE\_SEP\_TO\_FILE\_ERROR@{WRITE\_SEP\_TO\_FILE\_ERROR}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa1f87bd94ef68b0b0fc3523a24b7efdd4}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa1f87bd94ef68b0b0fc3523a24b7efdd4} 
+WRITE\+\_\+\+SEP\+\_\+\+TO\+\_\+\+FILE\+\_\+\+ERROR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{UNKNOWN\_OPCODE@{UNKNOWN\_OPCODE}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!UNKNOWN\_OPCODE@{UNKNOWN\_OPCODE}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa4b9f98f8f71f49dcce324329f5b4dc59}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa4b9f98f8f71f49dcce324329f5b4dc59} 
+UNKNOWN\+\_\+\+OPCODE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ZERO\_DIVISION\_ERROR@{ZERO\_DIVISION\_ERROR}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!ZERO\_DIVISION\_ERROR@{ZERO\_DIVISION\_ERROR}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daae76285072aeaaaa31e9fbf6f646e14f1}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daae76285072aeaaaa31e9fbf6f646e14f1} 
+ZERO\+\_\+\+DIVISION\+\_\+\+ERROR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{OPCODE\_INPUT\_ERROR@{OPCODE\_INPUT\_ERROR}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!OPCODE\_INPUT\_ERROR@{OPCODE\_INPUT\_ERROR}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa339d2845a7db50b08020f25a0d2c0a70}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa339d2845a7db50b08020f25a0d2c0a70} 
+OPCODE\+\_\+\+INPUT\+\_\+\+ERROR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ARGS\_INPUT\_ERROR@{ARGS\_INPUT\_ERROR}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!ARGS\_INPUT\_ERROR@{ARGS\_INPUT\_ERROR}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa10cb6b2ecb094e5494d4ac55e5f92e19}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa10cb6b2ecb094e5494d4ac55e5f92e19} 
+ARGS\+\_\+\+INPUT\+\_\+\+ERROR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ASSEMBLE\_ERROR@{ASSEMBLE\_ERROR}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!ASSEMBLE\_ERROR@{ASSEMBLE\_ERROR}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa9a91eaaf4a5ed06d57799a48b40719fa}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa9a91eaaf4a5ed06d57799a48b40719fa} 
+ASSEMBLE\+\_\+\+ERROR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{STRCMP\_ERROR@{STRCMP\_ERROR}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!STRCMP\_ERROR@{STRCMP\_ERROR}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa01c7fafc79bc05030c5056882aeecfee}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa01c7fafc79bc05030c5056882aeecfee} 
+STRCMP\+\_\+\+ERROR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ASSEMBLE\_VERIFICATION\_ERROR@{ASSEMBLE\_VERIFICATION\_ERROR}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!ASSEMBLE\_VERIFICATION\_ERROR@{ASSEMBLE\_VERIFICATION\_ERROR}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa9aa51a1d40945b1fd064ed14f6604589}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa9aa51a1d40945b1fd064ed14f6604589} 
+ASSEMBLE\+\_\+\+VERIFICATION\+\_\+\+ERROR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{INT\_TO\_STRING\_ERROR@{INT\_TO\_STRING\_ERROR}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!INT\_TO\_STRING\_ERROR@{INT\_TO\_STRING\_ERROR}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daac58a56346e1d28a908a39eb145e45cf1}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daac58a56346e1d28a908a39eb145e45cf1} 
+INT\+\_\+\+TO\+\_\+\+STRING\+\_\+\+ERROR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{DISASSEMBLE\_ERROR@{DISASSEMBLE\_ERROR}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!DISASSEMBLE\_ERROR@{DISASSEMBLE\_ERROR}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa5332d8897e888e1e2a04a4df9f3e889c}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa5332d8897e888e1e2a04a4df9f3e889c} 
+DISASSEMBLE\+\_\+\+ERROR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{READING\_OPCODE\_DISASSEMBLE\_ERROR@{READING\_OPCODE\_DISASSEMBLE\_ERROR}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!READING\_OPCODE\_DISASSEMBLE\_ERROR@{READING\_OPCODE\_DISASSEMBLE\_ERROR}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa1c4cd4163a43a23f1f5913fb106170e4}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa1c4cd4163a43a23f1f5913fb106170e4} 
+READING\+\_\+\+OPCODE\+\_\+\+DISASSEMBLE\+\_\+\+ERROR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{WRITE\_INDEX\_TO\_FILE\_ERROR@{WRITE\_INDEX\_TO\_FILE\_ERROR}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!WRITE\_INDEX\_TO\_FILE\_ERROR@{WRITE\_INDEX\_TO\_FILE\_ERROR}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa4dc7b1d70ce487ea184358d5bb07f580}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa4dc7b1d70ce487ea184358d5bb07f580} 
+WRITE\+\_\+\+INDEX\+\_\+\+TO\+\_\+\+FILE\+\_\+\+ERROR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{READING\_COMMAND\_ASSEMBLE\_ERROR@{READING\_COMMAND\_ASSEMBLE\_ERROR}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!READING\_COMMAND\_ASSEMBLE\_ERROR@{READING\_COMMAND\_ASSEMBLE\_ERROR}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa7230793dd2108689282aa6bd5c80778c}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa7230793dd2108689282aa6bd5c80778c} 
+READING\+\_\+\+COMMAND\+\_\+\+ASSEMBLE\+\_\+\+ERROR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{UNKNOWN\_REGISTER\_NAME@{UNKNOWN\_REGISTER\_NAME}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!UNKNOWN\_REGISTER\_NAME@{UNKNOWN\_REGISTER\_NAME}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daaba47ecc70755dc7e496b84850a3c87c1}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daaba47ecc70755dc7e496b84850a3c87c1} 
+UNKNOWN\+\_\+\+REGISTER\+\_\+\+NAME&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{GET\_ARGUMENT\_TYPE\_ERROR@{GET\_ARGUMENT\_TYPE\_ERROR}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!GET\_ARGUMENT\_TYPE\_ERROR@{GET\_ARGUMENT\_TYPE\_ERROR}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa513cc521f275ef09d81219bfc13f4014}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa513cc521f275ef09d81219bfc13f4014} 
+GET\+\_\+\+ARGUMENT\+\_\+\+TYPE\+\_\+\+ERROR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{IS\_VALID\_REGISTER\_NAME\_ERROR@{IS\_VALID\_REGISTER\_NAME\_ERROR}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!IS\_VALID\_REGISTER\_NAME\_ERROR@{IS\_VALID\_REGISTER\_NAME\_ERROR}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa5b0979c6e8ae3a1681edbbe05502288a}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa5b0979c6e8ae3a1681edbbe05502288a} 
+IS\+\_\+\+VALID\+\_\+\+REGISTER\+\_\+\+NAME\+\_\+\+ERROR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{NO\_ARGUMENT\_TYPE\_ERROR@{NO\_ARGUMENT\_TYPE\_ERROR}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!NO\_ARGUMENT\_TYPE\_ERROR@{NO\_ARGUMENT\_TYPE\_ERROR}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa427870d768de527a409fc7063ee3f24}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa427870d768de527a409fc7063ee3f24} 
+NO\+\_\+\+ARGUMENT\+\_\+\+TYPE\+\_\+\+ERROR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{UNKNOWN\_ARGUMENT\_TYPE@{UNKNOWN\_ARGUMENT\_TYPE}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!UNKNOWN\_ARGUMENT\_TYPE@{UNKNOWN\_ARGUMENT\_TYPE}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3385bd2f9288c7c77dee6f49fae96ac8}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3385bd2f9288c7c77dee6f49fae96ac8} 
+UNKNOWN\+\_\+\+ARGUMENT\+\_\+\+TYPE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{JUMP\_ADDRESS\_IS\_OUT\_OF\_RANGE@{JUMP\_ADDRESS\_IS\_OUT\_OF\_RANGE}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!JUMP\_ADDRESS\_IS\_OUT\_OF\_RANGE@{JUMP\_ADDRESS\_IS\_OUT\_OF\_RANGE}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daaff7d477b5536f7260c380ee3ecd88c17}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daaff7d477b5536f7260c380ee3ecd88c17} 
+JUMP\+\_\+\+ADDRESS\+\_\+\+IS\+\_\+\+OUT\+\_\+\+OF\+\_\+\+RANGE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{NOT\_INITIALIZED\_JUMP\_ADDRESS@{NOT\_INITIALIZED\_JUMP\_ADDRESS}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!NOT\_INITIALIZED\_JUMP\_ADDRESS@{NOT\_INITIALIZED\_JUMP\_ADDRESS}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa72775ef48bcf9918084e5bf12e7ea847}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa72775ef48bcf9918084e5bf12e7ea847} 
+NOT\+\_\+\+INITIALIZED\+\_\+\+JUMP\+\_\+\+ADDRESS&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{HALT\_EXIT@{HALT\_EXIT}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!HALT\_EXIT@{HALT\_EXIT}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa12ec50339c380c9a9b5063d27805dd3a}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa12ec50339c380c9a9b5063d27805dd3a} 
+HALT\+\_\+\+EXIT&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{IS\_VALID\_REGISTER\_NAME\_STRING\_ERROR@{IS\_VALID\_REGISTER\_NAME\_STRING\_ERROR}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!IS\_VALID\_REGISTER\_NAME\_STRING\_ERROR@{IS\_VALID\_REGISTER\_NAME\_STRING\_ERROR}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daac6965613e253f079fca333e02e5c9e9e}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daac6965613e253f079fca333e02e5c9e9e} 
+IS\+\_\+\+VALID\+\_\+\+REGISTER\+\_\+\+NAME\+\_\+\+STRING\+\_\+\+ERROR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{READ\_LABEL\_ERROR@{READ\_LABEL\_ERROR}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!READ\_LABEL\_ERROR@{READ\_LABEL\_ERROR}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa91b298f65bbab1047e039f661f9ca591}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa91b298f65bbab1047e039f661f9ca591} 
+READ\+\_\+\+LABEL\+\_\+\+ERROR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{LABEL\_REDEFINITION@{LABEL\_REDEFINITION}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!LABEL\_REDEFINITION@{LABEL\_REDEFINITION}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daad4f02fa9e9ff8f5b848fbcb98b90e879}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daad4f02fa9e9ff8f5b848fbcb98b90e879} 
+LABEL\+\_\+\+REDEFINITION&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{UNKNOWN\_LABEL@{UNKNOWN\_LABEL}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!UNKNOWN\_LABEL@{UNKNOWN\_LABEL}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daab4fca29457d120f231cb3374fbd5add8}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daab4fca29457d120f231cb3374fbd5add8} 
+UNKNOWN\+\_\+\+LABEL&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{NOT\_INITIALIZED\_LABEL@{NOT\_INITIALIZED\_LABEL}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!NOT\_INITIALIZED\_LABEL@{NOT\_INITIALIZED\_LABEL}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa8c207c4ea16831f7f74a33ed4ac82d7c}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa8c207c4ea16831f7f74a33ed4ac82d7c} 
+NOT\+\_\+\+INITIALIZED\+\_\+\+LABEL&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{READING\_MEMORY\_INDEX\_ERROR@{READING\_MEMORY\_INDEX\_ERROR}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!READING\_MEMORY\_INDEX\_ERROR@{READING\_MEMORY\_INDEX\_ERROR}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa953bf18fc531e72f24340e9315e4a8f2}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa953bf18fc531e72f24340e9315e4a8f2} 
+READING\+\_\+\+MEMORY\+\_\+\+INDEX\+\_\+\+ERROR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{BAD\_MEMORY\_ADDRESS@{BAD\_MEMORY\_ADDRESS}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!BAD\_MEMORY\_ADDRESS@{BAD\_MEMORY\_ADDRESS}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa53ef4bb8eda89adbd984c84830e00561}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa53ef4bb8eda89adbd984c84830e00561} 
+BAD\+\_\+\+MEMORY\+\_\+\+ADDRESS&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{BAD\_LIST\_SIZE@{BAD\_LIST\_SIZE}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!BAD\_LIST\_SIZE@{BAD\_LIST\_SIZE}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daad5bc668f6eaf06f9b0c6e5b047262590}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daad5bc668f6eaf06f9b0c6e5b047262590} 
+BAD\+\_\+\+LIST\+\_\+\+SIZE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{LIST\_CAP\_SIZE@{LIST\_CAP\_SIZE}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!LIST\_CAP\_SIZE@{LIST\_CAP\_SIZE}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa622c49d236b887dd9800acf392f26d9c}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa622c49d236b887dd9800acf392f26d9c} 
+LIST\+\_\+\+CAP\+\_\+\+SIZE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{BAD\_LIST\_HEAD@{BAD\_LIST\_HEAD}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!BAD\_LIST\_HEAD@{BAD\_LIST\_HEAD}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3ab0032710d38b54854aaba62094dfca}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3ab0032710d38b54854aaba62094dfca} 
+BAD\+\_\+\+LIST\+\_\+\+HEAD&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{BAD\_LIST\_TAIL@{BAD\_LIST\_TAIL}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!BAD\_LIST\_TAIL@{BAD\_LIST\_TAIL}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2ae11512a515975908c3eb00e08bfdc0}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2ae11512a515975908c3eb00e08bfdc0} 
+BAD\+\_\+\+LIST\+\_\+\+TAIL&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{BAD\_LIST\_ZERO\_ELEM@{BAD\_LIST\_ZERO\_ELEM}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!BAD\_LIST\_ZERO\_ELEM@{BAD\_LIST\_ZERO\_ELEM}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daafcf12481844481a0a75ee320b58247d8}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daafcf12481844481a0a75ee320b58247d8} 
+BAD\+\_\+\+LIST\+\_\+\+ZERO\+\_\+\+ELEM&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{LIST\_CYCLE@{LIST\_CYCLE}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!LIST\_CYCLE@{LIST\_CYCLE}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa58ea37b2d13cd49c2072c5a946a58d5a}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa58ea37b2d13cd49c2072c5a946a58d5a} 
+LIST\+\_\+\+CYCLE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{SYSTEM\_CALL\_ERROR@{SYSTEM\_CALL\_ERROR}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!SYSTEM\_CALL\_ERROR@{SYSTEM\_CALL\_ERROR}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa049aced892f12e8b73e3ba4a408dc1a8}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa049aced892f12e8b73e3ba4a408dc1a8} 
+SYSTEM\+\_\+\+CALL\+\_\+\+ERROR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{NO\_EDGE\_ERROR@{NO\_EDGE\_ERROR}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!NO\_EDGE\_ERROR@{NO\_EDGE\_ERROR}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa7c1d5f3f91822584c55a25b84075d989}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa7c1d5f3f91822584c55a25b84075d989} 
+NO\+\_\+\+EDGE\+\_\+\+ERROR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{UNKNOWN\_NODE\_STATUS@{UNKNOWN\_NODE\_STATUS}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!UNKNOWN\_NODE\_STATUS@{UNKNOWN\_NODE\_STATUS}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa55016827e92ed15ec00ab44ad7cc0201}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa55016827e92ed15ec00ab44ad7cc0201} 
+UNKNOWN\+\_\+\+NODE\+\_\+\+STATUS&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{NOT\_USED\_NODE@{NOT\_USED\_NODE}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!NOT\_USED\_NODE@{NOT\_USED\_NODE}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa418de923efbb7fa8d8061987ff9b1778}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa418de923efbb7fa8d8061987ff9b1778} 
+NOT\+\_\+\+USED\+\_\+\+NODE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{NODE\_INSERT\_INT\_ERROR@{NODE\_INSERT\_INT\_ERROR}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!NODE\_INSERT\_INT\_ERROR@{NODE\_INSERT\_INT\_ERROR}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daab62734d783965837b6995a536b5e7499}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daab62734d783965837b6995a536b5e7499} 
+NODE\+\_\+\+INSERT\+\_\+\+INT\+\_\+\+ERROR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{TREE\_BAD\_SIZE@{TREE\_BAD\_SIZE}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!TREE\_BAD\_SIZE@{TREE\_BAD\_SIZE}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa8b798ce2adcd54af9cb8594982f0ba3a}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa8b798ce2adcd54af9cb8594982f0ba3a} 
+TREE\+\_\+\+BAD\+\_\+\+SIZE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{UNKNOWN\_AKINATOR\_MENU\_OPTION@{UNKNOWN\_AKINATOR\_MENU\_OPTION}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!UNKNOWN\_AKINATOR\_MENU\_OPTION@{UNKNOWN\_AKINATOR\_MENU\_OPTION}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daafbab2b4270ab932fca54b273a35a5e05}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daafbab2b4270ab932fca54b273a35a5e05} 
+UNKNOWN\+\_\+\+AKINATOR\+\_\+\+MENU\+\_\+\+OPTION&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{AKINATOR\_MENU\_INPUT\_ERROR@{AKINATOR\_MENU\_INPUT\_ERROR}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!AKINATOR\_MENU\_INPUT\_ERROR@{AKINATOR\_MENU\_INPUT\_ERROR}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa8387e24276e3053d59cc8f1a9c9cc810}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa8387e24276e3053d59cc8f1a9c9cc810} 
+AKINATOR\+\_\+\+MENU\+\_\+\+INPUT\+\_\+\+ERROR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{AKINATOR\_QUESTION\_INPUT\_ERROR@{AKINATOR\_QUESTION\_INPUT\_ERROR}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!AKINATOR\_QUESTION\_INPUT\_ERROR@{AKINATOR\_QUESTION\_INPUT\_ERROR}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daaef85ea1444cb8a44b9cc390b792f27d9}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daaef85ea1444cb8a44b9cc390b792f27d9} 
+AKINATOR\+\_\+\+QUESTION\+\_\+\+INPUT\+\_\+\+ERROR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{UNKNOWN\_AKINATOR\_ANSWER\_OPTION@{UNKNOWN\_AKINATOR\_ANSWER\_OPTION}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!UNKNOWN\_AKINATOR\_ANSWER\_OPTION@{UNKNOWN\_AKINATOR\_ANSWER\_OPTION}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daace5a9b1a20a635c215b10305b50041ec}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daace5a9b1a20a635c215b10305b50041ec} 
+UNKNOWN\+\_\+\+AKINATOR\+\_\+\+ANSWER\+\_\+\+OPTION&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{AKINATOR\_OBJECT\_INPUT\_ERROR@{AKINATOR\_OBJECT\_INPUT\_ERROR}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!AKINATOR\_OBJECT\_INPUT\_ERROR@{AKINATOR\_OBJECT\_INPUT\_ERROR}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daadbd3360d0e8592bbb0645132b0687580}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daadbd3360d0e8592bbb0645132b0687580} 
+AKINATOR\+\_\+\+OBJECT\+\_\+\+INPUT\+\_\+\+ERROR&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{UNKNOWN\_STRING\_LOAD\_TREE@{UNKNOWN\_STRING\_LOAD\_TREE}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!UNKNOWN\_STRING\_LOAD\_TREE@{UNKNOWN\_STRING\_LOAD\_TREE}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa9f2cedbb3f981a17a8c14ac6c62340d6}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa9f2cedbb3f981a17a8c14ac6c62340d6} 
+UNKNOWN\+\_\+\+STRING\+\_\+\+LOAD\+\_\+\+TREE&\\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{AKINATOR\_COMPARE\_ERROR@{AKINATOR\_COMPARE\_ERROR}!MyError.h@{MyError.h}}
+\index{MyError.h@{MyError.h}!AKINATOR\_COMPARE\_ERROR@{AKINATOR\_COMPARE\_ERROR}}
+}\Hypertarget{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2aa1778aca8beac8448cf2d819416d70}\label{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2aa1778aca8beac8448cf2d819416d70} 
+AKINATOR\+\_\+\+COMPARE\+\_\+\+ERROR&\\
+\hline
+
+\end{DoxyEnumFields}
+
+
+Definition at line \doxymbox{\hyperlink{MyError_8h_source_l00004}{4}} of file \doxymbox{\hyperlink{MyError_8h_source}{My\+Error.\+h}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00004\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00005\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 0,\ }
+\DoxyCodeLine{00006\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa1544e711bac79f5a2bdfc5481e1f8fb3}{FILE\_ACCESS\_DENIED}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 1,}
+\DoxyCodeLine{00007\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa8d6d1bfbff8ad5a22852a94319e30082}{FILE\_FSTAT\_ERROR}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 2,}
+\DoxyCodeLine{00008\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 3,}
+\DoxyCodeLine{00009\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa34c3c260bc15620cb011dd0bb7719a33}{CMP\_ERROR}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 4,\ }
+\DoxyCodeLine{00010\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da}{NOT\_ENOUGH\_MEMORY}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 5,\ }
+\DoxyCodeLine{00011\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daac87c10c2ba4f23caa21a4ad29dc37715}{PUSH\_NOT\_EQUAL\_POP}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 6,\ }
+\DoxyCodeLine{00012\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa774131b3e4dfe3f57ab35303e6ee061}{BAD\_CLEAR\_INIT}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 7,\ }
+\DoxyCodeLine{00013\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2db4a162c365135849093698aaa2996b}{STACK\_DESTROY\_ERROR}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 8,}
+\DoxyCodeLine{00014\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa056762ace6c5a12f12ad918ca1bdf19d}{EMPTY\_STACK}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 9,}
+\DoxyCodeLine{00015\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa427278ac62c20f91f0f97146da3c4385}{STACK\_CAP\_SIZE}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 10,\ }
+\DoxyCodeLine{00016\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa0500c7558b55e10d263a3dc3abd32bfc}{BAD\_CANARY}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 11,}
+\DoxyCodeLine{00017\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa0c871c9aee660e139823e56d6558d27}{HASHES\_DIFFER}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 12,}
+\DoxyCodeLine{00018\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daac21e3807ef3e8771a7f26527ceb5d948}{EXECUTION\_ERROR}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 13,}
+\DoxyCodeLine{00019\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daae6aea40c86645dc00f8f0be7761671bc}{READ\_FILE\_ERROR}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 14,}
+\DoxyCodeLine{00020\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa5a15297265c3da9032feaa3ec7c24e08}{WRITE\_BUFFER\_TO\_FILE\_ERROR}}\ \ \ \ \ \ \ \ \ \ \ =\ 15,}
+\DoxyCodeLine{00021\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa5f104ee2136be4c218ce3ba4ffe9f6b5}{UNLINK\_FILE\_ERROR}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 16,}
+\DoxyCodeLine{00022\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa1f87bd94ef68b0b0fc3523a24b7efdd4}{WRITE\_SEP\_TO\_FILE\_ERROR}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 17,}
+\DoxyCodeLine{00023\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa4b9f98f8f71f49dcce324329f5b4dc59}{UNKNOWN\_OPCODE}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 18,}
+\DoxyCodeLine{00024\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daae76285072aeaaaa31e9fbf6f646e14f1}{ZERO\_DIVISION\_ERROR}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 19,}
+\DoxyCodeLine{00025\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa339d2845a7db50b08020f25a0d2c0a70}{OPCODE\_INPUT\_ERROR}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 20,}
+\DoxyCodeLine{00026\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa10cb6b2ecb094e5494d4ac55e5f92e19}{ARGS\_INPUT\_ERROR}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 21,}
+\DoxyCodeLine{00027\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa9a91eaaf4a5ed06d57799a48b40719fa}{ASSEMBLE\_ERROR}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 22,}
+\DoxyCodeLine{00028\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa01c7fafc79bc05030c5056882aeecfee}{STRCMP\_ERROR}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 23,}
+\DoxyCodeLine{00029\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa9aa51a1d40945b1fd064ed14f6604589}{ASSEMBLE\_VERIFICATION\_ERROR}}\ \ \ \ \ \ \ \ \ \ =\ 24,}
+\DoxyCodeLine{00030\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daac58a56346e1d28a908a39eb145e45cf1}{INT\_TO\_STRING\_ERROR}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 25,}
+\DoxyCodeLine{00031\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa5332d8897e888e1e2a04a4df9f3e889c}{DISASSEMBLE\_ERROR}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 26,}
+\DoxyCodeLine{00032\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa1c4cd4163a43a23f1f5913fb106170e4}{READING\_OPCODE\_DISASSEMBLE\_ERROR}}\ \ \ \ \ =\ 27,}
+\DoxyCodeLine{00033\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa4dc7b1d70ce487ea184358d5bb07f580}{WRITE\_INDEX\_TO\_FILE\_ERROR}}\ \ \ \ \ \ \ \ \ \ \ \ =\ 28,}
+\DoxyCodeLine{00034\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa7230793dd2108689282aa6bd5c80778c}{READING\_COMMAND\_ASSEMBLE\_ERROR}}\ \ \ \ \ \ \ =\ 29,}
+\DoxyCodeLine{00035\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaba47ecc70755dc7e496b84850a3c87c1}{UNKNOWN\_REGISTER\_NAME}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 30,}
+\DoxyCodeLine{00036\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa513cc521f275ef09d81219bfc13f4014}{GET\_ARGUMENT\_TYPE\_ERROR}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 31,}
+\DoxyCodeLine{00037\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa5b0979c6e8ae3a1681edbbe05502288a}{IS\_VALID\_REGISTER\_NAME\_ERROR}}\ \ \ \ \ \ \ \ \ =\ 32,}
+\DoxyCodeLine{00038\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa427870d768de527a409fc7063ee3f24}{NO\_ARGUMENT\_TYPE\_ERROR}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 33,}
+\DoxyCodeLine{00039\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3385bd2f9288c7c77dee6f49fae96ac8}{UNKNOWN\_ARGUMENT\_TYPE}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 34,}
+\DoxyCodeLine{00040\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaff7d477b5536f7260c380ee3ecd88c17}{JUMP\_ADDRESS\_IS\_OUT\_OF\_RANGE}}\ \ \ \ \ \ \ \ \ =\ 35,}
+\DoxyCodeLine{00041\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa72775ef48bcf9918084e5bf12e7ea847}{NOT\_INITIALIZED\_JUMP\_ADDRESS}}\ \ \ \ \ \ \ \ \ =\ 36,}
+\DoxyCodeLine{00042\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa12ec50339c380c9a9b5063d27805dd3a}{HALT\_EXIT}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 37,}
+\DoxyCodeLine{00043\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daac6965613e253f079fca333e02e5c9e9e}{IS\_VALID\_REGISTER\_NAME\_STRING\_ERROR}}\ \ =\ 38,}
+\DoxyCodeLine{00044\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa91b298f65bbab1047e039f661f9ca591}{READ\_LABEL\_ERROR}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 39,}
+\DoxyCodeLine{00045\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daad4f02fa9e9ff8f5b848fbcb98b90e879}{LABEL\_REDEFINITION}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 40,}
+\DoxyCodeLine{00046\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daab4fca29457d120f231cb3374fbd5add8}{UNKNOWN\_LABEL}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 41,}
+\DoxyCodeLine{00047\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa8c207c4ea16831f7f74a33ed4ac82d7c}{NOT\_INITIALIZED\_LABEL}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 42,}
+\DoxyCodeLine{00048\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa953bf18fc531e72f24340e9315e4a8f2}{READING\_MEMORY\_INDEX\_ERROR}}\ \ \ \ \ \ \ \ \ \ \ =\ 43,}
+\DoxyCodeLine{00049\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa53ef4bb8eda89adbd984c84830e00561}{BAD\_MEMORY\_ADDRESS}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 44,}
+\DoxyCodeLine{00050\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daad5bc668f6eaf06f9b0c6e5b047262590}{BAD\_LIST\_SIZE}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 45,}
+\DoxyCodeLine{00051\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa622c49d236b887dd9800acf392f26d9c}{LIST\_CAP\_SIZE}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 46,}
+\DoxyCodeLine{00052\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3ab0032710d38b54854aaba62094dfca}{BAD\_LIST\_HEAD}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 47,}
+\DoxyCodeLine{00053\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2ae11512a515975908c3eb00e08bfdc0}{BAD\_LIST\_TAIL}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 48,}
+\DoxyCodeLine{00054\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daafcf12481844481a0a75ee320b58247d8}{BAD\_LIST\_ZERO\_ELEM}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 49,}
+\DoxyCodeLine{00055\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa58ea37b2d13cd49c2072c5a946a58d5a}{LIST\_CYCLE}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 50,}
+\DoxyCodeLine{00056\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa049aced892f12e8b73e3ba4a408dc1a8}{SYSTEM\_CALL\_ERROR}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 51,}
+\DoxyCodeLine{00057\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa7c1d5f3f91822584c55a25b84075d989}{NO\_EDGE\_ERROR}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 52,}
+\DoxyCodeLine{00058\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa55016827e92ed15ec00ab44ad7cc0201}{UNKNOWN\_NODE\_STATUS}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 53,}
+\DoxyCodeLine{00059\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa418de923efbb7fa8d8061987ff9b1778}{NOT\_USED\_NODE}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 54,}
+\DoxyCodeLine{00060\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daab62734d783965837b6995a536b5e7499}{NODE\_INSERT\_INT\_ERROR}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 55,}
+\DoxyCodeLine{00061\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa8b798ce2adcd54af9cb8594982f0ba3a}{TREE\_BAD\_SIZE}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 56,}
+\DoxyCodeLine{00062\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daafbab2b4270ab932fca54b273a35a5e05}{UNKNOWN\_AKINATOR\_MENU\_OPTION}}\ \ \ \ \ \ \ \ \ =\ 57,}
+\DoxyCodeLine{00063\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa8387e24276e3053d59cc8f1a9c9cc810}{AKINATOR\_MENU\_INPUT\_ERROR}}\ \ \ \ \ \ \ \ \ \ \ \ =\ 58,}
+\DoxyCodeLine{00064\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaef85ea1444cb8a44b9cc390b792f27d9}{AKINATOR\_QUESTION\_INPUT\_ERROR}}\ \ \ \ \ \ \ \ =\ 59,}
+\DoxyCodeLine{00065\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daace5a9b1a20a635c215b10305b50041ec}{UNKNOWN\_AKINATOR\_ANSWER\_OPTION}}\ \ \ \ \ \ \ =\ 60,}
+\DoxyCodeLine{00066\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daadbd3360d0e8592bbb0645132b0687580}{AKINATOR\_OBJECT\_INPUT\_ERROR}}\ \ \ \ \ \ \ \ \ \ =\ 61,}
+\DoxyCodeLine{00067\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa9f2cedbb3f981a17a8c14ac6c62340d6}{UNKNOWN\_STRING\_LOAD\_TREE}}\ \ \ \ \ \ \ \ \ \ \ \ \ =\ 62,}
+\DoxyCodeLine{00068\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2aa1778aca8beac8448cf2d819416d70}{AKINATOR\_COMPARE\_ERROR}}\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ =\ 63,}
+\DoxyCodeLine{00069\ \};}
+
+\end{DoxyCode}
+
+
+\label{MyError_8h_doc-func-members}
+\Hypertarget{MyError_8h_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{MyError_8h_a6a91e619425dcba77b56d72c9213c736}\index{MyError.h@{MyError.h}!GetErrorString@{GetErrorString}}
+\index{GetErrorString@{GetErrorString}!MyError.h@{MyError.h}}
+\doxysubsubsection{\texorpdfstring{GetErrorString()}{GetErrorString()}}
+{\footnotesize\ttfamily \label{MyError_8h_a6a91e619425dcba77b56d72c9213c736} 
+const char \texorpdfstring{$\ast$}{*} Get\+Error\+String (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}}}]{error\+Status}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \doxymbox{\hyperlink{Tree_8cpp_source_l01307}{1307}} of file \doxymbox{\hyperlink{Tree_8cpp_source}{Tree.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{01307\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{01308\ \ \ \ \ \textcolor{keywordflow}{switch}\ (errorStatus)\ \{}
+\DoxyCodeLine{01309\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}}:}
+\DoxyCodeLine{01310\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Program\ works\ fine!\ But\ this\ sentence\ shouldn't\ be\ printed\ to\ user!\(\backslash\)n"{}};}
+\DoxyCodeLine{01311\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{01312\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa1544e711bac79f5a2bdfc5481e1f8fb3}{FILE\_ACCESS\_DENIED}}:}
+\DoxyCodeLine{01313\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Cannot\ access\ file!\(\backslash\)n"{}};}
+\DoxyCodeLine{01314\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{01315\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa8d6d1bfbff8ad5a22852a94319e30082}{FILE\_FSTAT\_ERROR}}:}
+\DoxyCodeLine{01316\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Unknown\ fstat()\ error!\(\backslash\)n"{}};}
+\DoxyCodeLine{01317\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{01318\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}}:}
+\DoxyCodeLine{01319\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Index\ is\ out\ of\ range!\(\backslash\)n"{}};}
+\DoxyCodeLine{01320\ }
+\DoxyCodeLine{01321\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa34c3c260bc15620cb011dd0bb7719a33}{CMP\_ERROR}}:}
+\DoxyCodeLine{01322\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Comarator\ error!\(\backslash\)n"{}};}
+\DoxyCodeLine{01323\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{01324\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da}{NOT\_ENOUGH\_MEMORY}}:}
+\DoxyCodeLine{01325\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Not\ enough\ memory!\(\backslash\)n"{}};}
+\DoxyCodeLine{01326\ }
+\DoxyCodeLine{01327\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daac87c10c2ba4f23caa21a4ad29dc37715}{PUSH\_NOT\_EQUAL\_POP}}:}
+\DoxyCodeLine{01328\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Last\ pushed\ element\ to\ stack\ is\ not\ equal\ first\ popped!\(\backslash\)n"{}};}
+\DoxyCodeLine{01329\ }
+\DoxyCodeLine{01330\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa774131b3e4dfe3f57ab35303e6ee061}{BAD\_CLEAR\_INIT}}:}
+\DoxyCodeLine{01331\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Value\ was\ initialized\ with\ zeroes,\ but\ it's\ not\ true\ BEFORE\ initialization\ function!\(\backslash\)n"{}};}
+\DoxyCodeLine{01332\ }
+\DoxyCodeLine{01333\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2db4a162c365135849093698aaa2996b}{STACK\_DESTROY\_ERROR}}:}
+\DoxyCodeLine{01334\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Error\ happened\ when\ destroying\ stack!\(\backslash\)n"{}};}
+\DoxyCodeLine{01335\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{01336\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa056762ace6c5a12f12ad918ca1bdf19d}{EMPTY\_STACK}}:}
+\DoxyCodeLine{01337\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Trying\ to\ pop\ from\ the\ empty\ stack!\(\backslash\)n"{}};}
+\DoxyCodeLine{01338\ }
+\DoxyCodeLine{01339\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa427278ac62c20f91f0f97146da3c4385}{STACK\_CAP\_SIZE}}:}
+\DoxyCodeLine{01340\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Stack\ capacity\ is\ less\ than\ size!\(\backslash\)n"{}};}
+\DoxyCodeLine{01341\ }
+\DoxyCodeLine{01342\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa0500c7558b55e10d263a3dc3abd32bfc}{BAD\_CANARY}}:}
+\DoxyCodeLine{01343\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Canary\ value\ was\ changed!\(\backslash\)n"{}};}
+\DoxyCodeLine{01344\ }
+\DoxyCodeLine{01345\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa0c871c9aee660e139823e56d6558d27}{HASHES\_DIFFER}}:}
+\DoxyCodeLine{01346\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Hashes\ values\ differ:\ hash\ inside\ structure\ not\ equal\ to\ just\ counted\ hash\(\backslash\)n"{}};}
+\DoxyCodeLine{01347\ }
+\DoxyCodeLine{01348\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daac21e3807ef3e8771a7f26527ceb5d948}{EXECUTION\_ERROR}}:}
+\DoxyCodeLine{01349\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Error\ happened\ when\ executing!\(\backslash\)n"{}};}
+\DoxyCodeLine{01350\ }
+\DoxyCodeLine{01351\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daae6aea40c86645dc00f8f0be7761671bc}{READ\_FILE\_ERROR}}:}
+\DoxyCodeLine{01352\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Error\ happened\ when\ reading\ file!\(\backslash\)n"{}};}
+\DoxyCodeLine{01353\ }
+\DoxyCodeLine{01354\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa5f104ee2136be4c218ce3ba4ffe9f6b5}{UNLINK\_FILE\_ERROR}}:}
+\DoxyCodeLine{01355\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Error\ happened\ when\ unlinking\ file!\(\backslash\)n"{}};}
+\DoxyCodeLine{01356\ }
+\DoxyCodeLine{01357\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa4b9f98f8f71f49dcce324329f5b4dc59}{UNKNOWN\_OPCODE}}:}
+\DoxyCodeLine{01358\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Unknown\ opcode\ found\ when\ executing!\(\backslash\)n"{}};}
+\DoxyCodeLine{01359\ }
+\DoxyCodeLine{01360\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daae76285072aeaaaa31e9fbf6f646e14f1}{ZERO\_DIVISION\_ERROR}}:}
+\DoxyCodeLine{01361\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Zero\ division\ error\ happened!\(\backslash\)n"{}};\ }
+\DoxyCodeLine{01362\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{01363\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa339d2845a7db50b08020f25a0d2c0a70}{OPCODE\_INPUT\_ERROR}}:}
+\DoxyCodeLine{01364\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Error\ happened\ while\ executing\ in\ opcode\ input!\(\backslash\)n"{}};}
+\DoxyCodeLine{01365\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{01366\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa10cb6b2ecb094e5494d4ac55e5f92e19}{ARGS\_INPUT\_ERROR}}:}
+\DoxyCodeLine{01367\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Error\ happened\ while\ executing\ in\ args\ input!\(\backslash\)n"{}};\ \ \ }
+\DoxyCodeLine{01368\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{01369\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa9a91eaaf4a5ed06d57799a48b40719fa}{ASSEMBLE\_ERROR}}:}
+\DoxyCodeLine{01370\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Error\ happened\ while\ assembling!\(\backslash\)n"{}};}
+\DoxyCodeLine{01371\ }
+\DoxyCodeLine{01372\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa01c7fafc79bc05030c5056882aeecfee}{STRCMP\_ERROR}}:}
+\DoxyCodeLine{01373\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Error\ happened\ while\ comparing\ strings!\(\backslash\)n"{}};}
+\DoxyCodeLine{01374\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{01375\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa9aa51a1d40945b1fd064ed14f6604589}{ASSEMBLE\_VERIFICATION\_ERROR}}:}
+\DoxyCodeLine{01376\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Incorrect\ line\ found\ while\ assembling!\(\backslash\)n"{}};}
+\DoxyCodeLine{01377\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{01378\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daac58a56346e1d28a908a39eb145e45cf1}{INT\_TO\_STRING\_ERROR}}:}
+\DoxyCodeLine{01379\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Error\ happened\ while\ converting\ int\ to\ string!\(\backslash\)n"{}};}
+\DoxyCodeLine{01380\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{01381\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa5332d8897e888e1e2a04a4df9f3e889c}{DISASSEMBLE\_ERROR}}:}
+\DoxyCodeLine{01382\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Error\ happened\ while\ disassembling!\(\backslash\)n"{}};}
+\DoxyCodeLine{01383\ }
+\DoxyCodeLine{01384\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa1c4cd4163a43a23f1f5913fb106170e4}{READING\_OPCODE\_DISASSEMBLE\_ERROR}}:}
+\DoxyCodeLine{01385\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Error\ happened\ when\ reading\ opcode\ while\ disassembling!\(\backslash\)n"{}};}
+\DoxyCodeLine{01386\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{01387\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa4dc7b1d70ce487ea184358d5bb07f580}{WRITE\_INDEX\_TO\_FILE\_ERROR}}:}
+\DoxyCodeLine{01388\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Error\ happened\ when\ writing\ index\ to\ file!\(\backslash\)n"{}};}
+\DoxyCodeLine{01389\ }
+\DoxyCodeLine{01390\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa7230793dd2108689282aa6bd5c80778c}{READING\_COMMAND\_ASSEMBLE\_ERROR}}:}
+\DoxyCodeLine{01391\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Error\ happened\ when\ reading\ command\ while\ assembling!\(\backslash\)n"{}};}
+\DoxyCodeLine{01392\ }
+\DoxyCodeLine{01393\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaba47ecc70755dc7e496b84850a3c87c1}{UNKNOWN\_REGISTER\_NAME}}:}
+\DoxyCodeLine{01394\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Got\ an\ unknown\ register\ name!\(\backslash\)n"{}};}
+\DoxyCodeLine{01395\ }
+\DoxyCodeLine{01396\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa513cc521f275ef09d81219bfc13f4014}{GET\_ARGUMENT\_TYPE\_ERROR}}:}
+\DoxyCodeLine{01397\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Error\ happened\ when\ getting\ argument\ type!\(\backslash\)n"{}};}
+\DoxyCodeLine{01398\ }
+\DoxyCodeLine{01399\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa5b0979c6e8ae3a1681edbbe05502288a}{IS\_VALID\_REGISTER\_NAME\_ERROR}}:}
+\DoxyCodeLine{01400\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Error\ happened\ when\ validating\ register\ name!\(\backslash\)n"{}};}
+\DoxyCodeLine{01401\ }
+\DoxyCodeLine{01402\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa427870d768de527a409fc7063ee3f24}{NO\_ARGUMENT\_TYPE\_ERROR}}:}
+\DoxyCodeLine{01403\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Argument\ type\ missing!\(\backslash\)n"{}};}
+\DoxyCodeLine{01404\ }
+\DoxyCodeLine{01405\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3385bd2f9288c7c77dee6f49fae96ac8}{UNKNOWN\_ARGUMENT\_TYPE}}:}
+\DoxyCodeLine{01406\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Unknown\ argument\ type!\(\backslash\)n"{}};}
+\DoxyCodeLine{01407\ }
+\DoxyCodeLine{01408\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaff7d477b5536f7260c380ee3ecd88c17}{JUMP\_ADDRESS\_IS\_OUT\_OF\_RANGE}}:}
+\DoxyCodeLine{01409\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Jump\ address\ is\ out\ of\ allocated\ memory\ range!\(\backslash\)n"{}};}
+\DoxyCodeLine{01410\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{01411\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa72775ef48bcf9918084e5bf12e7ea847}{NOT\_INITIALIZED\_JUMP\_ADDRESS}}:}
+\DoxyCodeLine{01412\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Jump\ address\ was\ not\ initialized!\(\backslash\)n"{}};}
+\DoxyCodeLine{01413\ }
+\DoxyCodeLine{01414\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa12ec50339c380c9a9b5063d27805dd3a}{HALT\_EXIT}}:}
+\DoxyCodeLine{01415\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}HALT\ command\ was\ called!\(\backslash\)n"{}};}
+\DoxyCodeLine{01416\ }
+\DoxyCodeLine{01417\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daac6965613e253f079fca333e02e5c9e9e}{IS\_VALID\_REGISTER\_NAME\_STRING\_ERROR}}:}
+\DoxyCodeLine{01418\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Error\ happened\ when\ validating\ register\ name\ string!\(\backslash\)n"{}};}
+\DoxyCodeLine{01419\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{01420\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa91b298f65bbab1047e039f661f9ca591}{READ\_LABEL\_ERROR}}:}
+\DoxyCodeLine{01421\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Error\ happened\ when\ reading\ label!\(\backslash\)n"{}};}
+\DoxyCodeLine{01422\ }
+\DoxyCodeLine{01423\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daad4f02fa9e9ff8f5b848fbcb98b90e879}{LABEL\_REDEFINITION}}:}
+\DoxyCodeLine{01424\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Got\ a\ label\ redefinition!\(\backslash\)n"{}};}
+\DoxyCodeLine{01425\ }
+\DoxyCodeLine{01426\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daab4fca29457d120f231cb3374fbd5add8}{UNKNOWN\_LABEL}}:}
+\DoxyCodeLine{01427\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Got\ an\ unknown\ label!\(\backslash\)n"{}};}
+\DoxyCodeLine{01428\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{01429\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa8c207c4ea16831f7f74a33ed4ac82d7c}{NOT\_INITIALIZED\_LABEL}}:}
+\DoxyCodeLine{01430\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Label\ was\ not\ initialized!\(\backslash\)n"{}};}
+\DoxyCodeLine{01431\ }
+\DoxyCodeLine{01432\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa953bf18fc531e72f24340e9315e4a8f2}{READING\_MEMORY\_INDEX\_ERROR}}:}
+\DoxyCodeLine{01433\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}When\ reading\ memory\ index\ error\ happened!\(\backslash\)n"{}};}
+\DoxyCodeLine{01434\ }
+\DoxyCodeLine{01435\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa53ef4bb8eda89adbd984c84830e00561}{BAD\_MEMORY\_ADDRESS}}:}
+\DoxyCodeLine{01436\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Memory\ address\ is\ out\ of\ allocated\ (for\ this\ vm)\ RAM!\(\backslash\)n"{}};}
+\DoxyCodeLine{01437\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{01438\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daad5bc668f6eaf06f9b0c6e5b047262590}{BAD\_LIST\_SIZE}}:}
+\DoxyCodeLine{01439\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}List\ has\ size\ <=\ 0\(\backslash\)n"{}};}
+\DoxyCodeLine{01440\ }
+\DoxyCodeLine{01441\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa622c49d236b887dd9800acf392f26d9c}{LIST\_CAP\_SIZE}}:}
+\DoxyCodeLine{01442\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}List\ capacity\ less\ than\ size!\(\backslash\)n"{}};}
+\DoxyCodeLine{01443\ }
+\DoxyCodeLine{01444\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3ab0032710d38b54854aaba62094dfca}{BAD\_LIST\_HEAD}}:}
+\DoxyCodeLine{01445\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Incorrect\ head\ index\ in\ the\ list!\(\backslash\)n"{}};}
+\DoxyCodeLine{01446\ }
+\DoxyCodeLine{01447\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2ae11512a515975908c3eb00e08bfdc0}{BAD\_LIST\_TAIL}}:}
+\DoxyCodeLine{01448\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Incorrect\ tail\ index\ in\ the\ list!\(\backslash\)n"{}};}
+\DoxyCodeLine{01449\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{01450\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daafcf12481844481a0a75ee320b58247d8}{BAD\_LIST\_ZERO\_ELEM}}:}
+\DoxyCodeLine{01451\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Incorrect\ zero\ element\ in\ list!\ Should\ have\ all\ zeros!\(\backslash\)n"{}};}
+\DoxyCodeLine{01452\ }
+\DoxyCodeLine{01453\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa58ea37b2d13cd49c2072c5a946a58d5a}{LIST\_CYCLE}}:}
+\DoxyCodeLine{01454\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}List\ has\ cycles!\(\backslash\)n"{}};}
+\DoxyCodeLine{01455\ }
+\DoxyCodeLine{01456\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa049aced892f12e8b73e3ba4a408dc1a8}{SYSTEM\_CALL\_ERROR}}:}
+\DoxyCodeLine{01457\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Error\ while\ executing\ system()!\(\backslash\)n"{}};}
+\DoxyCodeLine{01458\ }
+\DoxyCodeLine{01459\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa7c1d5f3f91822584c55a25b84075d989}{NO\_EDGE\_ERROR}}:}
+\DoxyCodeLine{01460\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}List\ node\ has\ less\ than\ two\ edges!\(\backslash\)n"{}};}
+\DoxyCodeLine{01461\ }
+\DoxyCodeLine{01462\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa55016827e92ed15ec00ab44ad7cc0201}{UNKNOWN\_NODE\_STATUS}}:}
+\DoxyCodeLine{01463\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}List\ node\ has\ unknown\ status!\(\backslash\)n"{}};}
+\DoxyCodeLine{01464\ }
+\DoxyCodeLine{01465\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa418de923efbb7fa8d8061987ff9b1778}{NOT\_USED\_NODE}}:}
+\DoxyCodeLine{01466\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}List\ node\ is\ not\ used!\(\backslash\)n"{}};}
+\DoxyCodeLine{01467\ }
+\DoxyCodeLine{01468\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daab62734d783965837b6995a536b5e7499}{NODE\_INSERT\_INT\_ERROR}}:}
+\DoxyCodeLine{01469\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Error\ happened\ when\ inserting\ integer\ value\ in\ the\ node!\(\backslash\)n"{}};}
+\DoxyCodeLine{01470\ }
+\DoxyCodeLine{01471\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa8b798ce2adcd54af9cb8594982f0ba3a}{TREE\_BAD\_SIZE}}:}
+\DoxyCodeLine{01472\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Tree\ has\ not\ positive\ size!\(\backslash\)n"{}};}
+\DoxyCodeLine{01473\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{01474\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daafbab2b4270ab932fca54b273a35a5e05}{UNKNOWN\_AKINATOR\_MENU\_OPTION}}:}
+\DoxyCodeLine{01475\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Unknown\ menu\ option\ entered\ in\ akinator\ program!\(\backslash\)n"{}};}
+\DoxyCodeLine{01476\ }
+\DoxyCodeLine{01477\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa8387e24276e3053d59cc8f1a9c9cc810}{AKINATOR\_MENU\_INPUT\_ERROR}}:}
+\DoxyCodeLine{01478\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Error\ happened\ when\ proceeding\ user\ input\ in\ akinator\ menu!\(\backslash\)n"{}};}
+\DoxyCodeLine{01479\ }
+\DoxyCodeLine{01480\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaef85ea1444cb8a44b9cc390b792f27d9}{AKINATOR\_QUESTION\_INPUT\_ERROR}}:}
+\DoxyCodeLine{01481\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Error\ happened\ when\ proceeding\ user\ input\ while\ answering\ question!\(\backslash\)n"{}};}
+\DoxyCodeLine{01482\ }
+\DoxyCodeLine{01483\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daace5a9b1a20a635c215b10305b50041ec}{UNKNOWN\_AKINATOR\_ANSWER\_OPTION}}:}
+\DoxyCodeLine{01484\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Incorrect\ akinator\ answer\ option!\(\backslash\)n"{}};}
+\DoxyCodeLine{01485\ }
+\DoxyCodeLine{01486\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daadbd3360d0e8592bbb0645132b0687580}{AKINATOR\_OBJECT\_INPUT\_ERROR}}:}
+\DoxyCodeLine{01487\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Error\ when\ proceeding\ object\ input!\(\backslash\)n"{}};}
+\DoxyCodeLine{01488\ }
+\DoxyCodeLine{01489\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa9f2cedbb3f981a17a8c14ac6c62340d6}{UNKNOWN\_STRING\_LOAD\_TREE}}:}
+\DoxyCodeLine{01490\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Got\ an\ unknown\ string\ when\ loading\ tree!\(\backslash\)n"{}};}
+\DoxyCodeLine{01491\ }
+\DoxyCodeLine{01492\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{case}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2aa1778aca8beac8448cf2d819416d70}{AKINATOR\_COMPARE\_ERROR}}:}
+\DoxyCodeLine{01493\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}An\ error\ happened\ when\ comparing\ in\ akinator!\(\backslash\)n"{}};}
+\DoxyCodeLine{01494\ }
+\DoxyCodeLine{01495\ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{default}:}
+\DoxyCodeLine{01496\ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{keywordflow}{return}\ \textcolor{stringliteral}{"{}Unknown\ error\ status!\(\backslash\)n"{}};}
+\DoxyCodeLine{01497\ \ \ \ \ \}}
+\DoxyCodeLine{01498\ \}}
+
+\end{DoxyCode}
+
+
+References \doxymbox{\hyperlink{MyError_8h_source_l00068}{AKINATOR\+\_\+\+COMPARE\+\_\+\+ERROR}}, \doxymbox{\hyperlink{MyError_8h_source_l00063}{AKINATOR\+\_\+\+MENU\+\_\+\+INPUT\+\_\+\+ERROR}}, \doxymbox{\hyperlink{MyError_8h_source_l00066}{AKINATOR\+\_\+\+OBJECT\+\_\+\+INPUT\+\_\+\+ERROR}}, \doxymbox{\hyperlink{MyError_8h_source_l00064}{AKINATOR\+\_\+\+QUESTION\+\_\+\+INPUT\+\_\+\+ERROR}}, \doxymbox{\hyperlink{MyError_8h_source_l00026}{ARGS\+\_\+\+INPUT\+\_\+\+ERROR}}, \doxymbox{\hyperlink{MyError_8h_source_l00027}{ASSEMBLE\+\_\+\+ERROR}}, \doxymbox{\hyperlink{MyError_8h_source_l00029}{ASSEMBLE\+\_\+\+VERIFICATION\+\_\+\+ERROR}}, \doxymbox{\hyperlink{MyError_8h_source_l00016}{BAD\+\_\+\+CANARY}}, \doxymbox{\hyperlink{MyError_8h_source_l00012}{BAD\+\_\+\+CLEAR\+\_\+\+INIT}}, \doxymbox{\hyperlink{MyError_8h_source_l00052}{BAD\+\_\+\+LIST\+\_\+\+HEAD}}, \doxymbox{\hyperlink{MyError_8h_source_l00050}{BAD\+\_\+\+LIST\+\_\+\+SIZE}}, \doxymbox{\hyperlink{MyError_8h_source_l00053}{BAD\+\_\+\+LIST\+\_\+\+TAIL}}, \doxymbox{\hyperlink{MyError_8h_source_l00054}{BAD\+\_\+\+LIST\+\_\+\+ZERO\+\_\+\+ELEM}}, \doxymbox{\hyperlink{MyError_8h_source_l00049}{BAD\+\_\+\+MEMORY\+\_\+\+ADDRESS}}, \doxymbox{\hyperlink{MyError_8h_source_l00009}{CMP\+\_\+\+ERROR}}, \doxymbox{\hyperlink{MyError_8h_source_l00031}{DISASSEMBLE\+\_\+\+ERROR}}, \doxymbox{\hyperlink{MyError_8h_source_l00014}{EMPTY\+\_\+\+STACK}}, \doxymbox{\hyperlink{MyError_8h_source_l00018}{EXECUTION\+\_\+\+ERROR}}, \doxymbox{\hyperlink{MyError_8h_source_l00006}{FILE\+\_\+\+ACCESS\+\_\+\+DENIED}}, \doxymbox{\hyperlink{MyError_8h_source_l00007}{FILE\+\_\+\+FSTAT\+\_\+\+ERROR}}, \doxymbox{\hyperlink{MyError_8h_source_l00036}{GET\+\_\+\+ARGUMENT\+\_\+\+TYPE\+\_\+\+ERROR}}, \doxymbox{\hyperlink{Tree_8cpp_source_l01307}{Get\+Error\+String()}}, \doxymbox{\hyperlink{MyError_8h_source_l00042}{HALT\+\_\+\+EXIT}}, \doxymbox{\hyperlink{MyError_8h_source_l00017}{HASHES\+\_\+\+DIFFER}}, \doxymbox{\hyperlink{MyError_8h_source_l00030}{INT\+\_\+\+TO\+\_\+\+STRING\+\_\+\+ERROR}}, \doxymbox{\hyperlink{MyError_8h_source_l00037}{IS\+\_\+\+VALID\+\_\+\+REGISTER\+\_\+\+NAME\+\_\+\+ERROR}}, \doxymbox{\hyperlink{MyError_8h_source_l00043}{IS\+\_\+\+VALID\+\_\+\+REGISTER\+\_\+\+NAME\+\_\+\+STRING\+\_\+\+ERROR}}, \doxymbox{\hyperlink{MyError_8h_source_l00040}{JUMP\+\_\+\+ADDRESS\+\_\+\+IS\+\_\+\+OUT\+\_\+\+OF\+\_\+\+RANGE}}, \doxymbox{\hyperlink{MyError_8h_source_l00045}{LABEL\+\_\+\+REDEFINITION}}, \doxymbox{\hyperlink{MyError_8h_source_l00051}{LIST\+\_\+\+CAP\+\_\+\+SIZE}}, \doxymbox{\hyperlink{MyError_8h_source_l00055}{LIST\+\_\+\+CYCLE}}, \doxymbox{\hyperlink{MyError_8h_source_l00038}{NO\+\_\+\+ARGUMENT\+\_\+\+TYPE\+\_\+\+ERROR}}, \doxymbox{\hyperlink{MyError_8h_source_l00057}{NO\+\_\+\+EDGE\+\_\+\+ERROR}}, \doxymbox{\hyperlink{MyError_8h_source_l00060}{NODE\+\_\+\+INSERT\+\_\+\+INT\+\_\+\+ERROR}}, \doxymbox{\hyperlink{MyError_8h_source_l00010}{NOT\+\_\+\+ENOUGH\+\_\+\+MEMORY}}, \doxymbox{\hyperlink{MyError_8h_source_l00041}{NOT\+\_\+\+INITIALIZED\+\_\+\+JUMP\+\_\+\+ADDRESS}}, \doxymbox{\hyperlink{MyError_8h_source_l00047}{NOT\+\_\+\+INITIALIZED\+\_\+\+LABEL}}, \doxymbox{\hyperlink{MyError_8h_source_l00059}{NOT\+\_\+\+USED\+\_\+\+NODE}}, \doxymbox{\hyperlink{MyError_8h_source_l00005}{OK}}, \doxymbox{\hyperlink{MyError_8h_source_l00025}{OPCODE\+\_\+\+INPUT\+\_\+\+ERROR}}, \doxymbox{\hyperlink{MyError_8h_source_l00008}{OUT\+\_\+\+OF\+\_\+\+RANGE}}, \doxymbox{\hyperlink{MyError_8h_source_l00011}{PUSH\+\_\+\+NOT\+\_\+\+EQUAL\+\_\+\+POP}}, \doxymbox{\hyperlink{MyError_8h_source_l00019}{READ\+\_\+\+FILE\+\_\+\+ERROR}}, \doxymbox{\hyperlink{MyError_8h_source_l00044}{READ\+\_\+\+LABEL\+\_\+\+ERROR}}, \doxymbox{\hyperlink{MyError_8h_source_l00034}{READING\+\_\+\+COMMAND\+\_\+\+ASSEMBLE\+\_\+\+ERROR}}, \doxymbox{\hyperlink{MyError_8h_source_l00048}{READING\+\_\+\+MEMORY\+\_\+\+INDEX\+\_\+\+ERROR}}, \doxymbox{\hyperlink{MyError_8h_source_l00032}{READING\+\_\+\+OPCODE\+\_\+\+DISASSEMBLE\+\_\+\+ERROR}}, \doxymbox{\hyperlink{MyError_8h_source_l00015}{STACK\+\_\+\+CAP\+\_\+\+SIZE}}, \doxymbox{\hyperlink{MyError_8h_source_l00013}{STACK\+\_\+\+DESTROY\+\_\+\+ERROR}}, \doxymbox{\hyperlink{MyError_8h_source_l00028}{STRCMP\+\_\+\+ERROR}}, \doxymbox{\hyperlink{MyError_8h_source_l00056}{SYSTEM\+\_\+\+CALL\+\_\+\+ERROR}}, \doxymbox{\hyperlink{MyError_8h_source_l00061}{TREE\+\_\+\+BAD\+\_\+\+SIZE}}, \doxymbox{\hyperlink{MyError_8h_source_l00065}{UNKNOWN\+\_\+\+AKINATOR\+\_\+\+ANSWER\+\_\+\+OPTION}}, \doxymbox{\hyperlink{MyError_8h_source_l00062}{UNKNOWN\+\_\+\+AKINATOR\+\_\+\+MENU\+\_\+\+OPTION}}, \doxymbox{\hyperlink{MyError_8h_source_l00039}{UNKNOWN\+\_\+\+ARGUMENT\+\_\+\+TYPE}}, \doxymbox{\hyperlink{MyError_8h_source_l00046}{UNKNOWN\+\_\+\+LABEL}}, \doxymbox{\hyperlink{MyError_8h_source_l00058}{UNKNOWN\+\_\+\+NODE\+\_\+\+STATUS}}, \doxymbox{\hyperlink{MyError_8h_source_l00023}{UNKNOWN\+\_\+\+OPCODE}}, \doxymbox{\hyperlink{MyError_8h_source_l00035}{UNKNOWN\+\_\+\+REGISTER\+\_\+\+NAME}}, \doxymbox{\hyperlink{MyError_8h_source_l00067}{UNKNOWN\+\_\+\+STRING\+\_\+\+LOAD\+\_\+\+TREE}}, \doxymbox{\hyperlink{MyError_8h_source_l00021}{UNLINK\+\_\+\+FILE\+\_\+\+ERROR}}, \doxymbox{\hyperlink{MyError_8h_source_l00033}{WRITE\+\_\+\+INDEX\+\_\+\+TO\+\_\+\+FILE\+\_\+\+ERROR}}, and \doxymbox{\hyperlink{MyError_8h_source_l00024}{ZERO\+\_\+\+DIVISION\+\_\+\+ERROR}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{Tree_8cpp_source_l00583}{Add\+Line()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l00596}{Add\+Line\+Clean()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l00573}{Clear\+Line()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l01500}{Compare()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l01108}{Crop\+Last\+Char()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l00508}{Generate\+Dot\+File()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l00540}{Generate\+Dump\+Filename()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l01065}{Generate\+Tree\+File()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l01628}{Get\+Compare()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l01188}{Get\+Definition()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l01307}{Get\+Error\+String()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l01050}{Get\+File\+Size()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l01122}{Get\+Viz\+Len()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l01142}{Give\+Definition()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l00767}{Guess()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l00921}{Load\+Tree()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l00252}{Node\+Create()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l00217}{Node\+Insert\+Int()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l00299}{Node\+Verify()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l01019}{Read\+File()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l01275}{Rec\+Definition()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l00171}{Rec\+Node\+Destroy()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l00365}{Rec\+Node\+Print\+To\+Line()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l00277}{Rec\+Node\+Verify()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l00474}{Rec\+Node\+Viz\+Dump()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l00894}{Save\+Tree()}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00108}{Stack\+Destroy()}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00069}{Stack\+Init()}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00153}{Stack\+Pop()}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00127}{Stack\+Push()}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00175}{Stack\+Verify()}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00186}{Stack\+Verify\+Without\+Hash()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l00647}{Start\+User\+Cycle()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l00158}{Tree\+Destroy()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l00318}{Tree\+Dump()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l00141}{Tree\+Init()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l00204}{Tree\+Insert\+Int()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l00341}{Tree\+Print()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l00186}{Tree\+Set\+Initial\+Int()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l00195}{Tree\+Set\+Initial\+String()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l00308}{Tree\+Verify()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l00419}{Tree\+Viz\+Dump()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l00610}{Unlink\+File()}}, and \doxymbox{\hyperlink{Tree_8cpp_source_l00624}{Write\+Buffer\+To\+File()}}.
+

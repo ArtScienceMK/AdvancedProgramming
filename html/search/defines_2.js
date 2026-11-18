@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['debug_5farray_0',['DEBUG_ARRAY',['../MyAssert_8h.html#ab700e8338c9d8f091efabb3ae6dd3f04',1,'MyAssert.h']]]
+  ['canary_0',['CANARY',['../MyStack_8cpp.html#a3f66c64c3c72034ee0c901bd685bb179',1,'MyStack.cpp']]]
 ];

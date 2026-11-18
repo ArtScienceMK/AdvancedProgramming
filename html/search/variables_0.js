@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['capacity_0',['capacity',['../structList__t.html#a4ad48150d3812a75a194a9f8b14f6cc7',1,'List_t']]]
+  ['capacity_0',['capacity',['../structStack__t.html#ad998fec906a4d5f999bf4ee7876da7eb',1,'Stack_t']]]
 ];

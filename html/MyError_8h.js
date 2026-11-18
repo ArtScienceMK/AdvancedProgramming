@@ -52,7 +52,19 @@ var MyError_8h =
       [ "BAD_LIST_TAIL", "MyError_8h.html#aa31a82488e1f3eb535fa0643033348daa2ae11512a515975908c3eb00e08bfdc0", null ],
       [ "BAD_LIST_ZERO_ELEM", "MyError_8h.html#aa31a82488e1f3eb535fa0643033348daafcf12481844481a0a75ee320b58247d8", null ],
       [ "LIST_CYCLE", "MyError_8h.html#aa31a82488e1f3eb535fa0643033348daa58ea37b2d13cd49c2072c5a946a58d5a", null ],
-      [ "SYSTEM_CALL_ERROR", "MyError_8h.html#aa31a82488e1f3eb535fa0643033348daa049aced892f12e8b73e3ba4a408dc1a8", null ]
+      [ "SYSTEM_CALL_ERROR", "MyError_8h.html#aa31a82488e1f3eb535fa0643033348daa049aced892f12e8b73e3ba4a408dc1a8", null ],
+      [ "NO_EDGE_ERROR", "MyError_8h.html#aa31a82488e1f3eb535fa0643033348daa7c1d5f3f91822584c55a25b84075d989", null ],
+      [ "UNKNOWN_NODE_STATUS", "MyError_8h.html#aa31a82488e1f3eb535fa0643033348daa55016827e92ed15ec00ab44ad7cc0201", null ],
+      [ "NOT_USED_NODE", "MyError_8h.html#aa31a82488e1f3eb535fa0643033348daa418de923efbb7fa8d8061987ff9b1778", null ],
+      [ "NODE_INSERT_INT_ERROR", "MyError_8h.html#aa31a82488e1f3eb535fa0643033348daab62734d783965837b6995a536b5e7499", null ],
+      [ "TREE_BAD_SIZE", "MyError_8h.html#aa31a82488e1f3eb535fa0643033348daa8b798ce2adcd54af9cb8594982f0ba3a", null ],
+      [ "UNKNOWN_AKINATOR_MENU_OPTION", "MyError_8h.html#aa31a82488e1f3eb535fa0643033348daafbab2b4270ab932fca54b273a35a5e05", null ],
+      [ "AKINATOR_MENU_INPUT_ERROR", "MyError_8h.html#aa31a82488e1f3eb535fa0643033348daa8387e24276e3053d59cc8f1a9c9cc810", null ],
+      [ "AKINATOR_QUESTION_INPUT_ERROR", "MyError_8h.html#aa31a82488e1f3eb535fa0643033348daaef85ea1444cb8a44b9cc390b792f27d9", null ],
+      [ "UNKNOWN_AKINATOR_ANSWER_OPTION", "MyError_8h.html#aa31a82488e1f3eb535fa0643033348daace5a9b1a20a635c215b10305b50041ec", null ],
+      [ "AKINATOR_OBJECT_INPUT_ERROR", "MyError_8h.html#aa31a82488e1f3eb535fa0643033348daadbd3360d0e8592bbb0645132b0687580", null ],
+      [ "UNKNOWN_STRING_LOAD_TREE", "MyError_8h.html#aa31a82488e1f3eb535fa0643033348daa9f2cedbb3f981a17a8c14ac6c62340d6", null ],
+      [ "AKINATOR_COMPARE_ERROR", "MyError_8h.html#aa31a82488e1f3eb535fa0643033348daa2aa1778aca8beac8448cf2d819416d70", null ]
     ] ],
     [ "GetErrorString", "MyError_8h.html#a6a91e619425dcba77b56d72c9213c736", null ]
 ];

@@ -1,0 +1,617 @@
+\doxysection{My\+Stack.\+cpp File Reference}
+\hypertarget{MyStack_8cpp}{}\label{MyStack_8cpp}\index{MyStack.cpp@{MyStack.cpp}}
+{\ttfamily \+\#include $<$math.\+h$>$}\newline
+{\ttfamily \+\#include $<$string.\+h$>$}\newline
+{\ttfamily \+\#include "{}My\+Assert.\+h"{}}\newline
+{\ttfamily \+\#include "{}My\+Error.\+h"{}}\newline
+{\ttfamily \+\#include "{}My\+Stack.\+h"{}}\newline
+{\ttfamily \+\#include $<$stdio.\+h$>$}\newline
+{\ttfamily \+\#include $<$unistd.\+h$>$}\newline
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\+\#define \doxymbox{\hyperlink{MyStack_8cpp_a1bdd7c1369b250215a080e8421d4ecf3}{ON\+\_\+\+DEBUG}}(...)
+\item 
+\+\#define \doxymbox{\hyperlink{MyStack_8cpp_a906c955aa71199f4d029c68d6c2ca958}{ON\+\_\+\+CANARY}}(...)
+\item 
+\+\#define \doxymbox{\hyperlink{MyStack_8cpp_a2a6650e6569e7a5c40895e1da0a682d9}{ON\+\_\+\+HASH}}(...)
+\item 
+\+\#define \doxymbox{\hyperlink{MyStack_8cpp_a6df1d22fb5f09eccc23b9f399670cfd7}{STRINGIFY}}(x)
+\item 
+\+\#define \doxymbox{\hyperlink{MyStack_8cpp_aff44bdb7611a5f354b42b78f080e8112}{GET\+\_\+\+SOURCE\+\_\+\+LOCATION}}(source\+Location,  var\+Name)
+\item 
+\+\#define \doxymbox{\hyperlink{MyStack_8cpp_ae90f47e5461a7f2df8983005401e6064}{POISON}}~NAN
+\item 
+\+\#define \doxymbox{\hyperlink{MyStack_8cpp_a3f66c64c3c72034ee0c901bd685bb179}{CANARY}}~((\doxymbox{\hyperlink{MyStack_8cpp_ad805fd920eacf5f2f1e7a9809f086604}{Stack\+Element\+\_\+t}}) 0x\+EDA)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef size\+\_\+t \doxymbox{\hyperlink{MyStack_8cpp_ad805fd920eacf5f2f1e7a9809f086604}{Stack\+Element\+\_\+t}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \doxymbox{\hyperlink{MyStack_8cpp_a36a5af0dfe9e5bd77b87d87b31bb4927}{Spoil\+Canary}} (\doxymbox{\hyperlink{structStack__t}{Stack\+\_\+t}} \texorpdfstring{$\ast$}{*}ptr\+Stack)
+\item 
+unsigned long long \doxymbox{\hyperlink{MyStack_8cpp_a3e1580b8d88a5b604f91323b1f58c9b3}{Get\+Hash}} (\doxymbox{\hyperlink{structStack__t}{Stack\+\_\+t}} \texorpdfstring{$\ast$}{*}ptr\+Stack)
+\item 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} \doxymbox{\hyperlink{MyStack_8cpp_aaabf505841abf624a72ec03389ee5020}{Stack\+Init}} (\doxymbox{\hyperlink{structStack__t}{Stack\+\_\+t}} \texorpdfstring{$\ast$}{*}ptr\+Stack, size\+\_\+t \+\_\+capacity ON\+\_\+\+DEBUG(, \doxymbox{\hyperlink{structSourceLocation}{Source\+Location}} source\+Location))
+\item 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} \doxymbox{\hyperlink{MyStack_8cpp_a5491a8b10af3cbd595109f5069ec5dd1}{Stack\+Destroy}} (\doxymbox{\hyperlink{structStack__t}{Stack\+\_\+t}} \texorpdfstring{$\ast$}{*}ptr\+Stack)
+\item 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} \doxymbox{\hyperlink{MyStack_8cpp_a3de270f413264e89d9bfac04575fdb81}{Stack\+Push}} (\doxymbox{\hyperlink{structStack__t}{Stack\+\_\+t}} \texorpdfstring{$\ast$}{*}ptr\+Stack, \doxymbox{\hyperlink{MyStack_8cpp_ad805fd920eacf5f2f1e7a9809f086604}{Stack\+Element\+\_\+t}} push\+Value)
+\item 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} \doxymbox{\hyperlink{MyStack_8cpp_aac1781d10570f7e1f393acd2ad758d11}{Stack\+Pop}} (\doxymbox{\hyperlink{structStack__t}{Stack\+\_\+t}} \texorpdfstring{$\ast$}{*}ptr\+Stack, \doxymbox{\hyperlink{MyStack_8cpp_ad805fd920eacf5f2f1e7a9809f086604}{Stack\+Element\+\_\+t}} \texorpdfstring{$\ast$}{*}ptr\+Value)
+\item 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} \doxymbox{\hyperlink{MyStack_8cpp_ab6b6aaa8436bc1c9848552ae3e603fcd}{Stack\+Verify}} (\doxymbox{\hyperlink{structStack__t}{Stack\+\_\+t}} \texorpdfstring{$\ast$}{*}ptr\+Stack)
+\item 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} \doxymbox{\hyperlink{MyStack_8cpp_afb8a6364930fc209a45150430c97b93f}{Stack\+Verify\+Without\+Hash}} (\doxymbox{\hyperlink{structStack__t}{Stack\+\_\+t}} \texorpdfstring{$\ast$}{*}ptr\+Stack)
+\item 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} \doxymbox{\hyperlink{MyStack_8cpp_a97c4a9df7ae2cdcbd13b82e74ea1c337}{Stack\+Dump}} (\doxymbox{\hyperlink{structStack__t}{Stack\+\_\+t}} stack, \doxymbox{\hyperlink{structSourceLocation}{Source\+Location}} source\+Location)
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const double \doxymbox{\hyperlink{MyStack_8cpp_a1cd15547aa7a518489d755671d9e3b6f}{Eps}} = 1e-\/3
+\end{DoxyCompactItemize}
+
+
+\label{MyStack_8cpp_doc-define-members}
+\Hypertarget{MyStack_8cpp_doc-define-members}
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{MyStack_8cpp_a3f66c64c3c72034ee0c901bd685bb179}\index{MyStack.cpp@{MyStack.cpp}!CANARY@{CANARY}}
+\index{CANARY@{CANARY}!MyStack.cpp@{MyStack.cpp}}
+\doxysubsubsection{\texorpdfstring{CANARY}{CANARY}}
+{\footnotesize\ttfamily \label{MyStack_8cpp_a3f66c64c3c72034ee0c901bd685bb179} 
+\+\#define CANARY~((\doxymbox{\hyperlink{MyStack_8cpp_ad805fd920eacf5f2f1e7a9809f086604}{Stack\+Element\+\_\+t}}) 0x\+EDA)}
+
+
+
+Definition at line \doxymbox{\hyperlink{MyStack_8cpp_source_l00046}{46}} of file \doxymbox{\hyperlink{MyStack_8cpp_source}{My\+Stack.\+cpp}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{MyStack_8cpp_source_l00203}{Stack\+Dump()}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00069}{Stack\+Init()}}, and \doxymbox{\hyperlink{MyStack_8cpp_source_l00186}{Stack\+Verify\+Without\+Hash()}}.
+
+\Hypertarget{MyStack_8cpp_aff44bdb7611a5f354b42b78f080e8112}\index{MyStack.cpp@{MyStack.cpp}!GET\_SOURCE\_LOCATION@{GET\_SOURCE\_LOCATION}}
+\index{GET\_SOURCE\_LOCATION@{GET\_SOURCE\_LOCATION}!MyStack.cpp@{MyStack.cpp}}
+\doxysubsubsection{\texorpdfstring{GET\_SOURCE\_LOCATION}{GET\_SOURCE\_LOCATION}}
+{\footnotesize\ttfamily \label{MyStack_8cpp_aff44bdb7611a5f354b42b78f080e8112} 
+\+\#define GET\+\_\+\+SOURCE\+\_\+\+LOCATION(\begin{DoxyParamCaption}\item[{}]{source\+Location}{, }\item[{}]{var\+Name}{}\end{DoxyParamCaption})}
+
+{\bfseries Value:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{sourceLocation.file\ =\ strdup(\_\_FILE\_\_);\(\backslash\)}
+\DoxyCodeLine{sourceLocation.function\ =\ strdup(\_\_FUNCTION\_\_);\(\backslash\)}
+\DoxyCodeLine{sourceLocation.line\ =\ \_\_LINE\_\_;\(\backslash\)}
+\DoxyCodeLine{sourceLocation.name\ =\ strdup(\doxymbox{\hyperlink{MyStack_8cpp_a6df1d22fb5f09eccc23b9f399670cfd7}{STRINGIFY}}(varName));}
+
+\end{DoxyCode}
+
+
+Definition at line \doxymbox{\hyperlink{MyStack_8cpp_source_l00032}{32}} of file \doxymbox{\hyperlink{MyStack_8cpp_source}{My\+Stack.\+cpp}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{Tree_8cpp_source_l01628}{Get\+Compare()}}, and \doxymbox{\hyperlink{Tree_8cpp_source_l01188}{Get\+Definition()}}.
+
+\Hypertarget{MyStack_8cpp_a906c955aa71199f4d029c68d6c2ca958}\index{MyStack.cpp@{MyStack.cpp}!ON\_CANARY@{ON\_CANARY}}
+\index{ON\_CANARY@{ON\_CANARY}!MyStack.cpp@{MyStack.cpp}}
+\doxysubsubsection{\texorpdfstring{ON\_CANARY}{ON\_CANARY}}
+{\footnotesize\ttfamily \label{MyStack_8cpp_a906c955aa71199f4d029c68d6c2ca958} 
+\+\#define ON\+\_\+\+CANARY(\begin{DoxyParamCaption}\item[{}]{}...{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \doxymbox{\hyperlink{MyStack_8cpp_source_l00017}{17}} of file \doxymbox{\hyperlink{MyStack_8cpp_source}{My\+Stack.\+cpp}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{MyStack_8cpp_source_l00186}{Stack\+Verify\+Without\+Hash()}}.
+
+\Hypertarget{MyStack_8cpp_a1bdd7c1369b250215a080e8421d4ecf3}\index{MyStack.cpp@{MyStack.cpp}!ON\_DEBUG@{ON\_DEBUG}}
+\index{ON\_DEBUG@{ON\_DEBUG}!MyStack.cpp@{MyStack.cpp}}
+\doxysubsubsection{\texorpdfstring{ON\_DEBUG}{ON\_DEBUG}}
+{\footnotesize\ttfamily \label{MyStack_8cpp_a1bdd7c1369b250215a080e8421d4ecf3} 
+\+\#define ON\+\_\+\+DEBUG(\begin{DoxyParamCaption}\item[{}]{}...{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \doxymbox{\hyperlink{MyStack_8cpp_source_l00007}{7}} of file \doxymbox{\hyperlink{MyStack_8cpp_source}{My\+Stack.\+cpp}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{MyStack_8cpp_source_l00108}{Stack\+Destroy()}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00203}{Stack\+Dump()}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00069}{Stack\+Init()}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00153}{Stack\+Pop()}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00127}{Stack\+Push()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l00419}{Tree\+Viz\+Dump()}}, and \doxymbox{\hyperlink{Tree_8cpp_source_l00624}{Write\+Buffer\+To\+File()}}.
+
+\Hypertarget{MyStack_8cpp_a2a6650e6569e7a5c40895e1da0a682d9}\index{MyStack.cpp@{MyStack.cpp}!ON\_HASH@{ON\_HASH}}
+\index{ON\_HASH@{ON\_HASH}!MyStack.cpp@{MyStack.cpp}}
+\doxysubsubsection{\texorpdfstring{ON\_HASH}{ON\_HASH}}
+{\footnotesize\ttfamily \label{MyStack_8cpp_a2a6650e6569e7a5c40895e1da0a682d9} 
+\+\#define ON\+\_\+\+HASH(\begin{DoxyParamCaption}\item[{}]{}...{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \doxymbox{\hyperlink{MyStack_8cpp_source_l00027}{27}} of file \doxymbox{\hyperlink{MyStack_8cpp_source}{My\+Stack.\+cpp}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{MyStack_8cpp_source_l00069}{Stack\+Init()}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00153}{Stack\+Pop()}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00127}{Stack\+Push()}}, and \doxymbox{\hyperlink{MyStack_8cpp_source_l00175}{Stack\+Verify()}}.
+
+\Hypertarget{MyStack_8cpp_ae90f47e5461a7f2df8983005401e6064}\index{MyStack.cpp@{MyStack.cpp}!POISON@{POISON}}
+\index{POISON@{POISON}!MyStack.cpp@{MyStack.cpp}}
+\doxysubsubsection{\texorpdfstring{POISON}{POISON}}
+{\footnotesize\ttfamily \label{MyStack_8cpp_ae90f47e5461a7f2df8983005401e6064} 
+\+\#define POISON~NAN}
+
+
+
+Definition at line \doxymbox{\hyperlink{MyStack_8cpp_source_l00045}{45}} of file \doxymbox{\hyperlink{MyStack_8cpp_source}{My\+Stack.\+cpp}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{MyStack_8cpp_source_l00069}{Stack\+Init()}}, and \doxymbox{\hyperlink{MyStack_8cpp_source_l00153}{Stack\+Pop()}}.
+
+\Hypertarget{MyStack_8cpp_a6df1d22fb5f09eccc23b9f399670cfd7}\index{MyStack.cpp@{MyStack.cpp}!STRINGIFY@{STRINGIFY}}
+\index{STRINGIFY@{STRINGIFY}!MyStack.cpp@{MyStack.cpp}}
+\doxysubsubsection{\texorpdfstring{STRINGIFY}{STRINGIFY}}
+{\footnotesize\ttfamily \label{MyStack_8cpp_a6df1d22fb5f09eccc23b9f399670cfd7} 
+\+\#define STRINGIFY(\begin{DoxyParamCaption}\item[{}]{x}{}\end{DoxyParamCaption})}
+
+{\bfseries Value:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{(\#\ x)}
+
+\end{DoxyCode}
+
+
+Definition at line \doxymbox{\hyperlink{MyStack_8cpp_source_l00031}{31}} of file \doxymbox{\hyperlink{MyStack_8cpp_source}{My\+Stack.\+cpp}}.
+
+
+
+\label{MyStack_8cpp_doc-typedef-members}
+\Hypertarget{MyStack_8cpp_doc-typedef-members}
+\doxysubsection{Typedef Documentation}
+\Hypertarget{MyStack_8cpp_ad805fd920eacf5f2f1e7a9809f086604}\index{MyStack.cpp@{MyStack.cpp}!StackElement\_t@{StackElement\_t}}
+\index{StackElement\_t@{StackElement\_t}!MyStack.cpp@{MyStack.cpp}}
+\doxysubsubsection{\texorpdfstring{StackElement\_t}{StackElement\_t}}
+{\footnotesize\ttfamily \label{MyStack_8cpp_ad805fd920eacf5f2f1e7a9809f086604} 
+typedef size\+\_\+t \doxymbox{\hyperlink{MyStack_8cpp_ad805fd920eacf5f2f1e7a9809f086604}{Stack\+Element\+\_\+t}}}
+
+
+
+Definition at line \doxymbox{\hyperlink{MyStack_8cpp_source_l00043}{43}} of file \doxymbox{\hyperlink{MyStack_8cpp_source}{My\+Stack.\+cpp}}.
+
+
+
+\label{MyStack_8cpp_doc-func-members}
+\Hypertarget{MyStack_8cpp_doc-func-members}
+\doxysubsection{Function Documentation}
+\Hypertarget{MyStack_8cpp_a3e1580b8d88a5b604f91323b1f58c9b3}\index{MyStack.cpp@{MyStack.cpp}!GetHash@{GetHash}}
+\index{GetHash@{GetHash}!MyStack.cpp@{MyStack.cpp}}
+\doxysubsubsection{\texorpdfstring{GetHash()}{GetHash()}}
+{\footnotesize\ttfamily \label{MyStack_8cpp_a3e1580b8d88a5b604f91323b1f58c9b3} 
+unsigned long long Get\+Hash (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structStack__t}{Stack\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{ptr\+Stack}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \doxymbox{\hyperlink{MyStack_8cpp_source_l00267}{267}} of file \doxymbox{\hyperlink{MyStack_8cpp_source}{My\+Stack.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00267\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00268\ }
+\DoxyCodeLine{00269\ \ \ \ \ \doxymbox{\hyperlink{MyStack_8cpp_afb8a6364930fc209a45150430c97b93f}{StackVerifyWithoutHash}}(ptrStack);}
+\DoxyCodeLine{00270\ }
+\DoxyCodeLine{00271\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ hashMod\ =\ 1e9\ +\ 7,\ hashPow\ =\ 239;}
+\DoxyCodeLine{00272\ \ \ \ \ \textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ \textcolor{keywordtype}{long}\ hashValue\ =\ 0;}
+\DoxyCodeLine{00273\ \ \ \ \ hashValue\ +=\ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_ad998fec906a4d5f999bf4ee7876da7eb}{capacity}};}
+\DoxyCodeLine{00274\ \ \ \ \ hashValue\ *=\ hashPow;}
+\DoxyCodeLine{00275\ \ \ \ \ hashValue\ \%=\ hashMod;}
+\DoxyCodeLine{00276\ }
+\DoxyCodeLine{00277\ \ \ \ \ hashValue\ +=\ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a2d76cc62e9674f12196f4d66c9c8d449}{size}};}
+\DoxyCodeLine{00278\ \ \ \ \ hashValue\ *=\ hashPow;}
+\DoxyCodeLine{00279\ \ \ \ \ hashValue\ \%=\ hashMod;}
+\DoxyCodeLine{00280\ }
+\DoxyCodeLine{00281\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 0;\ i\ <\ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_ad998fec906a4d5f999bf4ee7876da7eb}{capacity}};\ i++)\ \{}
+\DoxyCodeLine{00282\ \ \ \ \ \ \ \ \ hashValue\ +=\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ long)ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}[i];}
+\DoxyCodeLine{00283\ \ \ \ \ \ \ \ \ hashValue\ *=\ hashPow;}
+\DoxyCodeLine{00284\ \ \ \ \ \ \ \ \ hashValue\ \%=\ hashMod;}
+\DoxyCodeLine{00285\ \ \ \ \ \}}
+\DoxyCodeLine{00286\ }
+\DoxyCodeLine{00287\ \ \ \ \ \textcolor{keywordtype}{char}*\ statusString\ =\ (\textcolor{keywordtype}{char}*)ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a95b09342bb15c75fd1d28fe09b98c769}{status}};}
+\DoxyCodeLine{00288\ \ \ \ \ \textcolor{keywordflow}{for}\ (;\ *statusString\ !=\ \textcolor{charliteral}{'\(\backslash\)0'};\ statusString++)\ \{}
+\DoxyCodeLine{00289\ \ \ \ \ \ \ \ \ hashValue\ +=\ (\textcolor{keywordtype}{unsigned}\ \textcolor{keywordtype}{long}\ long)*statusString;}
+\DoxyCodeLine{00290\ \ \ \ \ \ \ \ \ hashValue\ *=\ hashPow;}
+\DoxyCodeLine{00291\ \ \ \ \ \ \ \ \ hashValue\ \%=\ hashMod;}
+\DoxyCodeLine{00292\ \ \ \ \ \}}
+\DoxyCodeLine{00293\ }
+\DoxyCodeLine{00294\ \ \ \ \ \doxymbox{\hyperlink{MyStack_8cpp_afb8a6364930fc209a45150430c97b93f}{StackVerifyWithoutHash}}(ptrStack);}
+\DoxyCodeLine{00295\ }
+\DoxyCodeLine{00296\ \ \ \ \ \textcolor{keywordflow}{return}\ hashValue;}
+\DoxyCodeLine{00297\ }
+\DoxyCodeLine{00298\ \}}
+
+\end{DoxyCode}
+
+
+References \doxymbox{\hyperlink{MyStack_8h_source_l00013}{Stack\+\_\+t::\+capacity}}, \doxymbox{\hyperlink{MyStack_8h_source_l00011}{Stack\+\_\+t::\+data}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00267}{Get\+Hash()}}, \doxymbox{\hyperlink{MyStack_8h_source_l00012}{Stack\+\_\+t::\+size}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00186}{Stack\+Verify\+Without\+Hash()}}, and \doxymbox{\hyperlink{MyStack_8h_source_l00015}{Stack\+\_\+t::\+status}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{MyStack_8cpp_source_l00267}{Get\+Hash()}}, \doxymbox{\hyperlink{MyStack_8cpp_a36a5af0dfe9e5bd77b87d87b31bb4927}{Spoil\+Canary()}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00069}{Stack\+Init()}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00153}{Stack\+Pop()}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00127}{Stack\+Push()}}, and \doxymbox{\hyperlink{MyStack_8cpp_source_l00175}{Stack\+Verify()}}.
+
+\Hypertarget{MyStack_8cpp_a36a5af0dfe9e5bd77b87d87b31bb4927}\index{MyStack.cpp@{MyStack.cpp}!SpoilCanary@{SpoilCanary}}
+\index{SpoilCanary@{SpoilCanary}!MyStack.cpp@{MyStack.cpp}}
+\doxysubsubsection{\texorpdfstring{SpoilCanary()}{SpoilCanary()}}
+{\footnotesize\ttfamily \label{MyStack_8cpp_a36a5af0dfe9e5bd77b87d87b31bb4927} 
+void Spoil\+Canary (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structStack__t}{Stack\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{ptr\+Stack}{}\end{DoxyParamCaption})}
+
+
+
+References \doxymbox{\hyperlink{MyStack_8cpp_source_l00267}{Get\+Hash()}}, and \doxymbox{\hyperlink{MyStack_8cpp_a36a5af0dfe9e5bd77b87d87b31bb4927}{Spoil\+Canary()}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{MyStack_8cpp_a36a5af0dfe9e5bd77b87d87b31bb4927}{Spoil\+Canary()}}.
+
+\Hypertarget{MyStack_8cpp_a5491a8b10af3cbd595109f5069ec5dd1}\index{MyStack.cpp@{MyStack.cpp}!StackDestroy@{StackDestroy}}
+\index{StackDestroy@{StackDestroy}!MyStack.cpp@{MyStack.cpp}}
+\doxysubsubsection{\texorpdfstring{StackDestroy()}{StackDestroy()}}
+{\footnotesize\ttfamily \label{MyStack_8cpp_a5491a8b10af3cbd595109f5069ec5dd1} 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} Stack\+Destroy (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structStack__t}{Stack\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{ptr\+Stack}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \doxymbox{\hyperlink{MyStack_8cpp_source_l00108}{108}} of file \doxymbox{\hyperlink{MyStack_8cpp_source}{My\+Stack.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00108\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00109\ }
+\DoxyCodeLine{00110\ \ \ \ \ \doxymbox{\hyperlink{MyStack_8cpp_a1bdd7c1369b250215a080e8421d4ecf3}{ON\_DEBUG}}(\doxymbox{\hyperlink{MyStack_8cpp_ab6b6aaa8436bc1c9848552ae3e603fcd}{StackVerify}}(ptrStack));}
+\DoxyCodeLine{00111\ }
+\DoxyCodeLine{00112\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack\ !=\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}});}
+\DoxyCodeLine{00113\ }
+\DoxyCodeLine{00114\ \ \ \ \ free(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}});\ \ \textcolor{comment}{//\ TODO\ make\ a\ wrapper\ to\ put\ a\ poison\ to\ freed\ memory}}
+\DoxyCodeLine{00115\ \ \ \ \ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_ad998fec906a4d5f999bf4ee7876da7eb}{capacity}}\ =\ 0;}
+\DoxyCodeLine{00116\ \ \ \ \ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a2d76cc62e9674f12196f4d66c9c8d449}{size}}\ =\ 0;}
+\DoxyCodeLine{00117\ \ \ \ \ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a95b09342bb15c75fd1d28fe09b98c769}{status}}\ =\ \textcolor{stringliteral}{"{}Destroyed\(\backslash\)n"{}};}
+\DoxyCodeLine{00118\ \ \ \ \ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a290cd0e4238ec7fb664a66d9d96a8c82}{hash}}\ =\ 0;}
+\DoxyCodeLine{00119\ }
+\DoxyCodeLine{00120\ \ \ \ \ ptrStack\ =\ NULL;}
+\DoxyCodeLine{00121\ \ \ \ \ }
+\DoxyCodeLine{00122\ \ \ \ \ \textcolor{comment}{//\ ON\_DEBUG(StackVerify(ptrStack));}}
+\DoxyCodeLine{00123\ }
+\DoxyCodeLine{00124\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}};}
+\DoxyCodeLine{00125\ \}}
+
+\end{DoxyCode}
+
+
+References \doxymbox{\hyperlink{MyAssert_8h_source_l00094}{ASSERT}}, \doxymbox{\hyperlink{MyStack_8h_source_l00013}{Stack\+\_\+t::\+capacity}}, \doxymbox{\hyperlink{MyStack_8h_source_l00011}{Stack\+\_\+t::\+data}}, \doxymbox{\hyperlink{Tree_8cpp_source_l01307}{Get\+Error\+String()}}, \doxymbox{\hyperlink{MyStack_8h_source_l00017}{Stack\+\_\+t::\+hash}}, \doxymbox{\hyperlink{MyError_8h_source_l00005}{OK}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00007}{ON\+\_\+\+DEBUG}}, \doxymbox{\hyperlink{MyError_8h_source_l00008}{OUT\+\_\+\+OF\+\_\+\+RANGE}}, \doxymbox{\hyperlink{MyStack_8h_source_l00012}{Stack\+\_\+t::\+size}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00108}{Stack\+Destroy()}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00175}{Stack\+Verify()}}, and \doxymbox{\hyperlink{MyStack_8h_source_l00015}{Stack\+\_\+t::\+status}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{MyStack_8cpp_source_l00108}{Stack\+Destroy()}}.
+
+\Hypertarget{MyStack_8cpp_a97c4a9df7ae2cdcbd13b82e74ea1c337}\index{MyStack.cpp@{MyStack.cpp}!StackDump@{StackDump}}
+\index{StackDump@{StackDump}!MyStack.cpp@{MyStack.cpp}}
+\doxysubsubsection{\texorpdfstring{StackDump()}{StackDump()}}
+{\footnotesize\ttfamily \label{MyStack_8cpp_a97c4a9df7ae2cdcbd13b82e74ea1c337} 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} Stack\+Dump (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structStack__t}{Stack\+\_\+t}}}]{stack}{, }\item[{\doxymbox{\hyperlink{structSourceLocation}{Source\+Location}}}]{source\+Location}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \doxymbox{\hyperlink{MyStack_8cpp_source_l00203}{203}} of file \doxymbox{\hyperlink{MyStack_8cpp_source}{My\+Stack.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00203\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00204\ \ \ \ \ \doxymbox{\hyperlink{MyStack_8cpp_a1bdd7c1369b250215a080e8421d4ecf3}{ON\_DEBUG}}(\doxymbox{\hyperlink{MyStack_8cpp_ab6b6aaa8436bc1c9848552ae3e603fcd}{StackVerify}}(\&stack));}
+\DoxyCodeLine{00205\ }
+\DoxyCodeLine{00206\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}\(\backslash\)n-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/\(\backslash\)n"{}});)}
+\DoxyCodeLine{00207\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}(StackDump):\ Starting...\(\backslash\)n"{}});)}
+\DoxyCodeLine{00208\ }
+\DoxyCodeLine{00209\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}Stack\_t\ <\%s>\ [\%p]\ \%s\ at\ \%s\ \{\(\backslash\)n"{}},}
+\DoxyCodeLine{00210\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ sourceLocation.\doxymbox{\hyperlink{structSourceLocation_a2da792b833f8df18ed7ba28fca670630}{name}},\ \&stack,\ sourceLocation.\doxymbox{\hyperlink{structSourceLocation_a5d88cd40250b64307d4b2acf8e79aa99}{function}},\ sourceLocation.\doxymbox{\hyperlink{structSourceLocation_abe1a3fee04b49b1ea16c433d345d9e3d}{file}});)\ \ \textcolor{comment}{//\ \ TODO\ make\ STRINGIFY}}
+\DoxyCodeLine{00211\ }
+\DoxyCodeLine{00212\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}capacity\ =\ \%zu\(\backslash\)n"{}},\ stack.capacity);)}
+\DoxyCodeLine{00213\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}\ \ \ \ size\ =\ \%zu\(\backslash\)n"{}},\ stack.size);)}
+\DoxyCodeLine{00214\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}\ \ \ \ hash\ =\ \%llu\(\backslash\)n"{}},\ stack.hash);)}
+\DoxyCodeLine{00215\ }
+\DoxyCodeLine{00216\ \ \ \ \ if\ (isatty(fileno(stderr)))\ \{}
+\DoxyCodeLine{00217\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}\%s"{}},\ \doxymbox{\hyperlink{MyAssert_8h_ac5b6e19bf06822021f35602c59658de3}{ORANGE}});)}
+\DoxyCodeLine{00218\ \ \ \ \ \}}
+\DoxyCodeLine{00219\ }
+\DoxyCodeLine{00220\ \ \ \ \ \textcolor{keywordflow}{if}\ (stack.\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}[0]\ !=\ \doxymbox{\hyperlink{MyStack_8cpp_a3f66c64c3c72034ee0c901bd685bb179}{CANARY}})\ \{}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}*[0]\ =\ \%lf\ (BAD\ CANARY)\ should\ be\ \%lf\(\backslash\)n"{}},\ stack.\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}[0],\ \doxymbox{\hyperlink{MyStack_8cpp_a3f66c64c3c72034ee0c901bd685bb179}{CANARY}});)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00222\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00223\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}*[0]\ =\ \%lf\ (CANARY)\(\backslash\)n"{}},\ stack.\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}[0]);)}
+\DoxyCodeLine{00224\ \ \ \ \ \}}
+\DoxyCodeLine{00225\ }
+\DoxyCodeLine{00226\ \ \ \ \ \textcolor{keywordflow}{if}\ (isatty(fileno(stderr)))\ \{}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}\%s"{}},\ \doxymbox{\hyperlink{MyAssert_8h_acfbc006ea433ad708fdee3e82996e721}{GREEN}});)}
+\DoxyCodeLine{00228\ \ \ \ \ \}}
+\DoxyCodeLine{00229\ }
+\DoxyCodeLine{00230\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 1;\ i\ <=\ stack.\doxymbox{\hyperlink{structStack__t_a2d76cc62e9674f12196f4d66c9c8d449}{size}};\ i++)\ \{}
+\DoxyCodeLine{00231\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}*[\%zu]\ =\ \%lf\(\backslash\)n"{}},\ i,\ stack.\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}[i]);)}
+\DoxyCodeLine{00232\ \ \ \ \ \}}
+\DoxyCodeLine{00233\ }
+\DoxyCodeLine{00234\ \ \ \ \ \textcolor{keywordflow}{if}\ (isatty(fileno(stderr)))\ \{}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}\%s"{}},\ \doxymbox{\hyperlink{MyAssert_8h_a8d23feea868a983c8c2b661e1e16972f}{RED}});)}
+\DoxyCodeLine{00236\ \ \ \ \ \}}
+\DoxyCodeLine{00237\ }
+\DoxyCodeLine{00238\ \ \ \ \ \textcolor{keywordflow}{for}\ (\textcolor{keywordtype}{size\_t}\ i\ =\ stack.\doxymbox{\hyperlink{structStack__t_a2d76cc62e9674f12196f4d66c9c8d449}{size}}\ +\ 1;\ i\ +\ 1\ <\ stack.\doxymbox{\hyperlink{structStack__t_ad998fec906a4d5f999bf4ee7876da7eb}{capacity}};\ i++)\ \{}
+\DoxyCodeLine{00239\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}[\%zu]\ =\ \%lf\ (POISON)\(\backslash\)n"{}},\ i,\ stack.\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}[i]);)}
+\DoxyCodeLine{00240\ \ \ \ \ \}}
+\DoxyCodeLine{00241\ }
+\DoxyCodeLine{00242\ \ \ \ \ \textcolor{keywordflow}{if}\ (isatty(fileno(stderr)))\ \{}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}\%s"{}},\ \doxymbox{\hyperlink{MyAssert_8h_ac5b6e19bf06822021f35602c59658de3}{ORANGE}});)}
+\DoxyCodeLine{00244\ \ \ \ \ \}}
+\DoxyCodeLine{00245\ }
+\DoxyCodeLine{00246\ \ \ \ \ \textcolor{keywordflow}{if}\ (stack.\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}[stack.\doxymbox{\hyperlink{structStack__t_ad998fec906a4d5f999bf4ee7876da7eb}{capacity}}\ -\/\ 1]\ !=\ \doxymbox{\hyperlink{MyStack_8cpp_a3f66c64c3c72034ee0c901bd685bb179}{CANARY}})\ \{}
+\DoxyCodeLine{00247\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}*[\%zu]\ =\ \%lf\ (BAD\ CANARY)\ should\ be\ \%lf\(\backslash\)n"{}},}
+\DoxyCodeLine{00248\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ stack.\doxymbox{\hyperlink{structStack__t_ad998fec906a4d5f999bf4ee7876da7eb}{capacity}}\ -\/\ 1,\ stack.\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}[stack.\doxymbox{\hyperlink{structStack__t_ad998fec906a4d5f999bf4ee7876da7eb}{capacity}}\ -\/\ 1],\ \doxymbox{\hyperlink{MyStack_8cpp_a3f66c64c3c72034ee0c901bd685bb179}{CANARY}});)\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00249\ \ \ \ \ \}\ \textcolor{keywordflow}{else}\ \{}
+\DoxyCodeLine{00250\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}*[\%zu]\ =\ \%lf\ (CANARY)\(\backslash\)n"{}},}
+\DoxyCodeLine{00251\ \ \ \ \ \ \ \ \ \ \ \ \ stack.\doxymbox{\hyperlink{structStack__t_ad998fec906a4d5f999bf4ee7876da7eb}{capacity}}\ -\/\ 1,\ stack.\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}[stack.\doxymbox{\hyperlink{structStack__t_ad998fec906a4d5f999bf4ee7876da7eb}{capacity}}\ -\/\ 1]);)}
+\DoxyCodeLine{00252\ \ \ \ \ \}}
+\DoxyCodeLine{00253\ }
+\DoxyCodeLine{00254\ \ \ \ \ \textcolor{keywordflow}{if}\ (isatty(fileno(stderr)))\ \{}
+\DoxyCodeLine{00255\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}\%s"{}},\ \doxymbox{\hyperlink{MyAssert_8h_ab702106cf3b3e96750b6845ded4e0299}{RESET}});)}
+\DoxyCodeLine{00256\ \ \ \ \ \}}
+\DoxyCodeLine{00257\ }
+\DoxyCodeLine{00258\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}\}\(\backslash\)n"{}});)}
+\DoxyCodeLine{00259\ }
+\DoxyCodeLine{00260\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}(StackDump):\ Ending...\(\backslash\)n"{}});)}
+\DoxyCodeLine{00261\ }
+\DoxyCodeLine{00262\ \ \ \ \ \doxymbox{\hyperlink{MyStack_8cpp_a1bdd7c1369b250215a080e8421d4ecf3}{ON\_DEBUG}}(\doxymbox{\hyperlink{MyStack_8cpp_ab6b6aaa8436bc1c9848552ae3e603fcd}{StackVerify}}(\&stack));}
+\DoxyCodeLine{00263\ }
+\DoxyCodeLine{00264\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}};}
+\DoxyCodeLine{00265\ \}}
+
+\end{DoxyCode}
+
+
+References \doxymbox{\hyperlink{MyStack_8cpp_source_l00046}{CANARY}}, \doxymbox{\hyperlink{MyStack_8h_source_l00013}{Stack\+\_\+t::\+capacity}}, \doxymbox{\hyperlink{MyStack_8h_source_l00011}{Stack\+\_\+t::\+data}}, \doxymbox{\hyperlink{MyAssert_8h_source_l00022}{Source\+Location::\+file}}, \doxymbox{\hyperlink{MyAssert_8h_source_l00023}{Source\+Location::\+function}}, \doxymbox{\hyperlink{MyAssert_8h_source_l00013}{GREEN}}, \doxymbox{\hyperlink{MyStack_8h_source_l00017}{Stack\+\_\+t::\+hash}}, \doxymbox{\hyperlink{MyAssert_8h_source_l00088}{LOG}}, \doxymbox{\hyperlink{MyAssert_8h_source_l00021}{Source\+Location::\+name}}, \doxymbox{\hyperlink{MyError_8h_source_l00005}{OK}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00007}{ON\+\_\+\+DEBUG}}, \doxymbox{\hyperlink{MyAssert_8h_source_l00015}{ORANGE}}, \doxymbox{\hyperlink{MyAssert_8h_source_l00016}{RED}}, \doxymbox{\hyperlink{MyAssert_8h_source_l00018}{RESET}}, \doxymbox{\hyperlink{MyStack_8h_source_l00012}{Stack\+\_\+t::\+size}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00203}{Stack\+Dump()}}, and \doxymbox{\hyperlink{MyStack_8cpp_source_l00175}{Stack\+Verify()}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{MyStack_8cpp_source_l00203}{Stack\+Dump()}}.
+
+\Hypertarget{MyStack_8cpp_aaabf505841abf624a72ec03389ee5020}\index{MyStack.cpp@{MyStack.cpp}!StackInit@{StackInit}}
+\index{StackInit@{StackInit}!MyStack.cpp@{MyStack.cpp}}
+\doxysubsubsection{\texorpdfstring{StackInit()}{StackInit()}}
+{\footnotesize\ttfamily \label{MyStack_8cpp_aaabf505841abf624a72ec03389ee5020} 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} Stack\+Init (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structStack__t}{Stack\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{ptr\+Stack}{, }\item[{size\+\_\+t \+\_\+capacity }]{ON\+\_\+\+DEBUG}{, Source\+Location source\+Location}\end{DoxyParamCaption})}
+
+
+
+Definition at line \doxymbox{\hyperlink{MyStack_8cpp_source_l00069}{69}} of file \doxymbox{\hyperlink{MyStack_8cpp_source}{My\+Stack.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00069\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}(StackInit):\ want\ to\ init\ \%s\(\backslash\)n\ Called\ from\ \%s:\%i\ \%s()\(\backslash\)n"{}},\ }
+\DoxyCodeLine{00072\ \ \ \ \ \ \ \ \ sourceLocation.name,\ sourceLocation.file,\ sourceLocation.line,\ sourceLocation.function);)\ \ \ \ \textcolor{comment}{//\ \ Дед,\ что\ писать\ в\ name??}}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{comment}{//\ \ \ Как\ сделать\ line\ ctr+click\ able??\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }}
+\DoxyCodeLine{00074\ \ \ \ \ }
+\DoxyCodeLine{00075\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack\ !=\ NULL,\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}});}
+\DoxyCodeLine{00076\ }
+\DoxyCodeLine{00077\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack-\/>data\ ==\ NULL,\ \ \ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa774131b3e4dfe3f57ab35303e6ee061}{BAD\_CLEAR\_INIT}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa774131b3e4dfe3f57ab35303e6ee061}{BAD\_CLEAR\_INIT}});}
+\DoxyCodeLine{00078\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack-\/>size\ ==\ 0,\ \ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa774131b3e4dfe3f57ab35303e6ee061}{BAD\_CLEAR\_INIT}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa774131b3e4dfe3f57ab35303e6ee061}{BAD\_CLEAR\_INIT}});}
+\DoxyCodeLine{00079\ \ \ \ \ }
+\DoxyCodeLine{00080\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack-\/>capacity\ ==\ 0,\ \ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa774131b3e4dfe3f57ab35303e6ee061}{BAD\_CLEAR\_INIT}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa774131b3e4dfe3f57ab35303e6ee061}{BAD\_CLEAR\_INIT}});}
+\DoxyCodeLine{00081\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack-\/>status\ ==\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa774131b3e4dfe3f57ab35303e6ee061}{BAD\_CLEAR\_INIT}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa774131b3e4dfe3f57ab35303e6ee061}{BAD\_CLEAR\_INIT}});}
+\DoxyCodeLine{00082\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack-\/>hash\ ==\ 0,\ \ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa774131b3e4dfe3f57ab35303e6ee061}{BAD\_CLEAR\_INIT}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa774131b3e4dfe3f57ab35303e6ee061}{BAD\_CLEAR\_INIT}});\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00083\ \ \ \ \ }
+\DoxyCodeLine{00084\ \ \ \ \ }
+\DoxyCodeLine{00085\ \ \ \ \ ptrStack-\/>capacity\ =\ \_capacity\ +\ 2;\ \textcolor{comment}{//\ stack\ initializes\ with\ size\ =\ 0}}
+\DoxyCodeLine{00086\ \ \ \ \ ptrStack-\/>\ data\ =\ (\doxymbox{\hyperlink{MyStack_8cpp_ad805fd920eacf5f2f1e7a9809f086604}{StackElement\_t}}*)calloc(ptrStack-\/>capacity,\ sizeof(\doxymbox{\hyperlink{MyStack_8cpp_ad805fd920eacf5f2f1e7a9809f086604}{StackElement\_t}}));\ }
+\DoxyCodeLine{00087\ \ \ \ \ }
+\DoxyCodeLine{00088\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack-\/>data\ !=\ NULL,\ \ \ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da}{NOT\_ENOUGH\_MEMORY}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da}{NOT\_ENOUGH\_MEMORY}});}
+\DoxyCodeLine{00089\ \ \ \ \ }
+\DoxyCodeLine{00090\ \ \ \ \ ptrStack-\/>data[0]\ =\ \doxymbox{\hyperlink{MyStack_8cpp_a3f66c64c3c72034ee0c901bd685bb179}{CANARY}};}
+\DoxyCodeLine{00091\ \ \ \ \ }
+\DoxyCodeLine{00092\ \ \ \ \ for\ (\textcolor{keywordtype}{size\_t}\ i\ =\ 1;\ i\ <\ ptrStack-\/>capacity\ -\/\ 1;\ i++)\ \{}
+\DoxyCodeLine{00093\ \ \ \ \ \ \ \ \ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}[i]\ =\ \doxymbox{\hyperlink{MyStack_8cpp_ae90f47e5461a7f2df8983005401e6064}{POISON}};}
+\DoxyCodeLine{00094\ \ \ \ \ \}}
+\DoxyCodeLine{00095\ \ \ \ \ }
+\DoxyCodeLine{00096\ \ \ \ \ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}[ptrStack-\/>\doxymbox{\hyperlink{structStack__t_ad998fec906a4d5f999bf4ee7876da7eb}{capacity}}\ -\/\ 1]\ =\ \doxymbox{\hyperlink{MyStack_8cpp_a3f66c64c3c72034ee0c901bd685bb179}{CANARY}};}
+\DoxyCodeLine{00097\ \ \ \ \ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a95b09342bb15c75fd1d28fe09b98c769}{status}}\ =\ \textcolor{stringliteral}{"{}Initialized\(\backslash\)n"{}};\ \ \textcolor{comment}{//\ \ Здесь\ strdup\ не\ нужен}}
+\DoxyCodeLine{00098\ \ \ \ \ }
+\DoxyCodeLine{00099\ \ \ \ \ \doxymbox{\hyperlink{MyStack_8cpp_a2a6650e6569e7a5c40895e1da0a682d9}{ON\_HASH}}(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a290cd0e4238ec7fb664a66d9d96a8c82}{hash}}\ =\ \doxymbox{\hyperlink{MyStack_8cpp_a3e1580b8d88a5b604f91323b1f58c9b3}{GetHash}}(ptrStack));}
+\DoxyCodeLine{00100\ \ \ \ \ }
+\DoxyCodeLine{00101\ \ \ \ \ \doxymbox{\hyperlink{MyStack_8cpp_a2a6650e6569e7a5c40895e1da0a682d9}{ON\_HASH}}(\doxymbox{\hyperlink{MyAssert_8h_a3577749fb48d57a158b8ac1a0b3ab57e}{LOG}}(fprintf(stderr,\ \textcolor{stringliteral}{"{}HASH\ IN\ INIT\ FUNC:\ \%llu\(\backslash\)n"{}},\ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a290cd0e4238ec7fb664a66d9d96a8c82}{hash}});))}
+\DoxyCodeLine{00102\ }
+\DoxyCodeLine{00103\ \ \ \ \ \doxymbox{\hyperlink{MyStack_8cpp_a1bdd7c1369b250215a080e8421d4ecf3}{ON\_DEBUG}}(\doxymbox{\hyperlink{MyStack_8cpp_ab6b6aaa8436bc1c9848552ae3e603fcd}{StackVerify}}(ptrStack));\ \ \ \ }
+\DoxyCodeLine{00104\ }
+\DoxyCodeLine{00105\ \ \ \ \ return\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}};}
+\DoxyCodeLine{00106\ \}}
+
+\end{DoxyCode}
+
+
+References \doxymbox{\hyperlink{MyAssert_8h_source_l00094}{ASSERT}}, \doxymbox{\hyperlink{MyError_8h_source_l00012}{BAD\+\_\+\+CLEAR\+\_\+\+INIT}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00046}{CANARY}}, \doxymbox{\hyperlink{MyStack_8h_source_l00013}{Stack\+\_\+t::\+capacity}}, \doxymbox{\hyperlink{MyStack_8h_source_l00011}{Stack\+\_\+t::\+data}}, \doxymbox{\hyperlink{MyAssert_8h_source_l00022}{Source\+Location::\+file}}, \doxymbox{\hyperlink{MyAssert_8h_source_l00023}{Source\+Location::\+function}}, \doxymbox{\hyperlink{Tree_8cpp_source_l01307}{Get\+Error\+String()}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00267}{Get\+Hash()}}, \doxymbox{\hyperlink{MyStack_8h_source_l00017}{Stack\+\_\+t::\+hash}}, \doxymbox{\hyperlink{MyAssert_8h_source_l00025}{Source\+Location::\+line}}, \doxymbox{\hyperlink{MyAssert_8h_source_l00088}{LOG}}, \doxymbox{\hyperlink{MyAssert_8h_source_l00021}{Source\+Location::\+name}}, \doxymbox{\hyperlink{MyError_8h_source_l00010}{NOT\+\_\+\+ENOUGH\+\_\+\+MEMORY}}, \doxymbox{\hyperlink{MyError_8h_source_l00005}{OK}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00007}{ON\+\_\+\+DEBUG}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00027}{ON\+\_\+\+HASH}}, \doxymbox{\hyperlink{MyError_8h_source_l00008}{OUT\+\_\+\+OF\+\_\+\+RANGE}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00045}{POISON}}, \doxymbox{\hyperlink{MyStack_8h_source_l00012}{Stack\+\_\+t::\+size}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00069}{Stack\+Init()}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00175}{Stack\+Verify()}}, and \doxymbox{\hyperlink{MyStack_8h_source_l00015}{Stack\+\_\+t::\+status}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{Tree_8cpp_source_l01628}{Get\+Compare()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l01188}{Get\+Definition()}}, and \doxymbox{\hyperlink{MyStack_8cpp_source_l00069}{Stack\+Init()}}.
+
+\Hypertarget{MyStack_8cpp_aac1781d10570f7e1f393acd2ad758d11}\index{MyStack.cpp@{MyStack.cpp}!StackPop@{StackPop}}
+\index{StackPop@{StackPop}!MyStack.cpp@{MyStack.cpp}}
+\doxysubsubsection{\texorpdfstring{StackPop()}{StackPop()}}
+{\footnotesize\ttfamily \label{MyStack_8cpp_aac1781d10570f7e1f393acd2ad758d11} 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} Stack\+Pop (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structStack__t}{Stack\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{ptr\+Stack}{, }\item[{\doxymbox{\hyperlink{MyStack_8cpp_ad805fd920eacf5f2f1e7a9809f086604}{Stack\+Element\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{ptr\+Value}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \doxymbox{\hyperlink{MyStack_8cpp_source_l00153}{153}} of file \doxymbox{\hyperlink{MyStack_8cpp_source}{My\+Stack.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00153\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00154\ }
+\DoxyCodeLine{00155\ \ \ \ \ \doxymbox{\hyperlink{MyStack_8cpp_a1bdd7c1369b250215a080e8421d4ecf3}{ON\_DEBUG}}(\doxymbox{\hyperlink{MyStack_8cpp_ab6b6aaa8436bc1c9848552ae3e603fcd}{StackVerify}}(ptrStack));}
+\DoxyCodeLine{00156\ \ \ \ \ }
+\DoxyCodeLine{00157\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack\ !=\ NULL,\ \ \ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}});}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00159\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}\ !=\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}});}
+\DoxyCodeLine{00160\ }
+\DoxyCodeLine{00161\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a2d76cc62e9674f12196f4d66c9c8d449}{size}}\ >\ 0,\ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa056762ace6c5a12f12ad918ca1bdf19d}{EMPTY\_STACK}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa056762ace6c5a12f12ad918ca1bdf19d}{EMPTY\_STACK}});}
+\DoxyCodeLine{00162\ }
+\DoxyCodeLine{00163\ \ \ \ \ *ptrValue\ =\ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}[ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a2d76cc62e9674f12196f4d66c9c8d449}{size}}];}
+\DoxyCodeLine{00164\ }
+\DoxyCodeLine{00165\ \ \ \ \ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}[ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a2d76cc62e9674f12196f4d66c9c8d449}{size}}]\ =\ \doxymbox{\hyperlink{MyStack_8cpp_ae90f47e5461a7f2df8983005401e6064}{POISON}};}
+\DoxyCodeLine{00166\ \ \ \ \ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a2d76cc62e9674f12196f4d66c9c8d449}{size}}-\/-\/;}
+\DoxyCodeLine{00167\ \ \ \ \ }
+\DoxyCodeLine{00168\ \ \ \ \ \doxymbox{\hyperlink{MyStack_8cpp_a2a6650e6569e7a5c40895e1da0a682d9}{ON\_HASH}}(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a290cd0e4238ec7fb664a66d9d96a8c82}{hash}}\ =\ \doxymbox{\hyperlink{MyStack_8cpp_a3e1580b8d88a5b604f91323b1f58c9b3}{GetHash}}(ptrStack);)}
+\DoxyCodeLine{00169\ }
+\DoxyCodeLine{00170\ \ \ \ \ \doxymbox{\hyperlink{MyStack_8cpp_a1bdd7c1369b250215a080e8421d4ecf3}{ON\_DEBUG}}(\doxymbox{\hyperlink{MyStack_8cpp_ab6b6aaa8436bc1c9848552ae3e603fcd}{StackVerify}}(ptrStack));}
+\DoxyCodeLine{00171\ }
+\DoxyCodeLine{00172\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}};}
+\DoxyCodeLine{00173\ \}}
+
+\end{DoxyCode}
+
+
+References \doxymbox{\hyperlink{MyAssert_8h_source_l00094}{ASSERT}}, \doxymbox{\hyperlink{MyStack_8h_source_l00011}{Stack\+\_\+t::\+data}}, \doxymbox{\hyperlink{MyError_8h_source_l00014}{EMPTY\+\_\+\+STACK}}, \doxymbox{\hyperlink{Tree_8cpp_source_l01307}{Get\+Error\+String()}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00267}{Get\+Hash()}}, \doxymbox{\hyperlink{MyStack_8h_source_l00017}{Stack\+\_\+t::\+hash}}, \doxymbox{\hyperlink{MyError_8h_source_l00005}{OK}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00007}{ON\+\_\+\+DEBUG}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00027}{ON\+\_\+\+HASH}}, \doxymbox{\hyperlink{MyError_8h_source_l00008}{OUT\+\_\+\+OF\+\_\+\+RANGE}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00045}{POISON}}, \doxymbox{\hyperlink{MyStack_8h_source_l00012}{Stack\+\_\+t::\+size}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00153}{Stack\+Pop()}}, and \doxymbox{\hyperlink{MyStack_8cpp_source_l00175}{Stack\+Verify()}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{Tree_8cpp_source_l01628}{Get\+Compare()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l01188}{Get\+Definition()}}, and \doxymbox{\hyperlink{MyStack_8cpp_source_l00153}{Stack\+Pop()}}.
+
+\Hypertarget{MyStack_8cpp_a3de270f413264e89d9bfac04575fdb81}\index{MyStack.cpp@{MyStack.cpp}!StackPush@{StackPush}}
+\index{StackPush@{StackPush}!MyStack.cpp@{MyStack.cpp}}
+\doxysubsubsection{\texorpdfstring{StackPush()}{StackPush()}}
+{\footnotesize\ttfamily \label{MyStack_8cpp_a3de270f413264e89d9bfac04575fdb81} 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} Stack\+Push (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structStack__t}{Stack\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{ptr\+Stack}{, }\item[{\doxymbox{\hyperlink{MyStack_8cpp_ad805fd920eacf5f2f1e7a9809f086604}{Stack\+Element\+\_\+t}}}]{push\+Value}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \doxymbox{\hyperlink{MyStack_8cpp_source_l00127}{127}} of file \doxymbox{\hyperlink{MyStack_8cpp_source}{My\+Stack.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00127\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00128\ \ \ \ \ }
+\DoxyCodeLine{00129\ \ \ \ \ \doxymbox{\hyperlink{MyStack_8cpp_a1bdd7c1369b250215a080e8421d4ecf3}{ON\_DEBUG}}(\doxymbox{\hyperlink{MyStack_8cpp_ab6b6aaa8436bc1c9848552ae3e603fcd}{StackVerify}}(ptrStack));}
+\DoxyCodeLine{00130\ }
+\DoxyCodeLine{00131\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack\ !=\ NULL,\ \ \ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}});}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00133\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}\ !=\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}});}
+\DoxyCodeLine{00134\ }
+\DoxyCodeLine{00135\ \ \ \ \ \textcolor{keywordflow}{if}\ (ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a2d76cc62e9674f12196f4d66c9c8d449}{size}}\ +\ 1\ ==\ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_ad998fec906a4d5f999bf4ee7876da7eb}{capacity}}\ -\/\ 1)\ \{}
+\DoxyCodeLine{00136\ \ \ \ \ \ \ \ \ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}\ =\ (\doxymbox{\hyperlink{MyStack_8cpp_ad805fd920eacf5f2f1e7a9809f086604}{StackElement\_t}}*)realloc(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}},\ \textcolor{keyword}{sizeof}(\doxymbox{\hyperlink{MyStack_8cpp_ad805fd920eacf5f2f1e7a9809f086604}{StackElement\_t}})\ *\ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_ad998fec906a4d5f999bf4ee7876da7eb}{capacity}}\ *\ 2);}
+\DoxyCodeLine{00137\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}\ !=\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da}{NOT\_ENOUGH\_MEMORY}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2fa3114dc11f3a0dbfc8f2a3d141e2da}{NOT\_ENOUGH\_MEMORY}});}
+\DoxyCodeLine{00139\ \ \ \ \ \ \ \ \ }
+\DoxyCodeLine{00140\ \ \ \ \ \ \ \ \ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_ad998fec906a4d5f999bf4ee7876da7eb}{capacity}}\ *=\ 2;}
+\DoxyCodeLine{00141\ \ \ \ \ \}}
+\DoxyCodeLine{00142\ }
+\DoxyCodeLine{00143\ \ \ \ \ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}[ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a2d76cc62e9674f12196f4d66c9c8d449}{size}}\ +\ 1]\ =\ pushValue;}
+\DoxyCodeLine{00144\ \ \ \ \ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a2d76cc62e9674f12196f4d66c9c8d449}{size}}++;\ }
+\DoxyCodeLine{00145\ }
+\DoxyCodeLine{00146\ \ \ \ \ \doxymbox{\hyperlink{MyStack_8cpp_a2a6650e6569e7a5c40895e1da0a682d9}{ON\_HASH}}(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a290cd0e4238ec7fb664a66d9d96a8c82}{hash}}\ =\ \doxymbox{\hyperlink{MyStack_8cpp_a3e1580b8d88a5b604f91323b1f58c9b3}{GetHash}}(ptrStack);)}
+\DoxyCodeLine{00147\ }
+\DoxyCodeLine{00148\ \ \ \ \ \doxymbox{\hyperlink{MyStack_8cpp_a1bdd7c1369b250215a080e8421d4ecf3}{ON\_DEBUG}}(\doxymbox{\hyperlink{MyStack_8cpp_ab6b6aaa8436bc1c9848552ae3e603fcd}{StackVerify}}(ptrStack));}
+\DoxyCodeLine{00149\ }
+\DoxyCodeLine{00150\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}};}
+\DoxyCodeLine{00151\ \}}
+
+\end{DoxyCode}
+
+
+References \doxymbox{\hyperlink{MyAssert_8h_source_l00094}{ASSERT}}, \doxymbox{\hyperlink{MyStack_8h_source_l00013}{Stack\+\_\+t::\+capacity}}, \doxymbox{\hyperlink{MyStack_8h_source_l00011}{Stack\+\_\+t::\+data}}, \doxymbox{\hyperlink{Tree_8cpp_source_l01307}{Get\+Error\+String()}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00267}{Get\+Hash()}}, \doxymbox{\hyperlink{MyStack_8h_source_l00017}{Stack\+\_\+t::\+hash}}, \doxymbox{\hyperlink{MyError_8h_source_l00010}{NOT\+\_\+\+ENOUGH\+\_\+\+MEMORY}}, \doxymbox{\hyperlink{MyError_8h_source_l00005}{OK}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00007}{ON\+\_\+\+DEBUG}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00027}{ON\+\_\+\+HASH}}, \doxymbox{\hyperlink{MyError_8h_source_l00008}{OUT\+\_\+\+OF\+\_\+\+RANGE}}, \doxymbox{\hyperlink{MyStack_8h_source_l00012}{Stack\+\_\+t::\+size}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00127}{Stack\+Push()}}, and \doxymbox{\hyperlink{MyStack_8cpp_source_l00175}{Stack\+Verify()}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{Tree_8cpp_source_l01628}{Get\+Compare()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l01188}{Get\+Definition()}}, \doxymbox{\hyperlink{Tree_8cpp_source_l01275}{Rec\+Definition()}}, and \doxymbox{\hyperlink{MyStack_8cpp_source_l00127}{Stack\+Push()}}.
+
+\Hypertarget{MyStack_8cpp_ab6b6aaa8436bc1c9848552ae3e603fcd}\index{MyStack.cpp@{MyStack.cpp}!StackVerify@{StackVerify}}
+\index{StackVerify@{StackVerify}!MyStack.cpp@{MyStack.cpp}}
+\doxysubsubsection{\texorpdfstring{StackVerify()}{StackVerify()}}
+{\footnotesize\ttfamily \label{MyStack_8cpp_ab6b6aaa8436bc1c9848552ae3e603fcd} 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} Stack\+Verify (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structStack__t}{Stack\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{ptr\+Stack}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \doxymbox{\hyperlink{MyStack_8cpp_source_l00175}{175}} of file \doxymbox{\hyperlink{MyStack_8cpp_source}{My\+Stack.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00175\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00177\ \ \ \ \ \textcolor{comment}{//\ LOG(fprintf(stderr,\ "{}(StackVerify)\ starting...\(\backslash\)n"{});)}}
+\DoxyCodeLine{00178\ \ \ \ \ }
+\DoxyCodeLine{00179\ \ \ \ \ \doxymbox{\hyperlink{MyStack_8cpp_afb8a6364930fc209a45150430c97b93f}{StackVerifyWithoutHash}}(ptrStack);}
+\DoxyCodeLine{00180\ }
+\DoxyCodeLine{00181\ \ \ \ \ \doxymbox{\hyperlink{MyStack_8cpp_a2a6650e6569e7a5c40895e1da0a682d9}{ON\_HASH}}(\doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a290cd0e4238ec7fb664a66d9d96a8c82}{hash}}\ ==\ \doxymbox{\hyperlink{MyStack_8cpp_a3e1580b8d88a5b604f91323b1f58c9b3}{GetHash}}(ptrStack),\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa0c871c9aee660e139823e56d6558d27}{HASHES\_DIFFER}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daaa0c871c9aee660e139823e56d6558d27}{HASHES\_DIFFER}});)}
+\DoxyCodeLine{00182\ \ \ \ \ }
+\DoxyCodeLine{00183\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}};}
+\DoxyCodeLine{00184\ \}}
+
+\end{DoxyCode}
+
+
+References \doxymbox{\hyperlink{MyAssert_8h_source_l00094}{ASSERT}}, \doxymbox{\hyperlink{Tree_8cpp_source_l01307}{Get\+Error\+String()}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00267}{Get\+Hash()}}, \doxymbox{\hyperlink{MyStack_8h_source_l00017}{Stack\+\_\+t::\+hash}}, \doxymbox{\hyperlink{MyError_8h_source_l00017}{HASHES\+\_\+\+DIFFER}}, \doxymbox{\hyperlink{MyError_8h_source_l00005}{OK}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00027}{ON\+\_\+\+HASH}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00175}{Stack\+Verify()}}, and \doxymbox{\hyperlink{MyStack_8cpp_source_l00186}{Stack\+Verify\+Without\+Hash()}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{MyStack_8cpp_source_l00108}{Stack\+Destroy()}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00203}{Stack\+Dump()}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00069}{Stack\+Init()}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00153}{Stack\+Pop()}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00127}{Stack\+Push()}}, and \doxymbox{\hyperlink{MyStack_8cpp_source_l00175}{Stack\+Verify()}}.
+
+\Hypertarget{MyStack_8cpp_afb8a6364930fc209a45150430c97b93f}\index{MyStack.cpp@{MyStack.cpp}!StackVerifyWithoutHash@{StackVerifyWithoutHash}}
+\index{StackVerifyWithoutHash@{StackVerifyWithoutHash}!MyStack.cpp@{MyStack.cpp}}
+\doxysubsubsection{\texorpdfstring{StackVerifyWithoutHash()}{StackVerifyWithoutHash()}}
+{\footnotesize\ttfamily \label{MyStack_8cpp_afb8a6364930fc209a45150430c97b93f} 
+\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348da}{ERROR\+\_\+\+STATUSES}} Stack\+Verify\+Without\+Hash (\begin{DoxyParamCaption}\item[{\doxymbox{\hyperlink{structStack__t}{Stack\+\_\+t}} \texorpdfstring{$\ast$}{*}}]{ptr\+Stack}{}\end{DoxyParamCaption})}
+
+
+
+Definition at line \doxymbox{\hyperlink{MyStack_8cpp_source_l00186}{186}} of file \doxymbox{\hyperlink{MyStack_8cpp_source}{My\+Stack.\+cpp}}.
+
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00186\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \{}
+\DoxyCodeLine{00187\ }
+\DoxyCodeLine{00188\ \ \ \ \ \textcolor{comment}{//\ LOG(fprintf(stderr,\ "{}(StackVerify)\ starting...\(\backslash\)n"{});)}}
+\DoxyCodeLine{00189\ }
+\DoxyCodeLine{00190\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack\ !=\ NULL,\ \ \ \ \ \ \ \ \ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}});}
+\DoxyCodeLine{00191\ }
+\DoxyCodeLine{00192\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}\ \ \ !=\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}});}
+\DoxyCodeLine{00193\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a95b09342bb15c75fd1d28fe09b98c769}{status}}\ !=\ NULL,\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa3f26dd98dc0ab63a635667a0c49fc709}{OUT\_OF\_RANGE}});}
+\DoxyCodeLine{00194\ }
+\DoxyCodeLine{00195\ \ \ \ \ \doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_ad998fec906a4d5f999bf4ee7876da7eb}{capacity}}\ >=\ ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a2d76cc62e9674f12196f4d66c9c8d449}{size}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa427278ac62c20f91f0f97146da3c4385}{STACK\_CAP\_SIZE}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa427278ac62c20f91f0f97146da3c4385}{STACK\_CAP\_SIZE}});}
+\DoxyCodeLine{00196\ \ \ \ \ }
+\DoxyCodeLine{00197\ \ \ \ \ \doxymbox{\hyperlink{MyStack_8cpp_a906c955aa71199f4d029c68d6c2ca958}{ON\_CANARY}}(\doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}[0]\ ==\ \doxymbox{\hyperlink{MyStack_8cpp_a3f66c64c3c72034ee0c901bd685bb179}{CANARY}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa0500c7558b55e10d263a3dc3abd32bfc}{BAD\_CANARY}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa0500c7558b55e10d263a3dc3abd32bfc}{BAD\_CANARY}});)}
+\DoxyCodeLine{00198\ \ \ \ \ \doxymbox{\hyperlink{MyStack_8cpp_a906c955aa71199f4d029c68d6c2ca958}{ON\_CANARY}}(\doxymbox{\hyperlink{MyAssert_8h_a4fc21d0c61644967b75d43359452c988}{ASSERT}}(ptrStack-\/>\doxymbox{\hyperlink{structStack__t_a0230b8b9bb0fb42bc9732d409876afb4}{data}}[ptrStack-\/>\doxymbox{\hyperlink{structStack__t_ad998fec906a4d5f999bf4ee7876da7eb}{capacity}}\ -\/\ 1]\ ==\ \doxymbox{\hyperlink{MyStack_8cpp_a3f66c64c3c72034ee0c901bd685bb179}{CANARY}},\ \doxymbox{\hyperlink{MyError_8h_a6a91e619425dcba77b56d72c9213c736}{GetErrorString}}(\doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa0500c7558b55e10d263a3dc3abd32bfc}{BAD\_CANARY}}),\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa0500c7558b55e10d263a3dc3abd32bfc}{BAD\_CANARY}});)}
+\DoxyCodeLine{00199\ \ \ \ \ }
+\DoxyCodeLine{00200\ \ \ \ \ \textcolor{keywordflow}{return}\ \doxymbox{\hyperlink{MyError_8h_aa31a82488e1f3eb535fa0643033348daa2bc49ec37d6a5715dd23e85f1ff5bb59}{OK}};}
+\DoxyCodeLine{00201\ \}}
+
+\end{DoxyCode}
+
+
+References \doxymbox{\hyperlink{MyAssert_8h_source_l00094}{ASSERT}}, \doxymbox{\hyperlink{MyError_8h_source_l00016}{BAD\+\_\+\+CANARY}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00046}{CANARY}}, \doxymbox{\hyperlink{MyStack_8h_source_l00013}{Stack\+\_\+t::\+capacity}}, \doxymbox{\hyperlink{MyStack_8h_source_l00011}{Stack\+\_\+t::\+data}}, \doxymbox{\hyperlink{Tree_8cpp_source_l01307}{Get\+Error\+String()}}, \doxymbox{\hyperlink{MyError_8h_source_l00005}{OK}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00017}{ON\+\_\+\+CANARY}}, \doxymbox{\hyperlink{MyError_8h_source_l00008}{OUT\+\_\+\+OF\+\_\+\+RANGE}}, \doxymbox{\hyperlink{MyStack_8h_source_l00012}{Stack\+\_\+t::\+size}}, \doxymbox{\hyperlink{MyError_8h_source_l00015}{STACK\+\_\+\+CAP\+\_\+\+SIZE}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00186}{Stack\+Verify\+Without\+Hash()}}, and \doxymbox{\hyperlink{MyStack_8h_source_l00015}{Stack\+\_\+t::\+status}}.
+
+
+
+Referenced by \doxymbox{\hyperlink{MyStack_8cpp_source_l00267}{Get\+Hash()}}, \doxymbox{\hyperlink{MyStack_8cpp_source_l00175}{Stack\+Verify()}}, and \doxymbox{\hyperlink{MyStack_8cpp_source_l00186}{Stack\+Verify\+Without\+Hash()}}.
+
+
+
+\label{MyStack_8cpp_doc-var-members}
+\Hypertarget{MyStack_8cpp_doc-var-members}
+\doxysubsection{Variable Documentation}
+\Hypertarget{MyStack_8cpp_a1cd15547aa7a518489d755671d9e3b6f}\index{MyStack.cpp@{MyStack.cpp}!Eps@{Eps}}
+\index{Eps@{Eps}!MyStack.cpp@{MyStack.cpp}}
+\doxysubsubsection{\texorpdfstring{Eps}{Eps}}
+{\footnotesize\ttfamily \label{MyStack_8cpp_a1cd15547aa7a518489d755671d9e3b6f} 
+const double Eps = 1e-\/3}
+
+
+
+Definition at line \doxymbox{\hyperlink{MyStack_8cpp_source_l00048}{48}} of file \doxymbox{\hyperlink{MyStack_8cpp_source}{My\+Stack.\+cpp}}.
+

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['log_0',['LOG',['../MyAssert_8h.html#a3577749fb48d57a158b8ac1a0b3ab57e',1,'MyAssert.h']]]
+  ['index_5fok_0',['INDEX_OK',['../MyAssert_8h.html#aeb7bd154d11d4743c6704a9ffaa39183',1,'MyAssert.h']]]
 ];
