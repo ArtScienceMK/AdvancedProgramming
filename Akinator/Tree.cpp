@@ -23,12 +23,14 @@
 #include <math.h>
 #include <sys/stat.h>
 #include <festival/festival.h>
+#include <raylib.h>
     
 typedef size_t StackElement_t;
 
 #include "MyError.h"
 #include "MyAssert.h"
 #include "MyStack.h"
+#include "GraphLib.h"
 
 int DUMP_CNT = 1;
 
@@ -46,7 +48,7 @@ const int MaxDotLineSize     = 200;
 const char* TreeFilename     = "data.trq";
 const char* TreeSaveFilename = "dataSave.trq";
 
-const int TreeFileSize       = 20000;
+const int TreeFileSize       = 2000;
 const int MaxTreeLineSize    = 200;
 
 const int MaxObjectLineSize  = 30;
@@ -54,7 +56,7 @@ const int MaxDefLineSize     = 600;
 const int MaxTraitsCnt      = 50;
 
 const int loadInitFiles = 1;
-const int heapSize      = 1000000;
+const int heapSize      = 500000;
 
 
 const char* DotFileTemplate = "digraph G{\n\trankdir=TB;\n\tnode[color=\"#000000\", style=filled, fillcolor=\"#00ff88\", fontsize=14, shape=\"Mrecord\"];\n";
@@ -658,7 +660,7 @@ ERROR_STATUSES StartUserCycle() {
 
     printf("Введи число запросов:                       \n"  );
     festival_say_text("Enter the number of queries!");
-    
+
     int nQueries = 0;
 
     if (!scanf("%d", &nQueries) || nQueries <= 0) {
@@ -685,54 +687,19 @@ ERROR_STATUSES StartUserCycle() {
     size_t inputLineSize = MaxObjectLineSize;
     size_t inputLineInd  = 0;
 
-    for (int i = 0; i < nQueries; i++) {
-        printf("Что ты желаешь сделать?\n");
-        festival_say_text("What's on your mind today?");
 
-        printf("[у]гадать объект, [п]осмотреть базу данных, [в]ыйти\n [д]ать определение, [с]равнить\n");
+    SetTargetFPS(TARGET_FPS);
+    InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "SquareSolver");
 
-        ClearLine(inputLine);
-        inputLineInd = 0;
+    while (!WindowShouldClose()) {
+        BeginDrawing();
+        ClearBackground(RAYWHITE);
+        
+        for (int i = 0; i < nQueries; i++) {
+            printf("Что ты желаешь сделать?\n");
+            festival_say_text("What's on your mind today?");
 
-        if ((inputLineInd = getline(&inputLine, &inputLineSize, stdin)) == -1) {
-            printf("Введена неверная опция... Самоуничтожение...\n");
-            festival_say_text("Self-destruction");
-            return AKINATOR_MENU_INPUT_ERROR;
-        } 
-
-        CropLastChar(inputLine, &inputLineInd);
-
-        fprintf(stderr, "string after cropping: <%s>\n", inputLine);
-
-        if (strcmp(inputLine, "у") == 0) {
-            Guess(&tree);            
-        }
-        else if (strcmp(inputLine, "п") == 0) {
-            printf("г[рафический] или т[екстовый] дамп?\n");
-            
-            ClearLine(inputLine);
-            inputLineInd = 0;
-            
-            if ((inputLineInd = getline(&inputLine, &inputLineSize, stdin)) == -1) {
-                printf("Введена неверная опция... Самоуничтожение...\n");
-                festival_say_text("Self-destruction");
-                return AKINATOR_MENU_INPUT_ERROR;
-            }
-
-            CropLastChar(inputLine, &inputLineInd);
-
-            if (strcmp(inputLine, "г") == 0) {
-                TreeVizDump(&tree);            
-            } 
-            else if (strcmp(inputLine, "т") == 0) {
-                TreeDump(&tree);
-            } 
-            else {
-                return AKINATOR_MENU_INPUT_ERROR;
-            }
-        }
-        else if (strcmp(inputLine, "в") == 0) {
-            printf("Сохранить базу данных?\n");
+            // printf("[у]гадать объект, [п]осмотреть базу данных, [в]ыйти\n [д]ать определение, [с]равнить\n");
 
             ClearLine(inputLine);
             inputLineInd = 0;
@@ -741,42 +708,90 @@ ERROR_STATUSES StartUserCycle() {
                 printf("Введена неверная опция... Самоуничтожение...\n");
                 festival_say_text("Self-destruction");
                 return AKINATOR_MENU_INPUT_ERROR;
-            }
+            } 
 
             CropLastChar(inputLine, &inputLineInd);
 
-            if (strcmp(inputLine, "да") == 0) {
-                ERROR_STATUSES SaveTreeErrorStatus = SaveTree(&tree);
+            fprintf(stderr, "string after cropping: <%s>\n", inputLine);
 
-                ASSERT(SaveTreeErrorStatus == OK, GetErrorString(SaveTreeErrorStatus),
-                       SaveTreeErrorStatus);
+            if (strcmp(inputLine, "у") == 0) {
+                Guess(&tree);            
+            }
+            else if (strcmp(inputLine, "п") == 0) {
+                printf("г[рафический] или т[екстовый] дамп?\n");
                 
-                printf("Дерево успешно сохранено!\n");
+                ClearLine(inputLine);
+                inputLineInd = 0;
+                
+                if ((inputLineInd = getline(&inputLine, &inputLineSize, stdin)) == -1) {
+                    printf("Введена неверная опция... Самоуничтожение...\n");
+                    festival_say_text("Self-destruction");
+                    return AKINATOR_MENU_INPUT_ERROR;
+                }
+
+                CropLastChar(inputLine, &inputLineInd);
+
+                if (strcmp(inputLine, "г") == 0) {
+                    TreeVizDump(&tree);            
+                } 
+                else if (strcmp(inputLine, "т") == 0) {
+                    TreeDump(&tree);
+                } 
+                else {
+                    return AKINATOR_MENU_INPUT_ERROR;
+                }
             }
-            else if (strcmp(inputLine, "нет") == 0) {
-                printf("Дерево не было сохранено!\n");
+            else if (strcmp(inputLine, "в") == 0) {
+                printf("Сохранить базу данных?\n");
+
+                ClearLine(inputLine);
+                inputLineInd = 0;
+
+                if ((inputLineInd = getline(&inputLine, &inputLineSize, stdin)) == -1) {
+                    printf("Введена неверная опция... Самоуничтожение...\n");
+                    festival_say_text("Self-destruction");
+                    return AKINATOR_MENU_INPUT_ERROR;
+                }
+
+                CropLastChar(inputLine, &inputLineInd);
+
+                if (strcmp(inputLine, "да") == 0) {
+                    ERROR_STATUSES SaveTreeErrorStatus = SaveTree(&tree);
+
+                    ASSERT(SaveTreeErrorStatus == OK, GetErrorString(SaveTreeErrorStatus),
+                        SaveTreeErrorStatus);
+                    
+                    printf("Дерево успешно сохранено!\n");
+                }
+                else if (strcmp(inputLine, "нет") == 0) {
+                    printf("Дерево не было сохранено!\n");
+                }
+                else {
+                    printf("Некорректный ответ на вопрос! Самоуничтожение...\n");
+                    festival_say_text("Self-destruction");
+                    return UNKNOWN_AKINATOR_ANSWER_OPTION;
+                }
+
+                printf("Пока!\n");
+                return OK;
+            }
+            else if (strcmp(inputLine, "д") == 0) {
+                GiveDefinition(&tree);
+            }
+            else if (strcmp(inputLine, "с") == 0) {
+                Compare(&tree);
             }
             else {
-                printf("Некорректный ответ на вопрос! Самоуничтожение...\n");
-                festival_say_text("Self-destruction");
-                return UNKNOWN_AKINATOR_ANSWER_OPTION;
+                printf("Введена неизвестная опция... Последнее предупреждение...\n");
+
+                // return UNKNOWN_AKINATOR_MENU_OPTION;
             }
+            // BeginMode2D(camera);
+        }
 
-            printf("Пока!\n");
-            return OK;
-        }
-        else if (strcmp(inputLine, "д") == 0) {
-            GiveDefinition(&tree);
-        }
-        else if (strcmp(inputLine, "с") == 0) {
-            Compare(&tree);
-        }
-        else {
-            printf("Введена неизвестная опция... Последнее предупреждение...\n");
-
-            // return UNKNOWN_AKINATOR_MENU_OPTION;
-        }
+        EndDrawing();
     }
+    CloseWindow();
 
     return OK;
 }
@@ -798,47 +813,60 @@ ERROR_STATUSES Guess(Tree* ptrTree) {
 
     while (!(curNode->left == NULL && curNode->right == NULL)) {
 
+        BeginDrawing();
+        ClearBackground(RAYWHITE);
+
+        
         fprintf(stderr, "(Guess): curNode: %p\n", curNode);
 
-        printf("%s?\n", curNode->data.line);
+        DrawChoice(curNode->data.line);
 
-        ClearLine(inputLine);
-        inputLineInd = 0;
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
+            Vector2 mousePosition = GetMousePosition();
 
-        if ((inputLineInd = getline(&inputLine, &inputLineSize, stdin)) == -1) {
-            printf("Не смог считать ответ на вопрос! Самоуничтожение...\n");
-            return AKINATOR_QUESTION_INPUT_ERROR;
-        }
+            bool YesChoice = false;
 
-        CropLastChar(inputLine, &inputLineInd);
+            ERROR_STATUSES BoxChoiceErrorStatus = BoxChoice(mousePosition, &YesChoice);
 
-        if (strcmp(inputLine, "да") == 0) {
-            if (curNode->right == NULL) {
-                break;
+            if (BoxChoiceErrorStatus == BOX_CHOICE_NONE_OF_THEM) {
+                continue;
             }
 
-            curNode = curNode->right;
+            ASSERT(BoxChoiceErrorStatus == OK, GetErrorString(BoxChoiceErrorStatus), BoxChoiceErrorStatus);
+
+            if (YesChoice) {
+                if (curNode->right == NULL) {
+                    break;
+                }
+
+                curNode = curNode->right;
             
-            fprintf(stderr, "(Guess): going to: %p\n", curNode);
-        } 
-        else if (strcmp(inputLine, "нет") == 0) {
-            if (curNode->left == NULL) {
-                break;
+                fprintf(stderr, "(Guess): YES, going to: %p\n", curNode);
+            } 
+            else {
+                if (curNode->left == NULL) {
+                    break;
+                }
+
+                curNode = curNode->left;
+
+                fprintf(stderr, "(Guess): NO going to: %p\n", curNode);
             }
-
-            curNode = curNode->left;
-
-            fprintf(stderr, "(Guess): going to: %p\n", curNode);
         }
-        else {
-            printf("Некорректный ответ на вопрос! Самоуничтожение...\n");
-            return UNKNOWN_AKINATOR_ANSWER_OPTION;
-        }
+
+        EndDrawing();
+    
     }
 
     // Т.к. мы можем попасть в NULL, а у неё нельзя по parent обратиться
 
-    printf("Это %s?\n", curNode->data.line);
+    char* choiceLine = (char*) calloc(MaxObjectLineSize, sizeof(choiceLine[0]));
+
+    ASSERT(choiceLine != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
+
+    sprintf(choiceLine, "Это %s\n", curNode->data.line);
+
+    DrawChoice(choiceLine);
 
     ClearLine(inputLine);
     inputLineInd = 0;
@@ -1510,6 +1538,9 @@ const char* GetErrorString(ERROR_STATUSES errorStatus) {
 
         case AKINATOR_COMPARE_ERROR:
             return "An error happened when comparing in akinator!\n";
+        
+        case BOX_CHOICE_NONE_OF_THEM:
+            return "User didn't click to any button.\n";
 
         default:
             return "Unknown error status!\n";
@@ -1821,5 +1852,18 @@ ERROR_STATUSES GetCompare(char** common, char** diff1, char** diff2, size_t* ptr
     *ptrDiff1Ind  = diff1Ind;
     *ptrDiff2Ind  = diff2Ind;
 
+    return OK;
+}
+
+ERROR_STATUSES DrawChoice(const char* line) {
+    ASSERT(line != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+
+//    DrawRectangle(ORIGIN.x, ORIGIN.y, 100, 100, Color(245, 245, 245));
+    DrawText(line, ORIGIN.x, ORIGIN.y, 100, Color(0, 0, 0));
+
+    return OK;
+}
+
+ERROR_STATUSES BoxChoice(Vector2 mousePosition, bool* ptrYesChoice) {
     return OK;
 }
