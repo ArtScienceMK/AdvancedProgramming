@@ -4,17 +4,31 @@
 typedef double TreeElement_t;
 
 enum NODE_TYPES {
-    OP    = 0,
-    CONST = 1,
-    VAR   = 2,
+    EMPTY_NODE = 0,
+    OP         = 1,
+    CONST      = 2,
+    VAR        = 3,
 };
 
 enum OP_TYPES {
-    NONE = '0',
-    ADD  = '+',
-    SUB  = '-',
-    MUL  = '*',
-    DIV  = '/',
+    EMPTY_OP = '0',
+    ADD      = '+',
+    SUB      = '-',
+    MUL      = '*',
+    DIV      = '/',
+    POW      = '^',
+    LOG      = 'L',
+    SIN      = 'S',
+    COS      = 'C',
+    TG       = 'T',
+    CTG      = 'G',
+    ARCSIN   = 's',
+    ARCCOS   = 'c',
+    ARCTG    = 't',
+    ARCCTG   = 'g',
+    SH       = 'H',
+    CH       = 'J',
+    TH       = 'K',
 };
 
 struct Node {
@@ -79,5 +93,7 @@ ERROR_STATUSES GetFileSize(int fileDesc, size_t* ptrFileSize);
 ERROR_STATUSES CropLastChar(char* curLine, size_t* ptrCurLineInd);
 ERROR_STATUSES GetVizLen(   char* curLine, size_t* res);
 
+ERROR_STATUSES PrintOpType(OP_TYPES opType,     char** ptrBuffer, size_t* ptrBufferSize);
+ERROR_STATUSES PrintDouble(double value, char** ptrBuffer, size_t* ptrBufferSize);
 
 #endif /*  TREE_H  */

@@ -1,6 +1,12 @@
 #ifndef _MY_ERROR_H
 #define _MY_ERROR_H
 
+#ifdef MAINFILE
+    #define EXTERN
+#else
+    #define EXTERN extern
+#endif
+
 enum ERROR_STATUSES {
     OK                                   = 0, 
     FILE_ACCESS_DENIED                   = 1,
@@ -68,8 +74,10 @@ enum ERROR_STATUSES {
     AKINATOR_COMPARE_ERROR               = 63,
     LOAD_TREE_UNKNOWN_LINE_ERROR         = 64,
     STRING_TO_DOUBLE_ERROR               = 65,
+    UNKNOWN_NODE_TYPE                    = 66,
+    UNKNOWN_OP_TYPE                      = 67,
 };
 
-const char* GetErrorString(ERROR_STATUSES errorStatus);
+EXTERN const char* GetErrorString(ERROR_STATUSES errorStatus);
 
 #endif /*_MY_ERROR_H*/

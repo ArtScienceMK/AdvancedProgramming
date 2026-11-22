@@ -49,7 +49,11 @@ const int MaxTreeLineSize    = 200;
 
 const int MaxObjectLineSize  = 30;
 const int MaxDefLineSize     = 600;
-const int MaxTraitsCnt      = 50;
+const int MaxTraitsCnt       = 50;
+
+const int MaxOpLineSize      = 10;
+
+const int MaxConstLineSize   = 10;
 
 const char* DotFileTemplate = "digraph G{\n\trankdir=TB;\n\tnode[color=\"#000000\", style=filled, fillcolor=\"#00ff88\", fontsize=14, shape=\"Mrecord\"];\n";
 
@@ -168,7 +172,7 @@ ERROR_STATUSES NodeCreate(Node* ptrParent, bool isLeftSon) {
     ASSERT(ptrNode != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
 
     ptrNode->parent     = ptrParent;
-    ptrNode->opType     = NONE;
+    ptrNode->opType     = EMPTY_OP;
 
     ptrNode->value      = NAN;
     ptrNode->varName    = NULL;
@@ -285,7 +289,7 @@ ERROR_STATUSES RecNodePrintToLine(Node* ptrNode, char* curLine, size_t* ptrCurLi
 
     sprintf(curLine + curLineInd, "(");
     curLineInd++;
-
+    
     if (!ptrNode) {
 
         sprintf(curLine + curLineInd, "nil)");
@@ -298,9 +302,42 @@ ERROR_STATUSES RecNodePrintToLine(Node* ptrNode, char* curLine, size_t* ptrCurLi
 
         return OK;
     }
+    
+    char* line      = NULL;
+    size_t lineSize = 0;
 
-    sprintf(curLine + curLineInd, "%lf", ptrNode->value);
-    curLineInd += strlen(STRINGIFY(ptrNode->value));
+    switch (ptrNode->nodeType) {
+        case OP: {
+            ERROR_STATUSES PrintOpTypeErrorStatus = PrintOpType(ptrNode->opType, &line, &lineSize);
+
+            ASSERT(PrintOpTypeErrorStatus == OK, GetErrorString(PrintOpTypeErrorStatus),
+                   PrintOpTypeErrorStatus);
+            break;
+        }
+        case CONST: {
+
+            ERROR_STATUSES PrintDoubleErrorStatus = PrintDouble(ptrNode->value, &line, &lineSize);
+
+            ASSERT(PrintDoubleErrorStatus == OK, GetErrorString(PrintDoubleErrorStatus), 
+                   PrintDoubleErrorStatus);
+            break;
+        }
+        case VAR: {
+            sprintf(curLine + curLineInd, "\"%s\" ", ptrNode->varName);
+            curLineInd += strlen(ptrNode->varName) + 3;
+
+            break;
+        }
+
+        default: {
+            return UNKNOWN_NODE_TYPE;
+        }
+    }
+
+    if (ptrNode->nodeType != VAR) {
+        sprintf(curLine + curLineInd, "\"%s\" ", line);
+        curLineInd += lineSize + 3;
+    }
 
     *ptrCurLineInd = curLineInd;
 
@@ -718,12 +755,12 @@ ERROR_STATUSES LoadTree(Tree* ptrTree) {
             return UNKNOWN_STRING_LOAD_TREE;                            
         } 
 
-        fprintf(stderr, "(LoadTree): bufferInd before: %i, buffer: <%s>, curLine: <%s>, info: <%c>\n", 
-                bufferInd, buffer + bufferInd, curLine, info);
-        
         // *(curLine + strlen(curLine) - 1) =1 '\0';
 
         info = curLine[0];
+
+        fprintf(stderr, "(LoadTree): bufferInd before: %i, buffer: <%s>, curLine: <%s>, info: <%c>\n", 
+            bufferInd, buffer + bufferInd, curLine, info);
 
         switch (info) {
             case ('+'): {
@@ -754,6 +791,13 @@ ERROR_STATUSES LoadTree(Tree* ptrTree) {
                 curNode->opType   = DIV;
                 break;
             }
+            case ('^'): {
+                fprintf(stderr, "Found ^!\n");
+
+                curNode->nodeType = OP;
+                curNode->opType   = POW;
+                break;
+            }
             default: {
                 if (isalpha(info) || isdigit(info)) {
                     break;
@@ -765,7 +809,89 @@ ERROR_STATUSES LoadTree(Tree* ptrTree) {
         }
 
         if (info != '\0' && !isalnum(info)) {
+            fprintf(stderr, "Short operator found! Continue...\n");
+
             bufferInd += 4;  // -, + и т д
+            continue;
+        }
+
+        if (strcmp(curLine, "log") == 0) {
+            fprintf(stderr, "Found log!\n");
+
+            curNode->nodeType = OP;
+            curNode->opType   = LOG;
+        }
+        else if (strcmp(curLine, "sin") == 0) {
+            fprintf(stderr, "Found sin!\n");
+
+            curNode->nodeType = OP;
+            curNode->opType   = SIN;
+        }
+        else if (strcmp(curLine, "cos") == 0) {
+            fprintf(stderr, "Found cos!\n");
+
+            curNode->nodeType = OP;
+            curNode->opType   = COS;
+        }
+        else if (strcmp(curLine, "tg") == 0) {
+            fprintf(stderr, "Found tg!\n");
+
+            curNode->nodeType = OP;
+            curNode->opType   = TG;
+        }
+        else if (strcmp(curLine, "ctg") == 0) {
+            fprintf(stderr, "Found ctg!\n");
+
+            curNode->nodeType = OP;
+            curNode->opType   = CTG;
+        }
+        else if (strcmp(curLine, "arcsin") == 0) {
+            fprintf(stderr, "Found arcsin!\n");
+
+            curNode->nodeType = OP;
+            curNode->opType   = ARCSIN;
+        }
+        else if (strcmp(curLine, "arccos") == 0) {
+            fprintf(stderr, "Found arccos!\n");
+
+            curNode->nodeType = OP;
+            curNode->opType   = ARCCOS;
+        }
+        else if (strcmp(curLine, "arctg") == 0) {
+            fprintf(stderr, "Found arctg!\n");
+
+            curNode->nodeType = OP;
+            curNode->opType   = ARCTG;
+        }
+        else if (strcmp(curLine, "arcctg") == 0) {
+            fprintf(stderr, "Found sin!\n");
+
+            curNode->nodeType = OP;
+            curNode->opType   = ARCCTG;
+        }
+        else if (strcmp(curLine, "sh") == 0) {
+            fprintf(stderr, "Found sh!\n");
+
+            curNode->nodeType = OP;
+            curNode->opType   = SH;
+        }
+        else if (strcmp(curLine, "ch") == 0) {
+            fprintf(stderr, "Found ch (function)!\n");
+
+            curNode->nodeType = OP;
+            curNode->opType   = CH;
+        }
+        else if (strcmp(curLine, "th") == 0) {
+            fprintf(stderr, "Found th!\n");
+
+            curNode->nodeType = OP;
+            curNode->opType   = TH;
+        }
+
+        if (curNode->nodeType == OP && isalpha(info)) {
+            fprintf(stderr, "Found an operator! Continue...\n");
+
+            bufferInd += strlen(curLine) + 3;
             continue;
         }
 
@@ -926,3 +1052,54 @@ ERROR_STATUSES GetVizLen(   char* curLine, size_t* ptrRes) {
     return OK;
 }
 
+ERROR_STATUSES PrintOpType(OP_TYPES opType, char** ptrBuffer, size_t* ptrBufferSize) {
+    ASSERT(ptrBuffer     != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+    ASSERT(ptrBufferSize != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+
+    char* buffer = (char*) calloc(MaxOpLineSize, sizeof(buffer[0]));
+
+    ASSERT(buffer != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
+
+    switch (opType) {
+        case (ADD):    strcpy(buffer, "+"); break;
+        case (SUB):    strcpy(buffer,  "-"); break;
+        case (MUL):    strcpy(buffer,  "*"); break;
+        case (DIV):    strcpy(buffer,  "/"); break;
+        case (POW):    strcpy(buffer,  "^"); break;
+        case (LOG):    strcpy(buffer, "log"); break;
+        case (SIN):    strcpy(buffer, "sin"); break;
+        case (COS):    strcpy(buffer, "cos"); break;
+        case (TG):     strcpy(buffer, "tg"); break;
+        case (CTG):    strcpy(buffer, "ctg"); break;
+        case (ARCSIN): strcpy(buffer, "arcsin"); break;
+        case (ARCCOS): strcpy(buffer, "arccos"); break;
+        case (ARCTG):  strcpy(buffer, "arctg"); break;
+        case (ARCCTG): strcpy(buffer, "arcctg"); break;
+        case (SH):     strcpy(buffer, "sh"); break;
+        case (CH):     strcpy(buffer, "ch"); break;
+        case (TH):     strcpy(buffer, "th"); break;
+        default:
+            return UNKNOWN_OP_TYPE;
+    }
+
+    *ptrBuffer     = buffer;
+    *ptrBufferSize = strlen(buffer);
+
+    return OK;
+}
+
+ERROR_STATUSES PrintDouble(double value, char** ptrBuffer, size_t* ptrBufferSize) {
+    ASSERT(ptrBuffer     != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+    ASSERT(ptrBufferSize != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+
+    char* buffer = (char*) calloc(MaxConstLineSize, sizeof(buffer[0]));
+
+    ASSERT(buffer != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
+
+    sprintf(buffer, "%lf", value);
+
+    *ptrBuffer     = buffer;
+    *ptrBufferSize = strlen(buffer);
+
+    return OK;
+}
