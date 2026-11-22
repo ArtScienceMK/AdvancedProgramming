@@ -22,6 +22,7 @@
 #include <string.h>
 #include <math.h>
 #include <sys/stat.h>
+#include <festival/festival.h>
     
 typedef size_t StackElement_t;
 
@@ -51,6 +52,10 @@ const int MaxTreeLineSize    = 200;
 const int MaxObjectLineSize  = 30;
 const int MaxDefLineSize     = 600;
 const int MaxTraitsCnt      = 50;
+
+const int loadInitFiles = 1;
+const int heapSize      = 1000000;
+
 
 const char* DotFileTemplate = "digraph G{\n\trankdir=TB;\n\tnode[color=\"#000000\", style=filled, fillcolor=\"#00ff88\", fontsize=14, shape=\"Mrecord\"];\n";
 
@@ -131,7 +136,9 @@ ERROR_STATUSES GetFileSize(int fileDesc, size_t* ptrFileSize);
 ERROR_STATUSES CropLastChar(char* curLine, size_t* ptrCurLineInd);
 ERROR_STATUSES GetVizLen(   char* curLine, size_t* res);
 
-int main() {    
+int main() {
+    festival_initialize(loadInitFiles, heapSize);
+
     StartUserCycle();
 
     return 0;
@@ -647,12 +654,16 @@ ERROR_STATUSES WriteBufferToFile(const char* filename, char* buffer, size_t buff
 ERROR_STATUSES StartUserCycle() {
     printf("------------\n");
     printf("Трепещи! Это акИНАТОР - передовая нейросеть!\n"  );
+    festival_say_text("Trepeshi! This is akinator - cutting edge AI tool!\n");
+
     printf("Введи число запросов:                       \n"  );
+    festival_say_text("Enter the number of queries!");
     
     int nQueries = 0;
 
     if (!scanf("%d", &nQueries) || nQueries <= 0) {
         printf("Введено некорректное число запросов... Самоуничтожение...\n");
+        festival_say_text("Self-destruction");
         return OK;
     }
 
@@ -676,6 +687,8 @@ ERROR_STATUSES StartUserCycle() {
 
     for (int i = 0; i < nQueries; i++) {
         printf("Что ты желаешь сделать?\n");
+        festival_say_text("What's on your mind today?");
+
         printf("[у]гадать объект, [п]осмотреть базу данных, [в]ыйти\n [д]ать определение, [с]равнить\n");
 
         ClearLine(inputLine);
@@ -683,6 +696,7 @@ ERROR_STATUSES StartUserCycle() {
 
         if ((inputLineInd = getline(&inputLine, &inputLineSize, stdin)) == -1) {
             printf("Введена неверная опция... Самоуничтожение...\n");
+            festival_say_text("Self-destruction");
             return AKINATOR_MENU_INPUT_ERROR;
         } 
 
@@ -701,6 +715,7 @@ ERROR_STATUSES StartUserCycle() {
             
             if ((inputLineInd = getline(&inputLine, &inputLineSize, stdin)) == -1) {
                 printf("Введена неверная опция... Самоуничтожение...\n");
+                festival_say_text("Self-destruction");
                 return AKINATOR_MENU_INPUT_ERROR;
             }
 
@@ -724,6 +739,7 @@ ERROR_STATUSES StartUserCycle() {
 
             if ((inputLineInd = getline(&inputLine, &inputLineSize, stdin)) == -1) {
                 printf("Введена неверная опция... Самоуничтожение...\n");
+                festival_say_text("Self-destruction");
                 return AKINATOR_MENU_INPUT_ERROR;
             }
 
@@ -742,6 +758,7 @@ ERROR_STATUSES StartUserCycle() {
             }
             else {
                 printf("Некорректный ответ на вопрос! Самоуничтожение...\n");
+                festival_say_text("Self-destruction");
                 return UNKNOWN_AKINATOR_ANSWER_OPTION;
             }
 
@@ -835,10 +852,12 @@ ERROR_STATUSES Guess(Tree* ptrTree) {
 
     if (strcmp(inputLine, "да") == 0) {
         printf("Я был прав! Теперь я повелитель Триштатья!\n");
+        festival_say_text("I win!");
         return OK;
     } 
     else if (strcmp(inputLine, "нет") == 0) {
         printf("Не может быть! Помоги мне стать умнее: скажи, что это было?\n");
+        festival_say_text("No way!");
         
         ClearLine(inputLine);
         inputLineInd = 0;
