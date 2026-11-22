@@ -1,0 +1,928 @@
+#ifdef DEBUG
+
+#define ON_DEBUG(...)  __VA_ARGS__
+
+#else
+
+#define ON_DEBUG(...)
+
+#endif
+
+#define STRINGIFY( x ) (# x)
+#define GET_SOURCE_LOCATION(sourceLocation, varName)\
+    sourceLocation.file = strdup(__FILE__);\
+    sourceLocation.function = strdup(__FUNCTION__);\
+    sourceLocation.line = __LINE__;\
+    sourceLocation.name = strdup(STRINGIFY(varName));
+
+    
+#include <fcntl.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <string.h>
+#include <math.h>
+#include <ctype.h>
+#include <sys/stat.h>
+    
+#include "MyError.h"
+#include "MyAssert.h"
+#include "Tree.h"
+
+int DUMP_CNT = 1;
+
+const int MaxFilenameLen     = 30;
+const int MaxNumberLineSize  = 3;
+const int MaxUnicodeLineSize = 100;
+
+const char* VizDumpFilename  =  "Dump";
+const char* VizDumpExtension = ".png";
+
+const char* DotFilename      = "dot.txt";
+const int   DotFileSize      = 20000;
+const int MaxDotLineSize     = 300;
+
+const char* TreeFilename     = "data.trq";
+const char* TreeSaveFilename = "dataSave.trq";
+
+const int TreeFileSize       = 20000;
+const int MaxTreeLineSize    = 200;
+
+const int MaxObjectLineSize  = 30;
+const int MaxDefLineSize     = 600;
+const int MaxTraitsCnt      = 50;
+
+const char* DotFileTemplate = "digraph G{\n\trankdir=TB;\n\tnode[color=\"#000000\", style=filled, fillcolor=\"#00ff88\", fontsize=14, shape=\"Mrecord\"];\n";
+
+const char* DotSystemCallTemplate = "dot dot.txt -Tpng -o ";
+
+
+// int main() {    
+//     StartUserCycle();
+
+//     return 0;
+// }
+
+
+ERROR_STATUSES TreeInit(Tree* ptrTree) {
+    ASSERT(ptrTree->size == 0   , GetErrorString(BAD_CLEAR_INIT), BAD_CLEAR_INIT);
+    ASSERT(ptrTree->root == NULL, GetErrorString(BAD_CLEAR_INIT), BAD_CLEAR_INIT);
+
+    ptrTree->size = 1;
+    ptrTree->root = (Node*)calloc(1, sizeof(*(ptrTree->root)));
+
+    ASSERT(ptrTree->root != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
+
+    ASSERT(ptrTree->root != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
+
+
+    ptrTree->root->parent = ptrTree->root;  // Корень - сам себе родитель (BUG)
+    
+    return OK;
+}   
+
+ERROR_STATUSES TreeDestroy(Tree* ptrTree) {
+    ASSERT(ptrTree != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+
+    ERROR_STATUSES RecNodeDestroyErrorStatus = RecNodeDestroy(ptrTree->root);
+
+    ASSERT(RecNodeDestroyErrorStatus == OK, GetErrorString(RecNodeDestroyErrorStatus),
+           RecNodeDestroyErrorStatus);
+
+    //  Как освобождать указатель на дерево, не трогая  root??? Только кастомная обертка на free??
+    
+    return OK;
+}
+
+ERROR_STATUSES RecNodeDestroy(Node* ptrNode) {
+    ASSERT(ptrNode != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+
+    if (ptrNode->left != NULL) {
+        RecNodeDestroy(ptrNode->left);
+    }
+    if (ptrNode->right != NULL) {
+        RecNodeDestroy(ptrNode->right);
+    }
+
+    free(ptrNode);
+
+    return OK;
+}
+
+ERROR_STATUSES TreeInsert(Tree* ptrTree, TreeElement_t value) {
+    ASSERT(ptrTree != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+
+    ERROR_STATUSES NodeInsertErrorStatus = NodeInsert(ptrTree->root, value);
+
+    ASSERT(NodeInsertErrorStatus == OK, GetErrorString(NodeInsertErrorStatus),
+            NodeInsertErrorStatus);
+
+    ptrTree->size = ptrTree->size + 1;
+
+    return OK;
+}
+
+ERROR_STATUSES NodeInsert(Node* ptrNode, TreeElement_t value) {
+    
+    ERROR_STATUSES NodeVerifyErrorStatus = NodeVerify(ptrNode);
+
+    ASSERT(NodeVerifyErrorStatus == OK, GetErrorString(NodeVerifyErrorStatus),
+           NodeVerifyErrorStatus);
+
+    bool isLeftSon = false;
+    
+    while (!(ptrNode->left == NULL && ptrNode->right == NULL)) {        
+        if (value < ptrNode->value) {
+            isLeftSon = true;
+            ptrNode = ptrNode->left;
+        } else {
+            isLeftSon = false;
+            ptrNode = ptrNode->right;
+        }
+    }
+
+    fprintf(stderr, "(NodeInsert): ptrNode: %p\n", ptrNode);
+
+    ERROR_STATUSES NodeCreateErrorStatus = NodeCreate(ptrNode, isLeftSon);
+
+    if (isLeftSon) {
+        ptrNode->left->value = value;
+    } else {
+        ptrNode->right->value = value;
+    }
+
+    ASSERT(NodeCreateErrorStatus == OK, GetErrorString(NodeCreateErrorStatus),
+            NodeCreateErrorStatus);
+
+    return OK;
+}
+
+ERROR_STATUSES NodeCreate(Node* ptrParent, bool isLeftSon) {
+
+    ERROR_STATUSES NodeVerifyErrorStatus = NodeVerify(ptrParent);
+
+    ASSERT(NodeVerifyErrorStatus == OK, GetErrorString(NodeVerifyErrorStatus),
+           NodeVerifyErrorStatus);
+
+    Node* ptrNode = (Node*)calloc(1, sizeof(*ptrNode));
+
+    ASSERT(ptrNode != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
+
+    ptrNode->parent     = ptrParent;
+    ptrNode->opType     = NONE;
+
+    ptrNode->value      = NAN;
+    ptrNode->varName    = NULL;
+
+    if (isLeftSon) {
+        ptrParent->left = ptrNode;
+    } else {
+        ptrParent->right = ptrNode;
+    }
+
+    fprintf(stderr, "(NodeCreate): added ptrNode: %p, has parent: %p\n", ptrNode, ptrParent);
+    fprintf(stderr, "(NodeCreate): isLeftSon: %i\n", isLeftSon);
+
+    return OK;
+}
+
+ERROR_STATUSES RecNodeVerify(Node* ptrNode) {
+    ERROR_STATUSES NodeVerifyErrorStatus = NodeVerify(ptrNode);
+
+    ASSERT(NodeVerifyErrorStatus == OK, GetErrorString(NodeVerifyErrorStatus),
+           NodeVerifyErrorStatus);
+
+    if (ptrNode->left != NULL) {
+        NodeVerifyErrorStatus = RecNodeVerify(ptrNode->left);
+
+        ASSERT(NodeVerifyErrorStatus == OK, GetErrorString(NodeVerifyErrorStatus),
+               NodeVerifyErrorStatus);
+    }
+    if (ptrNode->right != NULL) {
+        NodeVerifyErrorStatus = RecNodeVerify(ptrNode->right);
+
+        ASSERT(NodeVerifyErrorStatus == OK, GetErrorString(NodeVerifyErrorStatus),
+               NodeVerifyErrorStatus);
+    }
+
+    return OK;
+}
+
+ERROR_STATUSES NodeVerify(Node* ptrNode) {
+    ASSERT(ptrNode         != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+    // ASSERT(ptrNode->left   != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+    // ASSERT(ptrNode->right  != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+    ASSERT(ptrNode->parent != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+
+    return OK;
+}
+
+ERROR_STATUSES TreeVerify(Tree* ptrTree) {
+    ASSERT(ptrTree         != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+
+    ASSERT(ptrTree->size   > 0, GetErrorString(TREE_BAD_SIZE), TREE_BAD_SIZE);
+
+    ASSERT(ptrTree->root   != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+
+    return RecNodeVerify(ptrTree->root);
+}
+
+ERROR_STATUSES TreeDump(Tree* ptrTree) {
+    ERROR_STATUSES TreeVerifyErrorStatus = TreeVerify(ptrTree);
+
+    ASSERT(TreeVerifyErrorStatus == OK, GetErrorString(TreeVerifyErrorStatus),
+           TreeVerifyErrorStatus);
+    
+    return RecNodeDump(ptrTree->root);
+}
+
+ERROR_STATUSES RecNodeDump(Node* ptrNode) {
+    fprintf(stderr, "Node at %p has type <%i>, has op type <%c>\n",
+            ptrNode, ptrNode->nodeType, ptrNode->opType);
+    fprintf(stderr, "Stores value: %lf, varName: <%s>\n", ptrNode->value, ptrNode->varName);
+    fprintf(stderr, "Left son: %p, right son: %p, parent: %p\n", ptrNode->left, ptrNode->right, ptrNode->parent);
+
+    if (ptrNode->left != NULL) {
+        RecNodeDump(ptrNode->left);
+    }
+    if (ptrNode->right != NULL) {
+        RecNodeDump(ptrNode->right);
+    }
+    return OK;
+}
+
+ERROR_STATUSES TreePrint(Tree* ptrTree) {
+    ERROR_STATUSES TreeVerifyErrorStatus = TreeVerify(ptrTree);
+
+    ASSERT(TreeVerifyErrorStatus == OK, GetErrorString(TreeVerifyErrorStatus),
+           TreeVerifyErrorStatus);
+    
+    return RecNodePrint(ptrTree->root);
+}
+
+ERROR_STATUSES RecNodePrint(Node* ptrNode) {
+    fprintf(stderr, "(%lf", ptrNode->value);
+
+    if (ptrNode->left != NULL) {
+        RecNodePrint(ptrNode->left);
+    }
+    if (ptrNode->right != NULL) {
+        RecNodePrint(ptrNode->right);
+    }
+
+    fprintf(stderr, ")");
+
+    return OK;
+}
+
+ERROR_STATUSES RecNodePrintToLine(Node* ptrNode, char* curLine, size_t* ptrCurLineInd) {
+    ASSERT(curLine       != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+    ASSERT(ptrCurLineInd != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+
+    fprintf(stderr, "(RecNodePrintToLine): START ptrNode: %p, curLine: <%s>, curLineInd: %zu\n", 
+                      ptrNode, curLine, *ptrCurLineInd);
+
+    size_t curLineInd = *ptrCurLineInd;
+
+    sprintf(curLine + curLineInd, "(");
+    curLineInd++;
+
+    if (!ptrNode) {
+
+        sprintf(curLine + curLineInd, "nil)");
+        curLineInd += strlen("nil)");
+
+        *ptrCurLineInd = curLineInd;
+        
+        fprintf(stderr, "(RecNodePrintToLine): IS LEAF ptrNode: %p, curLine: <%s>, curLineInd: %zu\n", 
+                          ptrNode, curLine, *ptrCurLineInd);
+
+        return OK;
+    }
+
+    sprintf(curLine + curLineInd, "%lf", ptrNode->value);
+    curLineInd += strlen(STRINGIFY(ptrNode->value));
+
+    *ptrCurLineInd = curLineInd;
+
+    fprintf(stderr, "(RecNodePrintToLine): BEFORE CALL ptrNode: %p, curLine: <%s>, curLineInd: %zu\n", 
+                      ptrNode, curLine, *ptrCurLineInd);
+
+    if (ptrNode->left != NULL) {
+        RecNodePrintToLine(ptrNode->left, curLine, ptrCurLineInd);
+    }
+    if (ptrNode->right != NULL) {
+        RecNodePrintToLine(ptrNode->right, curLine, ptrCurLineInd);
+    }
+
+    curLineInd = *ptrCurLineInd;
+
+    sprintf(curLine + curLineInd, ")");
+    curLineInd++;
+
+    *ptrCurLineInd = curLineInd;
+
+    fprintf(stderr, "(RecNodePrintToLine): END ptrNode: %p, curLine: <%s>, curLineInd: %zu\n", 
+                      ptrNode, curLine, *ptrCurLineInd);
+
+
+    return OK;
+}
+
+ERROR_STATUSES TreeVizDump(Tree* ptrTree) {
+    ERROR_STATUSES TreeVerifyErrorStatus = TreeVerify(ptrTree);
+
+    ASSERT(TreeVerifyErrorStatus == OK, GetErrorString(TreeVerifyErrorStatus),
+           TreeVerifyErrorStatus);
+    
+    char* buffer = NULL;
+
+    size_t bufferSize = 0;
+
+    ERROR_STATUSES GenerateDotFileErrorStatus = GenerateDotFile(ptrTree, &buffer, &bufferSize);
+
+    ASSERT(GenerateDotFileErrorStatus == OK, GetErrorString(GenerateDotFileErrorStatus),
+           GenerateDotFileErrorStatus);
+
+    ERROR_STATUSES UnlinkDotFileErrorStatus = UnlinkFile(DotFilename);
+
+    ASSERT(UnlinkDotFileErrorStatus == OK, GetErrorString(UnlinkDotFileErrorStatus), UnlinkDotFileErrorStatus);
+
+    ERROR_STATUSES WriteBufferToDotFileErrorStatus = WriteBufferToFile(DotFilename, buffer, bufferSize);
+
+    ASSERT(WriteBufferToDotFileErrorStatus == OK, GetErrorString(WriteBufferToDotFileErrorStatus),
+           WriteBufferToDotFileErrorStatus);
+
+        char* dotCallLine = (char*) calloc(strlen(DotSystemCallTemplate) + MaxFilenameLen, 
+                                       sizeof(dotCallLine[0]));
+    
+    ASSERT(dotCallLine != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
+    
+    int dotCallLineInd = 0;
+
+    strcpy(dotCallLine + dotCallLineInd, DotSystemCallTemplate);
+    dotCallLineInd += strlen(DotSystemCallTemplate);
+
+    char* curDumpFilename = NULL;
+
+    ERROR_STATUSES GenerateDumpFilenameErrorStatus = GenerateDumpFilename(&curDumpFilename);
+    
+    ASSERT(GenerateDumpFilenameErrorStatus == OK, GetErrorString(GenerateDumpFilenameErrorStatus), 
+           GenerateDumpFilenameErrorStatus);
+    
+    ON_DEBUG(fprintf(stderr, "dump filename: <%s>\n", curDumpFilename);)
+
+    strcpy(dotCallLine + dotCallLineInd, curDumpFilename);
+    dotCallLineInd += strlen(curDumpFilename);
+
+    ON_DEBUG(fprintf(stderr, "dotCallLineInd: <%s>\n", dotCallLine);)
+
+    int SystemCallErrorStatus = system(dotCallLine);
+
+    ASSERT(SystemCallErrorStatus == 0, GetErrorString(SYSTEM_CALL_ERROR), SYSTEM_CALL_ERROR);
+
+    return OK;
+}
+
+ERROR_STATUSES RecNodeVizDump(Node* ptrNode, char* buffer, size_t* ptrBufferInd, char* curLine) {
+
+    sprintf(curLine, "\t %zu [color=\"#000000\", fillcolor=\"#ffea5f\", label=\"{address = %p | node type = %i | op type = %c | info = %lf | varName = %s}\"];\n",
+            ptrNode, ptrNode, (NODE_TYPES)ptrNode->nodeType, (char)(ptrNode->opType), ptrNode->value, ptrNode->varName);
+    
+    ERROR_STATUSES AddLineCleanErrorStatus = AddLineClean(buffer, ptrBufferInd, curLine);
+
+    ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus),
+           AddLineCleanErrorStatus);
+
+    if (ptrNode->left != NULL) {
+        RecNodeVizDump(ptrNode->left, buffer, ptrBufferInd, curLine);
+
+        sprintf(curLine, "\t %zu->%zu[color=\"#3ba0ff\"];\n", ptrNode, ptrNode->left);
+
+        AddLineCleanErrorStatus = AddLineClean(buffer, ptrBufferInd, curLine);
+
+        ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus),
+           AddLineCleanErrorStatus);
+    }
+    if (ptrNode->right != NULL) {
+        RecNodeVizDump(ptrNode->right, buffer, ptrBufferInd, curLine);
+
+        sprintf(curLine, "\t %zu->%zu[color=\"#ff3b3b\"];\n", ptrNode, ptrNode->right);
+
+        AddLineCleanErrorStatus = AddLineClean(buffer, ptrBufferInd, curLine);
+
+        ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus),
+           AddLineCleanErrorStatus);
+    }
+
+    return OK;
+}
+
+ERROR_STATUSES GenerateDotFile(Tree* ptrTree, char** ptrBuffer, size_t* ptrBufferSize) {
+
+    char* buffer = (char*)calloc(DotFileSize, sizeof(buffer[0]));
+    
+    ASSERT(buffer != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
+    
+    size_t bufferInd = 0;
+
+    strcpy(buffer + bufferInd, DotFileTemplate);
+    bufferInd += strlen(DotFileTemplate);
+
+    char* curLine = (char*)calloc(MaxDotLineSize, sizeof(curLine[0]));
+   
+    ASSERT(curLine != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
+
+    ERROR_STATUSES RecNodeVizDumpErrorStatus = RecNodeVizDump(ptrTree->root, buffer, &bufferInd, curLine);    
+
+    ASSERT(RecNodeVizDumpErrorStatus == OK, GetErrorString(RecNodeVizDumpErrorStatus), 
+           RecNodeVizDumpErrorStatus);
+
+    sprintf(curLine, "}");
+
+    ERROR_STATUSES AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
+
+    ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus), AddLineCleanErrorStatus);
+
+    *ptrBuffer     = buffer;
+    *ptrBufferSize = bufferInd;
+
+    return OK;
+}
+
+ERROR_STATUSES GenerateDumpFilename(char** ptrFilename) {
+    // static int DUMP_CNT = 1;
+
+    ASSERT(ptrFilename != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+
+    char* curDumpFilename = (char*) calloc(MaxFilenameLen, sizeof(curDumpFilename[0]));
+
+    int curDumpFilenameInd = 0;
+
+    ASSERT(curDumpFilename != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
+
+    strcpy(curDumpFilename + curDumpFilenameInd, VizDumpFilename);
+    curDumpFilenameInd += strlen(VizDumpFilename);
+
+    char* numberLine = (char*) calloc(MaxNumberLineSize, sizeof(numberLine[0]));
+
+    ASSERT(numberLine != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
+
+    sprintf(numberLine, "%i", DUMP_CNT);
+
+    strcpy(curDumpFilename + curDumpFilenameInd, numberLine);
+    curDumpFilenameInd += strlen(numberLine);
+
+    strcpy(curDumpFilename + curDumpFilenameInd, VizDumpExtension);
+    curDumpFilenameInd += strlen(VizDumpExtension);
+
+    *ptrFilename = curDumpFilename;
+
+    DUMP_CNT++;
+
+    return OK;
+}
+
+ERROR_STATUSES ClearLine(char* line) {
+    ASSERT(line != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+
+    for (; *line != '\0'; line++) {
+        *line = '\0';
+    }
+
+    return OK;
+}
+
+ERROR_STATUSES AddLine(char* buffer, size_t* ptrBufferSize, char* toAdd) {
+    ASSERT(buffer        != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+    ASSERT(ptrBufferSize != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+    ASSERT(toAdd         != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+
+    strcpy(buffer + *ptrBufferSize, toAdd);
+    
+    int toAddLen = strlen(toAdd);
+    *ptrBufferSize += toAddLen;
+
+    return OK;
+}
+
+ERROR_STATUSES AddLineClean(char* buffer, size_t* ptrBufferSize, char* toAdd) {
+    ERROR_STATUSES AddLineErrorStatus = AddLine(buffer, ptrBufferSize, toAdd);
+
+    ASSERT(AddLineErrorStatus == OK, GetErrorString(AddLineErrorStatus),
+           AddLineErrorStatus);
+
+    ERROR_STATUSES ClearLineErrorStatus = ClearLine(toAdd);
+
+    ASSERT(ClearLineErrorStatus == OK, GetErrorString(ClearLineErrorStatus),
+           ClearLineErrorStatus);
+
+    return OK;
+}
+
+ERROR_STATUSES StringToDouble(char* curLine, double* ptrRes) {
+    ASSERT(curLine != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+    ASSERT(ptrRes  != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+
+    fprintf(stderr, "(StringToDouble): curLine: <%s>\n", curLine);
+
+    *ptrRes = NAN;
+    
+    char* ch = curLine;
+
+    bool sign = true;
+
+    if (*ch == '-') {
+        sign = false;
+        ch++;
+    }
+
+    long long num = 0;
+    long long power = 1;
+
+    bool afterDot = false;
+
+    for (; *ch != '\0'; ch++) {
+        num *= 10;
+
+        if (*ch == '.') {
+            afterDot = true;
+            continue;
+        } 
+        if (*ch >= '0' && *ch <= '9') {
+            num += (*ch - '0');
+
+            if (afterDot) {
+                power *= 10;
+            }
+        }
+        else {
+            return STRING_TO_DOUBLE_ERROR;
+        }
+    }
+
+    double res = (double)num / power;
+
+    res = (sign ? 1 : -1) * res;
+
+    *ptrRes = res;
+
+    return OK;
+}
+
+ERROR_STATUSES UnlinkFile(const char* filename) {
+    ASSERT(filename != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+
+    int fileDesc = open(filename, O_WRONLY | O_CREAT, S_IRWXU); //  unlink
+
+    ASSERT(fileDesc >= 0, GetErrorString(FILE_ACCESS_DENIED), FILE_ACCESS_DENIED);
+    
+    ftruncate(fileDesc, 0);
+
+    close(fileDesc);
+
+    return OK;
+}
+
+ERROR_STATUSES WriteBufferToFile(const char* filename, char* buffer, size_t bufferSize) {
+    ASSERT(filename != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+    
+    ASSERT(buffer   != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+
+    int fileDesc = open(filename, O_CREAT | O_WRONLY);  // Дед, почему нельзя ставить просто w
+
+    ASSERT(fileDesc >= 0, GetErrorString(FILE_ACCESS_DENIED), FILE_ACCESS_DENIED);
+
+    ON_DEBUG(fprintf(stderr, "(WriteBufferToFile): bufferSize: %i\n", bufferSize);)
+    ON_DEBUG(fprintf(stderr, "(WriteBufferToFile): buffer:\n");)
+
+    for (int i = 0; i < bufferSize; i++) {
+        ON_DEBUG(fprintf(stderr, "<%c> has number %i\n", buffer[i], buffer[i]);)
+    }
+    // const char* s = "MEOW\n";
+    write(fileDesc, buffer, sizeof(buffer[0]) * bufferSize);  //  Почему не пишет, коли в буфере все ок
+    
+    close(fileDesc);
+
+    return OK;
+}
+
+ERROR_STATUSES SaveTree(Tree* ptrTree) {
+    ERROR_STATUSES TreeVerifyErrorStatus = TreeVerify(ptrTree);
+
+    ASSERT(TreeVerifyErrorStatus == OK, GetErrorString(TreeVerifyErrorStatus),
+           TreeVerifyErrorStatus);
+    
+    char* buffer = NULL;
+
+    size_t bufferSize = 0;
+
+    ERROR_STATUSES GenerateTreeFileErrorStatus = GenerateTreeFile(ptrTree, &buffer, &bufferSize);
+
+    ASSERT(GenerateTreeFileErrorStatus == OK, GetErrorString(GenerateTreeFileErrorStatus),
+           GenerateTreeFileErrorStatus);
+
+    ERROR_STATUSES UnlinkFileErrorStatus = UnlinkFile(TreeSaveFilename);
+
+    ASSERT(UnlinkFileErrorStatus == OK, GetErrorString(UnlinkFileErrorStatus), UnlinkFileErrorStatus);
+
+    ERROR_STATUSES WriteBufferToFileErrorStatus = WriteBufferToFile(TreeSaveFilename, buffer, bufferSize);
+
+    ASSERT(WriteBufferToFileErrorStatus == OK, GetErrorString(WriteBufferToFileErrorStatus),
+           WriteBufferToFileErrorStatus);
+
+    return OK;
+}
+
+ERROR_STATUSES LoadTree(Tree* ptrTree) {
+    char* buffer      = NULL;
+    size_t bufferSize = 0;
+
+    ERROR_STATUSES ReadFileErrorStatus = ReadFile(TreeFilename, &buffer, &bufferSize);
+
+    ASSERT(ReadFileErrorStatus == OK, GetErrorString(ReadFileErrorStatus), ReadFileErrorStatus);
+
+    fprintf(stderr, "(LoadTree): buffer: <%s>\n", buffer);
+
+    char* curLine = (char*)calloc(MaxObjectLineSize, sizeof(*curLine));
+
+    ASSERT(curLine != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
+
+    TreeElement_t curValue = NAN;
+    char info              = '\0';
+
+    size_t bufferInd = 1;  //  wanna skip first '(', because we are already in root
+
+    TreeInit(ptrTree);
+
+    Node* curNode = ptrTree->root;
+
+    int nNodes = 1;
+
+    fprintf(stderr, "bufferSize: %zu\n", bufferSize);
+
+    for (; bufferInd < bufferSize && *(buffer + bufferInd) != '\0'; ) {
+        ClearLine(curLine);
+        curValue =  NAN;
+        info     = '\0';
+        
+        if (*(buffer + bufferInd) == ')') {
+            fprintf(stderr, "(LoadTree): Added )\n");
+
+            curNode = curNode->parent;
+            
+            bufferInd++;
+            continue;
+        }
+
+        if (*(buffer + bufferInd) == '(') {
+            fprintf(stderr, "(LoadTree): going to new node!\n");
+            fprintf(stderr, "(LoadTree): curNode: %p, left: %p, right: %p!\n", 
+                           curNode, curNode->left, curNode->right);
+
+            
+            bool isLeftSon = false;
+
+            if (curNode->left == NULL) {
+                isLeftSon = true;
+            } 
+            else {
+                isLeftSon = false;
+            }
+
+            ERROR_STATUSES NodeCreateErrorStatus = NodeCreate(curNode, isLeftSon);
+
+            ASSERT(NodeCreateErrorStatus == OK, GetErrorString(NodeCreateErrorStatus), NodeCreateErrorStatus);
+
+            nNodes++;
+
+            bufferInd++;
+
+            if (isLeftSon) {
+                curNode = curNode->left;
+            } else {
+                curNode = curNode->right;
+            }
+        }
+
+        if (!sscanf(buffer + bufferInd, "\"%[^\"]\"", curLine)) {
+            fprintf(stderr, "(LoadTree): cannot read expression, buffer: <%s>\n", buffer + bufferInd);
+
+            if (sscanf(buffer + bufferInd, "%[^)]", curLine) && strcmp(curLine, "nil") == 0) {
+                fprintf(stderr, "(LoadTree): curLine: <%s>\n", curLine);
+                fprintf(stderr, "(LoadTree): (nil) found!\n");
+                
+                bufferInd += 3;
+                continue;
+            }
+
+            return UNKNOWN_STRING_LOAD_TREE;                            
+        } 
+
+        fprintf(stderr, "(LoadTree): bufferInd before: %i, buffer: <%s>, curLine: <%s>, info: <%c>\n", 
+                bufferInd, buffer + bufferInd, curLine, info);
+        
+        // *(curLine + strlen(curLine) - 1) =1 '\0';
+
+        info = curLine[0];
+
+        switch (info) {
+            case ('+'): {
+                fprintf(stderr, "Found +!\n");
+
+                curNode->nodeType = OP;
+                curNode->opType   = ADD;
+                break;
+            }
+            case ('-'): {
+                fprintf(stderr, "Found -!\n");
+
+                curNode->nodeType = OP;
+                curNode->opType   = SUB;
+                break;
+            }
+            case ('*'): {
+                fprintf(stderr, "Found *!\n");
+
+                curNode->nodeType = OP;
+                curNode->opType   = MUL;
+                break;
+            }
+            case ('/'): {
+                fprintf(stderr, "Found /!\n");
+
+                curNode->nodeType = OP;
+                curNode->opType   = DIV;
+                break;
+            }
+            default: {
+                if (isalpha(info) || isdigit(info)) {
+                    break;
+                }
+                else {
+                    return LOAD_TREE_UNKNOWN_LINE_ERROR;
+                }
+            }
+        }
+
+        if (info != '\0' && !isalnum(info)) {
+            bufferInd += 4;  // -, + и т д
+            continue;
+        }
+
+        ERROR_STATUSES StringToDoubleErrorStatus = StringToDouble(curLine, &curValue);
+
+        ASSERT(StringToDoubleErrorStatus == OK || StringToDoubleErrorStatus == STRING_TO_DOUBLE_ERROR,
+               GetErrorString(StringToDoubleErrorStatus), StringToDoubleErrorStatus);
+
+        if (isnan(curValue)) {
+            fprintf(stderr, "(LoadTree): <%s> is not a number!\n", curLine);
+
+            curNode->nodeType = VAR;
+            curNode->varName  = strdup(curLine);
+
+            fprintf(stderr, "(LoadTree): found variable with name: <%s>\n", curLine);
+        }
+        else {
+            fprintf(stderr, "(LoadTree): value %lf!\n", curValue);
+
+            curNode->nodeType = CONST;
+            curNode->value    = curValue;
+
+            fprintf(stderr, "(LoadTree): found value: %lf\n", curValue);
+        }
+
+        bufferInd += 3 + strlen(curLine);
+
+        fprintf(stderr, "(LoadTree): curNode: %p, curLine: <%s>, info: <%c>\n", curNode, curLine, info);
+
+        fprintf(stderr, "(LoadTree): bufferInd after : %i\n", bufferInd);
+    }
+
+    ptrTree->size = nNodes;
+
+    return OK;
+}
+
+ERROR_STATUSES ReadFile(const char* filename, char** ptrBuffer, size_t* ptrBufferSize) {
+    ASSERT(filename != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+
+    int fileDesc = open(filename, O_RDONLY);
+
+    ASSERT(fileDesc >= 0, GetErrorString(FILE_ACCESS_DENIED), FILE_ACCESS_DENIED);
+
+    size_t fileSize = 0;
+
+    ERROR_STATUSES GetFileSizeErrorStatus = GetFileSize(fileDesc, &fileSize);
+
+    ASSERT(GetFileSizeErrorStatus == OK, GetErrorString(GetFileSizeErrorStatus),
+           GetFileSizeErrorStatus);
+
+    size_t bufferSize = fileSize + sizeof(char);
+
+    LOG(fprintf(stderr, "bufferSize: %zu\n", bufferSize);)
+
+    char* buffer = (char*)calloc(bufferSize, sizeof(buffer[0]));
+    
+    int charsRead = read(fileDesc, buffer, sizeof(buffer[0]) * bufferSize);
+    // fclose(ptrFile);
+
+    buffer[bufferSize - 1] = '\0';
+
+    *ptrBuffer     = buffer;
+    *ptrBufferSize = bufferSize;
+
+    return OK;
+}
+
+ERROR_STATUSES GetFileSize(int fileDesc, size_t* ptrFileSize) {
+    struct stat fileStats = {};
+
+    // fprintf(stderr, "File descriptor: %i\n", fileno(ptrFile));
+
+    int fstatStatus = fstat(fileDesc, &fileStats);
+
+    ASSERT(fstatStatus == 0, GetErrorString(FILE_FSTAT_ERROR), FILE_FSTAT_ERROR);
+
+    *ptrFileSize = fileStats.st_size;
+    
+    return OK;
+}
+
+
+ERROR_STATUSES GenerateTreeFile(Tree* ptrTree, char** ptrBuffer, size_t* ptrBufferSize) {
+    char* buffer = (char*)calloc(TreeFileSize, sizeof(buffer[0]));
+    
+    ASSERT(buffer != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
+    
+    size_t bufferInd = 0;
+
+    char* curLine = (char*)calloc(MaxTreeLineSize, sizeof(curLine[0]));
+   
+    ASSERT(curLine != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
+
+    size_t curLineInd = 0;
+
+    ERROR_STATUSES RecNodePrintToLineErrorStatus = RecNodePrintToLine(ptrTree->root, curLine, &curLineInd);
+
+    ASSERT(RecNodePrintToLineErrorStatus == OK, GetErrorString(RecNodePrintToLineErrorStatus), 
+           RecNodePrintToLineErrorStatus);
+
+    fprintf(stderr, "curLine after all recursive calls: <%s>\n", curLine);
+
+    // if (ptrTree->root->left != NULL) {
+        //     RecNodePrintToLineErrorStatus = RecNodePrintToLine(ptrTree->root->left, buffer, &bufferInd, curLine);    
+
+        // ASSERT(RecNodePrintToLineErrorStatus == OK, GetErrorString(RecNodePrintToLineErrorStatus), 
+        //    RecNodePrintToLineErrorStatus);
+    // }
+    // if (ptrTree->root->right != NULL) {
+    //         RecNodePrintToLineErrorStatus = RecNodePrintToLine(ptrTree->root->right, buffer, &bufferInd, curLine);    
+
+    //     ASSERT(RecNodePrintToLineErrorStatus == OK, GetErrorString(RecNodePrintToLineErrorStatus), 
+    //        RecNodePrintToLineErrorStatus);
+    // }
+
+    ERROR_STATUSES AddLineCleanErrorStatus = AddLineClean(buffer, &bufferInd, curLine);
+
+    ASSERT(AddLineCleanErrorStatus == OK, GetErrorString(AddLineCleanErrorStatus), AddLineCleanErrorStatus);
+
+    *ptrBuffer     = buffer;
+    *ptrBufferSize = bufferInd;
+
+    return OK;
+}
+
+ERROR_STATUSES CropLastChar(char* curLine, size_t* ptrCurLineInd) {
+    ASSERT(curLine       != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+    ASSERT(ptrCurLineInd != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+
+    // fprintf(stderr, "(CropLastChar): BEFORE curLine: <%s>, ind: %zu\n", curLine, *ptrCurLineInd);
+
+    curLine[*ptrCurLineInd - 1] = '\0';
+    *ptrCurLineInd = *ptrCurLineInd - 1;
+
+    // fprintf(stderr, "(CropLastChar): AFTER curLine: <%s>, ind: %zu\n", curLine, *ptrCurLineInd);
+    
+    return OK;
+}
+
+ERROR_STATUSES GetVizLen(   char* curLine, size_t* ptrRes) {
+    ASSERT(curLine != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+    ASSERT(ptrRes  != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+
+    size_t res = 0;
+
+    char* ch = curLine;
+
+    for (; *ch != '\0'; ch++) {
+        res++;
+        if ((*ch) & 0x80) {
+            ch++;  // skip one byte, if cyrillic
+        }
+    }
+
+    *ptrRes = res;
+
+    return OK;
+}
+
