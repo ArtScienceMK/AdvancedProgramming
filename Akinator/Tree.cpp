@@ -56,7 +56,7 @@ const int MaxDefLineSize     = 600;
 const int MaxTraitsCnt      = 50;
 
 const int loadInitFiles = 1;
-const int heapSize      = 500000;
+const int heapSize      = 100000;
 
 
 const char* DotFileTemplate = "digraph G{\n\trankdir=TB;\n\tnode[color=\"#000000\", style=filled, fillcolor=\"#00ff88\", fontsize=14, shape=\"Mrecord\"];\n";
