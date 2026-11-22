@@ -146,7 +146,7 @@ ERROR_STATUSES NodeInsert(Node* ptrNode, TreeElement_t value) {
 
     fprintf(stderr, "(NodeInsert): ptrNode: %p\n", ptrNode);
 
-    ERROR_STATUSES NodeCreateErrorStatus = NodeCreate(ptrNode, isLeftSon);
+    ERROR_STATUSES NodeAddErrorStatus = NodeAdd(ptrNode, isLeftSon);
 
     if (isLeftSon) {
         ptrNode->left->value = value;
@@ -154,28 +154,24 @@ ERROR_STATUSES NodeInsert(Node* ptrNode, TreeElement_t value) {
         ptrNode->right->value = value;
     }
 
-    ASSERT(NodeCreateErrorStatus == OK, GetErrorString(NodeCreateErrorStatus),
-            NodeCreateErrorStatus);
+    ASSERT(NodeAddErrorStatus == OK, GetErrorString(NodeAddErrorStatus),
+            NodeAddErrorStatus);
 
     return OK;
 }
 
-ERROR_STATUSES NodeCreate(Node* ptrParent, bool isLeftSon) {
+ERROR_STATUSES NodeAdd(Node* ptrParent, bool isLeftSon) {
 
     ERROR_STATUSES NodeVerifyErrorStatus = NodeVerify(ptrParent);
 
     ASSERT(NodeVerifyErrorStatus == OK, GetErrorString(NodeVerifyErrorStatus),
            NodeVerifyErrorStatus);
 
-    Node* ptrNode = (Node*)calloc(1, sizeof(*ptrNode));
+    Node* ptrNode = NULL;
 
-    ASSERT(ptrNode != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
+    ERROR_STATUSES NodeCreateErrorStatus = NodeCreate(&ptrNode, EMPTY_NODE, EMPTY_OP, NAN, NULL, NULL, NULL, ptrParent);
 
-    ptrNode->parent     = ptrParent;
-    ptrNode->opType     = EMPTY_OP;
-
-    ptrNode->value      = NAN;
-    ptrNode->varName    = NULL;
+    ASSERT(NodeCreateErrorStatus == OK, GetErrorString(NodeCreateErrorStatus), NodeCreateErrorStatus);
 
     if (isLeftSon) {
         ptrParent->left = ptrNode;
@@ -183,8 +179,33 @@ ERROR_STATUSES NodeCreate(Node* ptrParent, bool isLeftSon) {
         ptrParent->right = ptrNode;
     }
 
-    fprintf(stderr, "(NodeCreate): added ptrNode: %p, has parent: %p\n", ptrNode, ptrParent);
-    fprintf(stderr, "(NodeCreate): isLeftSon: %i\n", isLeftSon);
+    fprintf(stderr, "(NodeAdd): added ptrNode: %p, has parent: %p\n", ptrNode, ptrParent);
+    fprintf(stderr, "(NodeAdd): isLeftSon: %i\n", isLeftSon);
+
+    return OK;
+}
+
+ERROR_STATUSES NodeCreate(Node** ptrRes, NODE_TYPES _nodeType, OP_TYPES _opType, TreeElement_t _value, char* _varName, 
+                          Node* _left, Node* _right, Node* _parent) {
+    ASSERT(ptrRes != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+    
+    Node* curNode = (Node*) calloc(1, sizeof(*curNode));
+
+    ASSERT(curNode != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
+
+    curNode->nodeType = _nodeType;
+    curNode->opType   = _opType;
+    curNode->value    = _value;
+    curNode->varName  = _varName;
+    curNode->left     = _left;
+    curNode->right    = _right;
+    curNode->parent   = _parent;
+
+    if (_varName) {
+        curNode->varName = strdup(_varName);
+    }
+
+    *ptrRes = curNode;
 
     return OK;
 }
@@ -215,7 +236,7 @@ ERROR_STATUSES NodeVerify(Node* ptrNode) {
     ASSERT(ptrNode         != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
     // ASSERT(ptrNode->left   != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
     // ASSERT(ptrNode->right  != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
-    ASSERT(ptrNode->parent != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+    // ASSERT(ptrNode->parent != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
 
     return OK;
 }
@@ -726,9 +747,9 @@ ERROR_STATUSES LoadTree(Tree* ptrTree) {
                 isLeftSon = false;
             }
 
-            ERROR_STATUSES NodeCreateErrorStatus = NodeCreate(curNode, isLeftSon);
+            ERROR_STATUSES NodeAddErrorStatus = NodeAdd(curNode, isLeftSon);
 
-            ASSERT(NodeCreateErrorStatus == OK, GetErrorString(NodeCreateErrorStatus), NodeCreateErrorStatus);
+            ASSERT(NodeAddErrorStatus == OK, GetErrorString(NodeAddErrorStatus), NodeAddErrorStatus);
 
             nNodes++;
 
@@ -1100,6 +1121,41 @@ ERROR_STATUSES PrintDouble(double value, char** ptrBuffer, size_t* ptrBufferSize
 
     *ptrBuffer     = buffer;
     *ptrBufferSize = strlen(buffer);
+
+    return OK;
+}
+
+ERROR_STATUSES NodeCopy(Node** ptrNode, Node* node) {
+    ASSERT(ptrNode != NULL, GetErrorString(OUT_OF_RANGE), OUT_OF_RANGE);
+
+    if (!node) {
+        return OK;
+    }
+
+    Node* curNode = (Node*) calloc(1, sizeof(*curNode));
+
+    ASSERT(curNode != NULL, GetErrorString(NOT_ENOUGH_MEMORY),
+           NOT_ENOUGH_MEMORY);
+    
+    curNode->nodeType = node->nodeType;
+    curNode->opType   = node->opType;
+    curNode->value    = node->value;
+
+    if (node->varName) {
+        curNode->varName = strdup(node->varName);
+    }
+
+    ERROR_STATUSES NodeCopyErrorStatus = NodeCopy(&curNode->left, node->left);
+
+    ASSERT(NodeCopyErrorStatus == OK, GetErrorString(NodeCopyErrorStatus),
+           NodeCopyErrorStatus);
+    
+    NodeCopyErrorStatus = NodeCopy(&curNode->right, node->right);
+
+    ASSERT(NodeCopyErrorStatus == OK, GetErrorString(NodeCopyErrorStatus),
+           NodeCopyErrorStatus);
+        
+    *ptrNode = curNode;
 
     return OK;
 }

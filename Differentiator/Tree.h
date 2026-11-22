@@ -54,7 +54,9 @@ ERROR_STATUSES RecNodeDestroy(Node* ptrNode);
 ERROR_STATUSES TreeInsert    (Tree* ptrTree, TreeElement_t value);
 ERROR_STATUSES NodeInsert    (Node* ptrNode, TreeElement_t value);
 
-ERROR_STATUSES NodeCreate      (Node* ptrParent, bool isLeftSon  );
+ERROR_STATUSES NodeAdd      (Node* ptrParent, bool isLeftSon  );
+ERROR_STATUSES NodeCreate   (Node** ptrRes, NODE_TYPES _nodeType, OP_TYPES _opType, TreeElement_t _value, char* _varName, 
+                             Node* _left, Node* _right, Node* _parent);
 
 ERROR_STATUSES TreeVerify(   Tree* ptrTree);
 ERROR_STATUSES RecNodeVerify(Node* ptrNode);
@@ -95,5 +97,7 @@ ERROR_STATUSES GetVizLen(   char* curLine, size_t* res);
 
 ERROR_STATUSES PrintOpType(OP_TYPES opType,     char** ptrBuffer, size_t* ptrBufferSize);
 ERROR_STATUSES PrintDouble(double value, char** ptrBuffer, size_t* ptrBufferSize);
+
+ERROR_STATUSES NodeCopy(Node** ptrRes, Node* node);
 
 #endif /*  TREE_H  */
