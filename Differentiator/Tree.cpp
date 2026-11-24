@@ -600,12 +600,12 @@ ERROR_STATUSES StringToDouble(char* curLine, double* ptrRes) {
     bool afterDot = false;
 
     for (; *ch != '\0'; ch++) {
-        num *= 10;
-
         if (*ch == '.') {
             afterDot = true;
             continue;
         } 
+        
+        num *= 10;
         if (*ch >= '0' && *ch <= '9') {
             num += (*ch - '0');
 
