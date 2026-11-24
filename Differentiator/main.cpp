@@ -17,6 +17,47 @@
     sourceLocation.line = __LINE__;\
     sourceLocation.name = strdup(STRINGIFY(varName));
 
+#define CHECK_CREATE ASSERT(NodeCreateErrorStatus == OK, GetErrorString(NodeCreateErrorStatus),\
+                            NodeCreateErrorStatus)
+
+#define CHECK_COPY ASSERT(NodeCopyErrorStatus == OK, GetErrorString(NodeCopyErrorStatus),\
+                          NodeCopyErrorStatus)
+    
+#define CHECK_DIFF ASSERT(DiffErrorStatus == OK, GetErrorString(DiffErrorStatus),\
+                          DiffErrorStatus)
+
+#define CONST(node, value, parent) (NodeCreateErrorStatus = NodeCreate(&node, CONST, EMPTY_OP, value, NULL, NULL, NULL, parent));\
+                   CHECK_CREATE
+
+#define VAR(node, varName, parent) (NodeCreateErrorStatus = NodeCreate(&node, VAR, EMPTY_OP, NAN, varName, NULL, NULL, parent));\
+                   CHECK_CREATE
+
+
+#define MUL(node, parent) (NodeCreateErrorStatus = NodeCreate(&node, OP, MUL, NAN, NULL, NULL, NULL, parent));\
+                   CHECK_CREATE
+
+#define DIV(node, parent) (NodeCreateErrorStatus = NodeCreate(&node, OP, DIV, NAN, NULL, NULL, NULL, parent));\
+                   CHECK_CREATE
+
+#define POW(node, parent) (NodeCreateErrorStatus = NodeCreate(&node, OP, POW, NAN, NULL, NULL, NULL, parent));\
+                   CHECK_CREATE
+
+#define LOG(node, parent) (NodeCreateErrorStatus = NodeCreate(&node, OP, LOG, NAN, NULL, NULL, NULL, parent));\
+                   CHECK_CREATE
+
+#define SIN(node, parent) (NodeCreateErrorStatus = NodeCreate(&node, OP, SIN, NAN, NULL, NULL, NULL, parent));\
+                   CHECK_CREATE
+
+#define COS(node, parent) (NodeCreateErrorStatus = NodeCreate(&node, OP, COS, NAN, NULL, NULL, NULL, parent));\
+                   CHECK_CREATE
+    
+#define TG( node, parent) (NodeCreateErrorStatus = NodeCreate(&node, OP, TG,  NAN, NULL, NULL, NULL, parent));\
+                   CHECK_CREATE
+            
+#define CTG(node, parent) (NodeCreateErrorStatus = NodeCreate(&node, OP, CTG, NAN, NULL, NULL, NULL, parent));\
+                   CHECK_CREATE
+
+
     
 #include <fcntl.h>
 #include <stdio.h>
@@ -48,6 +89,7 @@ ERROR_STATUSES DiffLog(  Node* node, Node** ptrRes);
 ERROR_STATUSES DiffSin(  Node* node, Node** ptrRes);
 ERROR_STATUSES DiffCos(  Node* node, Node** ptrRes);
 ERROR_STATUSES DiffTg (  Node* node, Node** ptrRes);
+ERROR_STATUSES DiffCtg(  Node* node, Node** ptrRes);
 
 
 int main() {
@@ -182,6 +224,14 @@ ERROR_STATUSES Diff(Node* node, Node** ptrRes) {
 
             break;
         }
+        case CTG: {
+            ERROR_STATUSES DiffCtgErrorStatus = DiffCtg(node, ptrRes);
+
+            ASSERT(DiffCtgErrorStatus == OK, GetErrorString(DiffCtgErrorStatus), 
+                   DiffCtgErrorStatus);
+                
+            break;
+        }
 
     }
 
@@ -197,8 +247,7 @@ ERROR_STATUSES DiffConst(Node* node, Node** ptrRes) {
 
     NodeCreateErrorStatus = NodeCreate(&curNode, CONST, EMPTY_OP, 0, NULL, NULL, NULL, NULL);
 
-    ASSERT(NodeCreateErrorStatus == OK, GetErrorString(NodeCreateErrorStatus), 
-            NodeCreateErrorStatus);
+    CHECK_CREATE
 
     *ptrRes = curNode;
 
@@ -215,8 +264,7 @@ ERROR_STATUSES DiffVar(Node* node, Node** ptrRes) {
 
     NodeCreateErrorStatus = NodeCreate(&curNode, CONST, EMPTY_OP, 1, NULL, NULL, NULL, NULL);
 
-    ASSERT(NodeCreateErrorStatus == OK, GetErrorString(NodeCreateErrorStatus), 
-            NodeCreateErrorStatus);
+    CHECK_CREATE
     
     *ptrRes = curNode;
 
@@ -246,8 +294,7 @@ ERROR_STATUSES DiffAdd(Node* node, Node** ptrRes) {
 
     NodeCreateErrorStatus = NodeCreate(&curNode, OP, ADD, NAN, NULL, leftSon, rightSon, NULL);
 
-    ASSERT(NodeCreateErrorStatus == OK, GetErrorString(NodeCreateErrorStatus), 
-            NodeCreateErrorStatus);
+    CHECK_CREATE
     
     *ptrRes = curNode;
 
@@ -277,8 +324,7 @@ ERROR_STATUSES DiffSub(Node* node, Node** ptrRes) {
 
     NodeCreateErrorStatus = NodeCreate(&curNode, OP, SUB, NAN, NULL, leftSon, rightSon, NULL);
 
-    ASSERT(NodeCreateErrorStatus == OK, GetErrorString(NodeCreateErrorStatus), 
-            NodeCreateErrorStatus);
+    CHECK_CREATE
     
     *ptrRes = curNode;
 
@@ -551,8 +597,7 @@ ERROR_STATUSES DiffLog(Node* node, Node** ptrRes) {
     if (node->left->nodeType == VAR && node->right->nodeType == VAR) {
         NodeCreateErrorStatus = NodeCreate(&curNode, CONST, EMPTY_OP, 1, NULL, NULL, NULL, NULL);
 
-        ASSERT(NodeCreateErrorStatus == OK, GetErrorString(NodeCreateErrorStatus), 
-            NodeCreateErrorStatus);
+        CHECK_CREATE
 
         *ptrRes = curNode;
 
@@ -831,31 +876,15 @@ ERROR_STATUSES DiffTg(Node* node, Node** ptrRes) {
             break;
         }
         case OP: {
-            NodeCreateErrorStatus = NodeCreate(&curNode, OP, MUL, NAN, NULL, NULL, NULL, NULL);
+            MUL(curNode, NULL);
 
-            ASSERT(NodeCreateErrorStatus == OK, GetErrorString(NodeCreateErrorStatus), 
-                   NodeCreateErrorStatus);
+            DIV(curNode->left, curNode);
 
-            NodeCreateErrorStatus = NodeCreate(&curNode->left, OP, DIV, NAN, NULL, NULL, NULL, NULL);
+            CONST(curNode->left->left, 1, curNode->left);
 
-            ASSERT(NodeCreateErrorStatus == OK, GetErrorString(NodeCreateErrorStatus), 
-                   NodeCreateErrorStatus);
+            POW(curNode->left->right, curNode->left);
 
-            NodeCreateErrorStatus = NodeCreate(&curNode->left->left, CONST, EMPTY_OP, 1, NULL, NULL, NULL, curNode->left);
-
-            ASSERT(NodeCreateErrorStatus == OK, GetErrorString(NodeCreateErrorStatus), 
-                   NodeCreateErrorStatus);
-
-            NodeCreateErrorStatus = NodeCreate(&curNode->left->right, OP, POW, NAN, NULL, NULL, NULL, curNode->left);
-
-            ASSERT(NodeCreateErrorStatus == OK, GetErrorString(NodeCreateErrorStatus), 
-                   NodeCreateErrorStatus);
-
-
-            NodeCreateErrorStatus = NodeCreate(&curNode->left->right->left, OP, COS, NAN, NULL, NULL, NULL, curNode->left->right);
-
-            ASSERT(NodeCreateErrorStatus == OK, GetErrorString(NodeCreateErrorStatus), 
-                   NodeCreateErrorStatus);
+            COS(curNode->left->right->left, curNode->left->right);
 
             Node* CP = NULL;
 
@@ -875,6 +904,78 @@ ERROR_STATUSES DiffTg(Node* node, Node** ptrRes) {
             
             curNode->right->parent = curNode;
 
+            break;
+        }
+        default: {
+            return UNKNOWN_OP_TYPE;
+        }
+    }
+
+    *ptrRes = curNode;
+
+    fprintf(stderr, "(Diff): res: %p\n", curNode);
+
+    return OK;
+}
+
+ERROR_STATUSES DiffCtg(Node* node, Node** ptrRes) {
+    fprintf(stderr, "(Diff): found ctg!\n");
+
+        ERROR_STATUSES NodeCreateErrorStatus = OK, NodeCopyErrorStatus = OK, DiffErrorStatus = OK;
+
+    Node* curNode = NULL;
+
+    switch (node->left->nodeType) {
+        case CONST: {
+            ERROR_STATUSES DiffConstErrorStatus = DiffConst(node, ptrRes);
+
+            ASSERT(DiffConstErrorStatus == OK, GetErrorString(DiffConstErrorStatus), 
+                   DiffConstErrorStatus);
+            
+            return OK;
+        }
+        case VAR: {
+            DIV(curNode, NULL);
+
+            CONST(curNode->left, -1, curNode);
+
+            POW(curNode->right, curNode);
+
+            SIN(curNode->right->left, curNode->right);
+
+            VAR(curNode->right->left->left, node->left->varName, curNode->right->left);
+
+            CONST(curNode->right->right, 2, curNode->right);
+
+            break;
+        }
+        case OP: {
+            MUL(curNode, NULL);
+
+            DIV(curNode->left, curNode);
+
+            CONST(curNode->left->left, -1, curNode->left);
+
+            POW(curNode->left->right, curNode->left);
+
+            SIN(curNode->left->right->left, curNode->left->right);
+
+            NodeCopyErrorStatus = NodeCopy(&curNode->left->right->left->left, node->left);
+            curNode->left->right->left->left->parent = curNode->left->right->left;
+            CHECK_COPY
+
+            CONST(curNode->left->right->right, 2, curNode->left->right);
+
+            Node* CP = NULL;
+
+            NodeCopyErrorStatus = NodeCopy(&CP, node->left);
+
+            CHECK_COPY
+
+            DiffErrorStatus = Diff(CP, &curNode->right);
+
+            curNode->right->parent = curNode;
+            
             break;
         }
         default: {
