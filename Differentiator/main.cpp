@@ -45,6 +45,8 @@ ERROR_STATUSES DiffDiv(  Node* node, Node** ptrRes);
 ERROR_STATUSES DiffPow(  Node* node, Node** ptrRes);
 ERROR_STATUSES DiffLog(  Node* node, Node** ptrRes);
 
+ERROR_STATUSES DiffSin(  Node* node, Node** ptrRes);
+
 int main() {
     Tree tree = {};
 
@@ -153,6 +155,15 @@ ERROR_STATUSES Diff(Node* node, Node** ptrRes) {
 
             break;
         }
+        case SIN: {
+            ERROR_STATUSES DiffSinErrorStatus = DiffSin(node, ptrRes);
+
+            ASSERT(DiffSinErrorStatus == OK, GetErrorString(DiffSinErrorStatus), 
+                   DiffSinErrorStatus);
+
+            break;
+        }
+        
     }
 
     return OK;
@@ -592,6 +603,68 @@ ERROR_STATUSES DiffLog(Node* node, Node** ptrRes) {
 
     *ptrRes = curNode;
 
+    fprintf(stderr, "(Diff): res: %p\n", curNode);
+    
+    return OK;
+}
+
+ERROR_STATUSES DiffSin(Node* node, Node** ptrRes) {
+    fprintf(stderr, "(Diff): found sin!\n");
+
+    ERROR_STATUSES NodeCreateErrorStatus = OK, NodeCopyErrorStatus = OK, DiffErrorStatus = OK;
+
+    Node* curNode = NULL;
+
+    switch (node->left->nodeType) {
+        case CONST: {
+            ERROR_STATUSES DiffConstErrorStatus = DiffConst(node, ptrRes);
+
+            ASSERT(DiffConstErrorStatus == OK, GetErrorString(DiffConstErrorStatus), 
+                   DiffConstErrorStatus);
+            
+            return OK;
+        }
+        case VAR: {
+            NodeCopyErrorStatus = NodeCopy(&curNode, node);
+
+            ASSERT(NodeCopyErrorStatus == OK, GetErrorString(NodeCopyErrorStatus), 
+                   NodeCopyErrorStatus);
+
+            curNode->opType = COS;
+
+            break;
+        }
+        case OP: {
+            NodeCreateErrorStatus = NodeCreate(&curNode, OP, MUL, NAN, NULL, NULL, NULL, NULL);
+
+            ASSERT(NodeCreateErrorStatus == OK, GetErrorString(NodeCreateErrorStatus), 
+                   NodeCreateErrorStatus);
+
+            NodeCopyErrorStatus = NodeCopy(&curNode->left, node);
+
+            ASSERT(NodeCopyErrorStatus == OK, GetErrorString(NodeCopyErrorStatus), 
+                   NodeCopyErrorStatus);
+
+            curNode->left->opType = COS;
+
+            Node* CL = NULL;
+
+            NodeCopyErrorStatus = NodeCopy(&CL, node->left);
+
+            ASSERT(NodeCopyErrorStatus == OK, GetErrorString(NodeCopyErrorStatus), 
+                   NodeCopyErrorStatus);
+        
+            DiffErrorStatus = Diff(CL, &curNode->right);
+
+            break;
+        }
+        default: {
+            return UNKNOWN_OP_TYPE;
+        }
+    }
+
+    *ptrRes = curNode;
+    
     fprintf(stderr, "(Diff): res: %p\n", curNode);
     
     return OK;
