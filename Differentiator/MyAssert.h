@@ -29,7 +29,7 @@ SourceLocation GetSourceLocation(void);
 
 #ifdef DEBUG
 
-#define LOG(...) __VA_ARGS__
+#define ON_DEBUG(...) __VA_ARGS__
 
 // #define FMT(x) (#x ":" x)
 

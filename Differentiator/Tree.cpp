@@ -604,7 +604,7 @@ ERROR_STATUSES StringToDouble(char* curLine, double* ptrRes) {
             afterDot = true;
             continue;
         } 
-        
+
         num *= 10;
         if (*ch >= '0' && *ch <= '9') {
             num += (*ch - '0');
@@ -788,35 +788,35 @@ ERROR_STATUSES LoadTree(Tree* ptrTree) {
                 fprintf(stderr, "Found +!\n");
 
                 curNode->nodeType = OP;
-                curNode->opType   = ADD;
+                curNode->opType   = OP_ADD;
                 break;
             }
             case ('-'): {
                 fprintf(stderr, "Found -!\n");
 
                 curNode->nodeType = OP;
-                curNode->opType   = SUB;
+                curNode->opType   = OP_SUB;
                 break;
             }
             case ('*'): {
                 fprintf(stderr, "Found *!\n");
 
                 curNode->nodeType = OP;
-                curNode->opType   = MUL;
+                curNode->opType   = OP_MUL;
                 break;
             }
             case ('/'): {
                 fprintf(stderr, "Found /!\n");
 
                 curNode->nodeType = OP;
-                curNode->opType   = DIV;
+                curNode->opType   = OP_DIV;
                 break;
             }
             case ('^'): {
                 fprintf(stderr, "Found ^!\n");
 
                 curNode->nodeType = OP;
-                curNode->opType   = POW;
+                curNode->opType   = OP_POW;
                 break;
             }
             default: {
@@ -840,73 +840,73 @@ ERROR_STATUSES LoadTree(Tree* ptrTree) {
             fprintf(stderr, "Found log!\n");
 
             curNode->nodeType = OP;
-            curNode->opType   = LOG;
+            curNode->opType   = OP_LOG;
         }
         else if (strcmp(curLine, "sin") == 0) {
             fprintf(stderr, "Found sin!\n");
 
             curNode->nodeType = OP;
-            curNode->opType   = SIN;
+            curNode->opType   = OP_SIN;
         }
         else if (strcmp(curLine, "cos") == 0) {
             fprintf(stderr, "Found cos!\n");
 
             curNode->nodeType = OP;
-            curNode->opType   = COS;
+            curNode->opType   = OP_COS;
         }
         else if (strcmp(curLine, "tg") == 0) {
             fprintf(stderr, "Found tg!\n");
 
             curNode->nodeType = OP;
-            curNode->opType   = TG;
+            curNode->opType   = OP_TG;
         }
         else if (strcmp(curLine, "ctg") == 0) {
             fprintf(stderr, "Found ctg!\n");
 
             curNode->nodeType = OP;
-            curNode->opType   = CTG;
+            curNode->opType   = OP_CTG;
         }
         else if (strcmp(curLine, "arcsin") == 0) {
             fprintf(stderr, "Found arcsin!\n");
 
             curNode->nodeType = OP;
-            curNode->opType   = ARCSIN;
+            curNode->opType   = OP_ARCSIN;
         }
         else if (strcmp(curLine, "arccos") == 0) {
             fprintf(stderr, "Found arccos!\n");
 
             curNode->nodeType = OP;
-            curNode->opType   = ARCCOS;
+            curNode->opType   = OP_ARCCOS;
         }
         else if (strcmp(curLine, "arctg") == 0) {
             fprintf(stderr, "Found arctg!\n");
 
             curNode->nodeType = OP;
-            curNode->opType   = ARCTG;
+            curNode->opType   = OP_ARCTG;
         }
         else if (strcmp(curLine, "arcctg") == 0) {
             fprintf(stderr, "Found sin!\n");
 
             curNode->nodeType = OP;
-            curNode->opType   = ARCCTG;
+            curNode->opType   = OP_ARCCTG;
         }
         else if (strcmp(curLine, "sh") == 0) {
             fprintf(stderr, "Found sh!\n");
 
             curNode->nodeType = OP;
-            curNode->opType   = SH;
+            curNode->opType   = OP_SH;
         }
         else if (strcmp(curLine, "ch") == 0) {
             fprintf(stderr, "Found ch (function)!\n");
 
             curNode->nodeType = OP;
-            curNode->opType   = CH;
+            curNode->opType   = OP_CH;
         }
         else if (strcmp(curLine, "th") == 0) {
             fprintf(stderr, "Found th!\n");
 
             curNode->nodeType = OP;
-            curNode->opType   = TH;
+            curNode->opType   = OP_TH;
         }
 
         if (curNode->nodeType == OP && isalpha(info)) {
@@ -966,7 +966,7 @@ ERROR_STATUSES ReadFile(const char* filename, char** ptrBuffer, size_t* ptrBuffe
 
     size_t bufferSize = fileSize + sizeof(char);
 
-    LOG(fprintf(stderr, "bufferSize: %zu\n", bufferSize);)
+    ON_DEBUG(fprintf(stderr, "bufferSize: %zu\n", bufferSize);)
 
     char* buffer = (char*)calloc(bufferSize, sizeof(buffer[0]));
     
@@ -1082,23 +1082,23 @@ ERROR_STATUSES PrintOpType(OP_TYPES opType, char** ptrBuffer, size_t* ptrBufferS
     ASSERT(buffer != NULL, GetErrorString(NOT_ENOUGH_MEMORY), NOT_ENOUGH_MEMORY);
 
     switch (opType) {
-        case (ADD):    strcpy(buffer, "+"); break;
-        case (SUB):    strcpy(buffer,  "-"); break;
-        case (MUL):    strcpy(buffer,  "*"); break;
-        case (DIV):    strcpy(buffer,  "/"); break;
-        case (POW):    strcpy(buffer,  "^"); break;
-        case (LOG):    strcpy(buffer, "log"); break;
-        case (SIN):    strcpy(buffer, "sin"); break;
-        case (COS):    strcpy(buffer, "cos"); break;
-        case (TG):     strcpy(buffer, "tg"); break;
-        case (CTG):    strcpy(buffer, "ctg"); break;
-        case (ARCSIN): strcpy(buffer, "arcsin"); break;
-        case (ARCCOS): strcpy(buffer, "arccos"); break;
-        case (ARCTG):  strcpy(buffer, "arctg"); break;
-        case (ARCCTG): strcpy(buffer, "arcctg"); break;
-        case (SH):     strcpy(buffer, "sh"); break;
-        case (CH):     strcpy(buffer, "ch"); break;
-        case (TH):     strcpy(buffer, "th"); break;
+        case (OP_ADD):    strcpy(buffer, "+"); break;
+        case (OP_SUB):    strcpy(buffer,  "-"); break;
+        case (OP_MUL):    strcpy(buffer,  "*"); break;
+        case (OP_DIV):    strcpy(buffer,  "/"); break;
+        case (OP_POW):    strcpy(buffer,  "^"); break;
+        case (OP_LOG):    strcpy(buffer, "log"); break;
+        case (OP_SIN):    strcpy(buffer, "sin"); break;
+        case (OP_COS):    strcpy(buffer, "cos"); break;
+        case (OP_TG):     strcpy(buffer, "tg"); break;
+        case (OP_CTG):    strcpy(buffer, "ctg"); break;
+        case (OP_ARCSIN): strcpy(buffer, "arcsin"); break;
+        case (OP_ARCCOS): strcpy(buffer, "arccos"); break;
+        case (OP_ARCTG):  strcpy(buffer, "arctg"); break;
+        case (OP_ARCCTG): strcpy(buffer, "arcctg"); break;
+        case (OP_SH):     strcpy(buffer, "sh"); break;
+        case (OP_CH):     strcpy(buffer, "ch"); break;
+        case (OP_TH):     strcpy(buffer, "th"); break;
         default:
             return UNKNOWN_OP_TYPE;
     }
@@ -1159,3 +1159,5 @@ ERROR_STATUSES NodeCopy(Node** ptrNode, Node* node) {
 
     return OK;
 }
+
+
